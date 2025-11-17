@@ -1,1 +1,70 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  -ms-touch-action: manipulation;
+  overscroll-behavior: none;
+  font-family: sans-serif;
+  scroll-behavior: smooth;
+  overscroll-behavior: none;
+  button,
+  img,
+  i {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+  input {
+    &::placeholder {
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
+  }
+  textarea {
+    &::placeholder {
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
+  }
+}
+
+body {
+  width: 100%;
+  background: var(--auth-background);
+  color: var(--text-color);
+}
+
+:root[data-theme="light"] {
+  --auth-background: linear-gradient(160deg, #f7f9fc 0%, #e1e8f0 100%);
+  --auth-form-background: #ffffff;
+  --text-color: #0f172a;
+  --text-unfocused: #3e4b5f;
+  --selector-active-background: #ffffff;
+  --selector-background: #f1f5f9;
+  --auth-input-focus: #3b82f6;
+  --auth-input-background: #ffffff;
+  --auth-input-border: #d1d5dc;
+  --auth-form-border: transparent;
+  --primary: #f16849;
+}
+
+:root[data-theme="dark"] {
+  --auth-background: linear-gradient(160deg, #1e2a47 0%, #0e1629 100%);
+  --auth-form-background: #1d293d;
+  --text-color: #ffffff;
+  --text-unfocused: #afb9c7;
+  --selector-active-background: #475569;
+  --selector-background: #334155;
+  --auth-input-focus: #3b82f6;
+  --auth-input-background: #334155;
+  --auth-input-border: #475569;
+  --auth-form-border: #ffffff;
+  --primary: #f16849;
+}

@@ -1,0 +1,22 @@
+<form [formGroup]="enterCodeForm" (ngSubmit)="verify()">
+  <div class="inputs">
+    <div class="otp-wrapper">
+      @for (digit of otpDigits; track $index) {
+      <input
+        type="text"
+        maxlength="1"
+        class="otp-input"
+        [(ngModel)]="otp[$index]"
+        [ngModelOptions]="{ standalone: true }"
+        (input)="onInput($event, $index)"
+        (keydown)="onKeyDown($event, $index)"
+        (paste)="onPaste($event)"
+      />
+      }
+    </div>
+  </div>
+  <app-auth-button
+    text="Verify"
+    [isDisabled]="enterCodeForm.invalid"
+  ></app-auth-button>
+</form>

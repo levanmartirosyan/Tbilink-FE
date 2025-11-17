@@ -1,0 +1,24 @@
+<div
+  class="selector"
+  [class.hidden]="getFormName !== 'signin' && getFormName !== 'signup'"
+>
+  <div
+    class="indicator"
+    [style.left]="getFormName === 'signin' ? '4px' : 'calc(50% + 2px)'"
+  ></div>
+
+  <div
+    class="option"
+    [class.active]="getFormName === 'signin'"
+    routerLink="/auth/signin"
+  >
+    <span>Sign In</span>
+  </div>
+  <div
+    class="option"
+    [class.active]="getFormName === 'signup'"
+    routerLink="/auth/signup"
+  >
+    <span>Sign Up</span>
+  </div>
+</div>

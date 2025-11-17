@@ -1,0 +1,36 @@
+section {
+  width: 100vw;
+  min-height: 100vh;
+  background: var(--auth-background);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+  .logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    img {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      aspect-ratio: 1;
+      cursor: pointer;
+    }
+  }
+  .auth {
+    max-width: 450px;
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 8px;
+    background-color: var(--auth-form-background);
+    box-shadow: 0 0 10px 5px rgba($color: #0f172a, $alpha: 0.1);
+  }
+}

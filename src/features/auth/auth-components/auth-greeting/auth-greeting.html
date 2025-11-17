@@ -1,0 +1,17 @@
+<div class="greeting">
+  <h2 routerLink="/">TBILINK</h2>
+  <p>
+    @if (getFormName === 'signin' || getFormName === 'signup') {
+    <ng-container> Sign in to your account or create a new one </ng-container>
+    } @if (getFormName === 'recovery') {
+    <ng-container> Enter Your Email To Recover Account </ng-container>
+    } @if (getFormName === 'verify-email') {
+    <ng-container>
+      Code Sent To -
+      <span>{{ (commonService.verifyEmail$ | async)?.email | maskEmail }}</span>
+    </ng-container>
+    } @if (getFormName === 'create-new-password') {
+    <ng-container> Create New Password </ng-container>
+    }
+  </p>
+</div>

@@ -1,0 +1,32 @@
+<!-- <div class="selector">
+  <div class="indicator" [style.left]=" '4px'"></div>
+
+  <div class="option active" routerLink="/auth/signin">
+    <span>Sign In</span>
+  </div>
+  <div class="option" routerLink="/auth/signup">
+    <span>Sign Up</span>
+  </div>
+</div> -->
+
+<form [formGroup]="loginForm" (ngSubmit)="login()">
+  <div class="inputs">
+    <app-auth-input
+      type="email"
+      placeholder="Email"
+      formControlName="email"
+    ></app-auth-input>
+    <app-auth-input
+      type="password"
+      placeholder="Password"
+      formControlName="password"
+    ></app-auth-input>
+  </div>
+  <div class="passRec">
+    <span routerLink="/auth/recovery">Forgot your password?</span>
+  </div>
+  <app-auth-button
+    text="Sign In"
+    [isDisabled]="loginForm.invalid"
+  ></app-auth-button>
+</form>

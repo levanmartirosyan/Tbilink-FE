@@ -1,0 +1,16 @@
+<form [formGroup]="sendVerificationCodeForm" (ngSubmit)="recover()">
+  <div class="inputs">
+    <app-auth-input
+      type="email"
+      placeholder="Email"
+      formControlName="email"
+    ></app-auth-input>
+  </div>
+  <app-auth-button
+    text="Recover"
+    [isDisabled]="sendVerificationCodeForm.invalid"
+  ></app-auth-button>
+  <div class="goBack">
+    <span routerLink="/auth/signin">Go Back</span>
+  </div>
+</form>

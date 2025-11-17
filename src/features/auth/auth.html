@@ -1,0 +1,157 @@
+<app-theme-switcher></app-theme-switcher>
+<section>
+  <div class="logo">
+    <img src="assets/icons/logo.png" alt="" routerLink="/" />
+  </div>
+  <div class="auth">
+    <app-auth-greeting [getFormName]="currentForm"></app-auth-greeting>
+
+    <app-form-swither [getFormName]="currentForm"></app-form-swither>
+
+    <router-outlet></router-outlet>
+    <!-- @switch (Action) { @case ('SignIn') {
+    <app-signin-form (sendFormName)="receiveData($event)"></app-signin-form>
+    } @case ('SignUp') {
+    <app-signup-form></app-signup-form>
+    <form [formGroup]="registerForm" (ngSubmit)="register()">
+      <div class="input names">
+        <input
+          type="text"
+          placeholder="First Name"
+          formControlName="firstName"
+        />
+        <input type="text" placeholder="Last Name" formControlName="lastName" />
+      </div>
+
+      <div class="input statusCheck">
+        <input
+          type="email"
+          placeholder="Email"
+          formControlName="email"
+          [class.checkError]="registerForm.get('email')?.touched && registerForm.get('email')?.invalid"
+        />
+        @if (registerForm.get('email')?.touched &&
+        registerForm.get('email')?.hasError('pattern')) {
+        <p class="checkErrorMessage">Enter a valid email address</p>
+        }
+      </div>
+
+      <div class="input statusCheck">
+        <input
+          type="text"
+          placeholder="Username"
+          formControlName="userName"
+          [class.checkError]="IsNotUsed === false"
+        />
+
+        @if (IsNotUsed === false) {
+        <p class="checkErrorMessage">Username is already in use</p>
+        }
+      </div>
+
+      <div class="input statusCheck">
+        <input
+          type="password"
+          placeholder="Password"
+          formControlName="password"
+          [class.checkError]="registerForm.get('password')?.touched && registerForm.get('password')?.invalid"
+        />
+        @if (registerForm.get('password')?.touched &&
+        registerForm.get('password')?.hasError('pattern')) {
+        <p class="checkErrorMessage">
+          Password must be at least 8 characters, include 1 uppercase, 1 number,
+          and 1 special symbol
+        </p>
+        }
+      </div>
+
+      <div class="input statusCheck">
+        <input
+          type="password"
+          placeholder="Repeat Password"
+          formControlName="repPassword"
+          [class.checkError]="registerForm.touched && (registerForm.hasError('passwordsMismatch') || registerForm.get('repPassword')?.hasError('pattern'))"
+        />
+        @if (registerForm.touched && registerForm.hasError('passwordsMismatch'))
+        {
+        <p class="checkErrorMessage">Passwords didn’t match!</p>
+        } @else if (registerForm.get('repPassword')?.touched &&
+        registerForm.get('repPassword')?.hasError('pattern')) {
+        <p class="checkErrorMessage">
+          Password must be at least 8 characters, include 1 uppercase, 1 number,
+          and 1 special symbol
+        </p>
+        }
+      </div>
+
+      <div class="input">
+        <button
+          type="submit"
+          [disabled]="registerForm.invalid"
+          [class.disabled]="registerForm.invalid"
+        >
+          Sign Up
+        </button>
+      </div>
+    </form>
+    } @case ('Recovery') {
+    <form>
+      <div class="input">
+        <input type="email" placeholder="Email" />
+      </div>
+      <div class="input">
+        <button (click)="toggleFormSelector('EnterCode')">Recover</button>
+      </div>
+      <div class="input">
+        <span (click)="toggleFormSelector('SignIn')">Go Back</span>
+      </div>
+    </form>
+    <app-passrecovery-form
+      (sendFormName)="receiveData($event)"
+    ></app-passrecovery-form>
+    } @case ('EnterCode') {
+    <app-enter-code-form></app-enter-code-form>
+    <form [formGroup]="enterCodeForm">
+      <div class="otp-wrapper">
+        @for (digit of otpDigits; track $index) {
+        <input
+          type="text"
+          maxlength="1"
+          class="otp-input"
+          [(ngModel)]="otp[$index]"
+          [ngModelOptions]="{ standalone: true }"
+          (input)="onInput($event, $index)"
+          (keydown)="onKeyDown($event, $index)"
+          (paste)="onPaste($event)"
+        />
+        }
+      </div>
+
+      <div class="input">
+        @if (checkEnterCodeCase === 'register') {
+        <button
+          (click)="submitRegistration()"
+          [class.disabled]="getOtp() == '' || getOtp().length < 6"
+        >
+          Verify
+        </button>
+        } @else if (checkEnterCodeCase === 'recovery') {
+    Recovery flow button goes here
+    } 
+    </div>
+    </form>
+    } @case ('EnterNewPassword') {
+    <form>
+      <div class="input">
+        <input type="password" [placeholder]="'New Password'" />
+      </div>
+      <div class="input">
+        <input type="password" [placeholder]="'Repeat New Password'" />
+      </div>
+      <div class="input">
+        <button (click)="toggleFormSelector('SignIn')">Save</button>
+      </div>
+    </form>
+    } } -->
+  </div>
+</section>
