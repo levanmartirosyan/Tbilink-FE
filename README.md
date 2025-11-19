@@ -15,6 +15,20 @@ This project uses only APIs from the frontend. The backend and database are hand
 
 ---
 
+## 📑 Table of Contents
+
+| Section | Link |
+|---------|------|
+| Live Preview | [🖤 Live Preview](#-live-preview) |
+| Features | [💻 Features](#-features) |
+| Technologies | [⚡ Technologies Used](#-technologies-used) |
+| Getting Started | [🚀 Getting Started](#-getting-started) |
+| Project Structure | [🛠 Project Structure](#-project-structure) |
+| Commands Cheat Sheet | [💻 Commands Cheat Sheet](#-commands-cheat-sheet) |
+| Notes | [📌 Notes](#-notes) |
+
+---
+
 ## 🖤 Live Preview
 
 > You can clone this repository and run it locally to see it in action.
