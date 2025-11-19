@@ -1,6 +1,6 @@
 # 🌐 Tbilink - Angular Social Media Platform
 
-![Tbilink Logo](https://github.com/levanmartirosyan/Tbilink-FE/blob/main/public/assets/favicon1.ico)
+![Tbilink Logo](https://github.com/levanmartirosyan/Tbilink-FE/blob/main/public/favicon1.ico)
 
 **Tbilink** is a modern social media web application built with **Angular 20** for the frontend, **ASP.NET Web API** for the backend, and **Supabase (PostgreSQL)** as the database. It offers rich features like:
 
