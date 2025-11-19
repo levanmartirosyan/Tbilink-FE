@@ -52,16 +52,19 @@ Follow these steps to run **Tbilink** locally.
 ```bash
 git clone https://github.com/levanmartirosyan/Tbilink-FE.git
 cd Tbilink-FE
+```
 
 2️⃣ Install Dependencies
+```bash
 npm install
-
+```
 
 This will install all required Angular packages.
 
 3️⃣ Start the Development Server
+```bash
 ng serve
-
+```
 
 The app will run at: http://localhost:4200/
 
@@ -73,11 +76,13 @@ Make sure your ASP.NET Web API is running.
 
 Update the API URL in your Angular environment file:
 
+```TypeScript
 // src/environments/environment.ts
 export const environment = {
   production: false,
   apiUrl: 'https://your-backend-api.com/api'
 };
+```
 
 5️⃣ Supabase Database
 
@@ -105,19 +110,28 @@ Tbilink-FE/
 
 💻 Commands Cheat Sheet
 # Install dependencies
+```bash
 npm install
+```
 
 # Run the app locally
+```bash
 ng serve
+```
 
 # Build for production
+```bash
 ng build --prod
+```
 
 # Lint the code
+```bash
 ng lint
-
+```
 # Run tests
+```bash
 ng test
+```
 
 📌 Notes
 
