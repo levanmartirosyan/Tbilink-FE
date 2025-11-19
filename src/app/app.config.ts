@@ -8,6 +8,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
 import { icons, LUCIDE_ICONS, LucideIconProvider } from 'lucide-angular';
+import { provideLucideIcons } from '../core/providers/lucide-icons';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,10 +16,6 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(),
-    {
-      provide: LUCIDE_ICONS,
-      multi: true,
-      useValue: new LucideIconProvider(icons),
-    },
+    provideLucideIcons(),
   ],
 };

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ThemeService } from '../../core/services/theme-service';
 import { LucideAngularModule } from 'lucide-angular';
 
@@ -14,6 +14,8 @@ export class ThemeSwitcher implements OnInit {
   ngOnInit(): void {
     this.theme = this.themeService.getCurrentTheme();
   }
+
+  @Input() size?: number;
 
   public theme?: string;
   onToggle() {

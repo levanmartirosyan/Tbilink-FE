@@ -16,6 +16,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class AuthInput implements ControlValueAccessor {
   @Input() type = 'text';
   @Input() placeholder = '';
+  @Input() className?: string;
   @Input() autocomplete?: string;
 
   value = '';

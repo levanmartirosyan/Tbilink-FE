@@ -1,0 +1,121 @@
+:host {
+  width: 100vw;
+  header {
+    width: 100vw;
+    height: 64px;
+    background: color-mix(
+      in srgb,
+      var(--auth-form-background) 85%,
+      transparent
+    );
+    backdrop-filter: blur(8px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    .container {
+      max-width: 1280px;
+      width: 100%;
+      height: 64px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      .logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        img {
+          width: 44px;
+          height: 44px;
+        }
+        h2 {
+          color: var(--primary);
+          margin: 0;
+          font-size: 28px;
+          font-family: "Permanent Marker", cursive;
+          cursor: pointer;
+        }
+      }
+      nav {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        .active-indicator {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 34px; // same as .item width
+          height: 3px;
+          background-color: var(--primary);
+          border-radius: 3px;
+          transition: left 0.3s ease; // smooth sliding
+        }
+        .item {
+          width: 34px;
+          height: 34px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--text-color);
+          transition: 0.3s ease;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          lucide-icon {
+            width: 20px;
+            height: 20px;
+          }
+          &.active {
+            color: var(--primary);
+            background: color-mix(in srgb, var(--primary) 12%, transparent);
+          }
+          app-theme-switcher {
+            &:hover {
+              color: var(--primary) !important;
+            }
+          }
+          &:hover {
+            color: var(--primary);
+            background: color-mix(in srgb, var(--primary) 12%, transparent);
+          }
+        }
+        .profile {
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          .avatar {
+            cursor: pointer;
+            position: relative;
+            img {
+              width: 100%;
+              height: 100%;
+            }
+            .statusIndicator {
+              width: 14px;
+              height: 14px;
+              border-radius: 50%;
+              background-color: var(--indicator-inactive);
+              position: absolute;
+              right: 1px;
+              bottom: 1px;
+              border: 2px solid var(--auth-form-background);
+              transition: 0.3s ease;
+              &.active {
+                background-color: var(--indicator-active);
+                border: 2px solid var(--auth-form-background);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

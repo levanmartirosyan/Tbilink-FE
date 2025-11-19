@@ -11,7 +11,8 @@ import {
 } from '@angular/forms';
 import { AuthButton } from '../auth-button/auth-button';
 import { AuthInput } from '../auth-input/auth-input';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { CommonService } from '../../../../core/services/common-service';
 
 @Component({
   selector: 'app-signup-form',
@@ -20,7 +21,11 @@ import { RouterModule } from '@angular/router';
   styleUrl: './signup-form.scss',
 })
 export class SignupForm {
-  constructor(private api: ApiService) {}
+  constructor(
+    private api: ApiService,
+    private commonService: CommonService,
+    private router: Router
+  ) {}
 
   @Output() sendFormName = new EventEmitter<string>();
 
@@ -78,6 +83,19 @@ export class SignupForm {
     //     console.log(error);
     //   },
     // });
+
+    this.commonService.setUserEmailExists(true);
+
+    const formAction = {
+      type: 'registration',
+      email: this.registerForm.value.email,
+    };
+
+    this.commonService.setRecEmail(formAction);
+
+    sessionStorage.setItem('form-action', JSON.stringify(formAction));
+
+    this.router.navigate(['/auth/verify-email']);
   }
 
   changeForm(formName: string) {

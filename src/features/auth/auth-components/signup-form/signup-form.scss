@@ -1,11 +1,38 @@
 :host {
   width: 100%;
+
   form {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 12px;
     margin-top: 26px;
+    .statusCheck {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .input {
+      width: 100%;
+      min-height: 48px;
+      p {
+        width: 100%;
+        font-size: 13px;
+        text-align: end;
+        margin: 0;
+        &.checkSuccessMessage {
+          color: rgb(20, 187, 20);
+        }
+        &.checkErrorMessage {
+          color: red;
+        }
+        &.hidden {
+          display: none;
+        }
+      }
+    }
     .inputs {
       width: 100%;
       display: flex;

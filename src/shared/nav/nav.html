@@ -1,0 +1,33 @@
+<header>
+  <div class="container">
+    <div class="logo">
+      <img src="assets/icons/logo.png" alt="Tbilink" />
+      <h2 routerLink="/">TBILINK</h2>
+    </div>
+    <nav>
+      <div class="item" #navItem routerLink="/feed" routerLinkActive="active">
+        <lucide-icon name="house" [size]="20"></lucide-icon>
+      </div>
+      <div
+        class="item"
+        #navItem
+        routerLink="/messenger"
+        routerLinkActive="active"
+      >
+        <lucide-icon name="message-circle" [size]="20"></lucide-icon>
+      </div>
+      <div class="item">
+        <lucide-icon name="bell" [size]="20"></lucide-icon>
+      </div>
+
+      <app-theme-switcher [size]="20"></app-theme-switcher>
+
+      <div class="profile">
+        <div class="avatar" routerLink="/profile">
+          <img src="assets/icons/profile.png" alt="" />
+          <div class="statusIndicator"></div>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>

@@ -25,13 +25,21 @@ export class EnterCodeForm implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getFormData();
+    this.getFormAction();
   }
 
   @Output() sendFormName = new EventEmitter<string>();
 
+  private getFormAction() {
+    const data = sessionStorage.getItem('form-action');
+    if (data) {
+      this.formAction = JSON.parse(data);
+      this.getFormData();
+    }
+  }
+
   private getFormData() {
-    const email = sessionStorage.getItem('recover-email') || '';
+    const email = this.formAction.email;
 
     this.enterCodeForm.patchValue({ email });
     this.enterCodeForm.patchValue({ code: this.getOtp() });
@@ -50,6 +58,8 @@ export class EnterCodeForm implements OnInit {
     ]),
   });
 
+  public formAction: any;
+
   verify() {
     if (!this.enterCodeForm.valid) {
       return;
@@ -58,7 +68,13 @@ export class EnterCodeForm implements OnInit {
     this.commonService.setIsEmailVerified(true);
 
     this.sendFormName.emit('enter-new-password');
-    this.router.navigate(['/auth/create-new-password']);
+
+    if (this.formAction.type === 'password-recovery') {
+      this.router.navigate(['/auth/create-new-password']);
+    } else if (this.formAction.type === 'registration') {
+      this.router.navigate(['/']);
+    }
+
     console.log(this.enterCodeForm.value);
   }
 

@@ -39,6 +39,7 @@ body {
   width: 100%;
   background: var(--auth-background);
   color: var(--text-color);
+  position: relative;
 }
 
 :root[data-theme="light"] {
@@ -53,6 +54,8 @@ body {
   --auth-input-border: #d1d5dc;
   --auth-form-border: transparent;
   --primary: #f16849;
+  --indicator-active: #22c55e;
+  --indicator-inactive: #919191;
 }
 
 :root[data-theme="dark"] {
@@ -67,4 +70,6 @@ body {
   --auth-input-border: #475569;
   --auth-form-border: #ffffff;
   --primary: #f16849;
+  --indicator-active: #22c55e;
+  --indicator-inactive: #919191;
 }

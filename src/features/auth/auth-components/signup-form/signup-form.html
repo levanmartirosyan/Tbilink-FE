@@ -23,11 +23,19 @@
     ></app-auth-input>
   </div>
   <div class="inputs">
-    <app-auth-input
-      type="email"
-      placeholder="Email"
-      formControlName="email"
-    ></app-auth-input>
+    <div class="input statusCheck">
+      <app-auth-input
+        type="email"
+        placeholder="Email"
+        formControlName="email"
+        [className]="registerForm.get('email')?.hasError('pattern') ? 'checkError' : 'default'"
+      ></app-auth-input>
+      <!-- @if (registerForm.get('email')?.touched &&
+      registerForm.get('email')?.hasError('pattern')) {
+      <p class="checkErrorMessage">Enter a valid email address</p>
+      } -->
+    </div>
+
     <app-auth-input
       type="text"
       placeholder="Username"
