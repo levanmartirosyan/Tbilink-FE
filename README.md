@@ -103,7 +103,7 @@ Tbilink-FE/
 ├─ package.json
 └─ README.md
 
-🌈 Commands Cheat Sheet
+💻 Commands Cheat Sheet
 # Install dependencies
 npm install
 
