@@ -38,8 +38,8 @@ This project uses only APIs from the frontend. The backend and database are hand
 |----------|---------|----------|
 | Angular 20 | ASP.NET Web API | Supabase (PostgreSQL) |
 | RxJS | C# | PostgreSQL |
-| Tailwind / SCSS | REST APIs | Supabase Auth & APIs |
-| Lucide Icons | JWT Authentication | Cloud-hosted |
+|  SCSS | REST APIs |  |
+| Lucide Icons | JWT Authentication |  |
 
 ---
 
