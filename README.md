@@ -105,7 +105,7 @@ Ensure your Supabase PostgreSQL database is set up.
 
 Frontend only interacts with backend APIs, so no direct DB setup in frontend is required.
 
-🛠 Project Structure
+## 🛠 Project Structure
 ```bash
 Tbilink-FE/
 │
@@ -125,7 +125,7 @@ Tbilink-FE/
 └─ README.md
 ```
 
-💻 Commands Cheat Sheet
+## 💻 Commands Cheat Sheet
 # Install dependencies
 ```bash
 npm install
@@ -150,7 +150,7 @@ ng lint
 ng test
 ```
 
-📌 Notes
+## 📌 Notes
 
 This project is frontend-only; backend APIs are required to fully test messaging, calls, and group chat features.
 
