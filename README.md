@@ -51,6 +51,7 @@ Follow these steps to run **Tbilink** locally.
 
 ```bash
 git clone https://github.com/levanmartirosyan/Tbilink-FE.git
+
 cd Tbilink-FE
 ```
 
@@ -91,6 +92,7 @@ Ensure your Supabase PostgreSQL database is set up.
 Frontend only interacts with backend APIs, so no direct DB setup in frontend is required.
 
 🛠 Project Structure
+```bash
 Tbilink-FE/
 │
 ├─ src/
@@ -107,6 +109,7 @@ Tbilink-FE/
 ├─ angular.json
 ├─ package.json
 └─ README.md
+```
 
 💻 Commands Cheat Sheet
 # Install dependencies
