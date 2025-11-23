@@ -8,11 +8,11 @@ export const authGuard: CanActivateFn = (route, state) => {
 
   const currentUser = user.getUser();
 
-  const isExpired = currentUser?.expiresAt
-    ? new Date(currentUser.expiresAt).getTime() < Date.now()
+  const isExpired = currentUser?.tokens.expiresAt
+    ? new Date(currentUser.tokens.expiresAt).getTime() < Date.now()
     : true;
 
-  if (!currentUser?.accessToken || isExpired) {
+  if (!currentUser?.tokens.accessToken || isExpired) {
     router.navigate(['/auth/signin']);
     return false;
   }

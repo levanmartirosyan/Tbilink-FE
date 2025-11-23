@@ -6,16 +6,18 @@ import {
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
-import { icons, LUCIDE_ICONS, LucideIconProvider } from 'lucide-angular';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideLucideIcons } from '../core/providers/lucide-icons';
+import { provideEnvironment } from '../core/providers/enviroment';
+import { tokenInterceptor } from '../core/interceptors/token-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([tokenInterceptor])),
     provideLucideIcons(),
+    provideEnvironment(),
   ],
 };

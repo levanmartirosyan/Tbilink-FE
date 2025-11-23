@@ -13,6 +13,7 @@
     top: 0;
     left: 0;
     right: 0;
+    z-index: 999;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     .container {
       max-width: 1280px;
@@ -50,11 +51,11 @@
           position: absolute;
           bottom: 0;
           left: 0;
-          width: 34px; // same as .item width
+          width: 34px;
           height: 3px;
           background-color: var(--primary);
           border-radius: 3px;
-          transition: left 0.3s ease; // smooth sliding
+          transition: left 0.3s ease;
         }
         .item {
           width: 34px;
@@ -91,12 +92,14 @@
           width: 44px;
           height: 44px;
           border-radius: 50%;
+          position: relative;
           .avatar {
             cursor: pointer;
             position: relative;
             img {
               width: 100%;
               height: 100%;
+              border-radius: 50%;
             }
             .statusIndicator {
               width: 14px;
@@ -107,11 +110,63 @@
               right: 1px;
               bottom: 1px;
               border: 2px solid var(--auth-form-background);
-              transition: 0.3s ease;
               &.active {
                 background-color: var(--indicator-active);
                 border: 2px solid var(--auth-form-background);
               }
+            }
+          }
+
+          .profile-menu {
+            position: absolute;
+            right: 0;
+            bottom: -98px;
+            width: 110px;
+            border-radius: 10px;
+            background: color-mix(
+              in srgb,
+              var(--auth-form-background) 98%,
+              transparent
+            );
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: -4px 6px 10px rgba(0, 0, 0, 0.05),
+              4px 6px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: opacity 0.28s ease, transform 0.28s ease,
+              visibility 0s linear 0.28s;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: translateY(-10px);
+            .menu-item {
+              width: 100%;
+              cursor: pointer;
+              padding: 10px;
+              display: flex;
+              align-items: center;
+              justify-content: flex-start;
+              gap: 6px;
+              transition: 0.3s ease;
+              lucide-icon {
+                width: 17px;
+                height: 17px;
+              }
+              p {
+                font-size: 15px;
+              }
+              &:hover {
+                color: var(--primary);
+                background: color-mix(in srgb, var(--primary) 12%, transparent);
+              }
+            }
+            &.active {
+              opacity: 1;
+              visibility: visible;
+              pointer-events: all;
+              transform: translateY(0);
+              transition-delay: 0s;
             }
           }
         }

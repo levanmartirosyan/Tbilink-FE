@@ -7,9 +7,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ServiceResponse } from '../../../../core/interfaces/Response';
 import { ApiService } from '../../../../core/services/api-service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
+import { SignInRequest } from '../../../../core/interfaces/auth-interfaces';
+import { ServiceResponse } from '../../../../core/interfaces/Response';
+import { UserService } from '../../../../core/services/user-service';
 
 @Component({
   selector: 'app-signin-form',
@@ -18,7 +21,12 @@ import { RouterModule } from '@angular/router';
   styleUrl: './signin-form.scss',
 })
 export class SigninForm {
-  constructor(private api: ApiService) {}
+  constructor(
+    private api: ApiService,
+    private userService: UserService,
+    private cookies: CookieService,
+    private router: Router
+  ) {}
 
   @Output() sendFormName = new EventEmitter<string>();
 
@@ -39,16 +47,18 @@ export class SigninForm {
       return;
     }
 
-    console.log(this.loginForm.value);
+    this.api.signin(this.loginForm.value).subscribe({
+      next: (data: any) => {
+        console.log(data.data);
 
-    // this.api.login(this.loginForm.value).subscribe({
-    //   next: (data: ServiceResponse<number>) => {
-    //     console.log(data);
-    //   },
-    //   error: (error: ServiceResponse<number>) => {
-    //     console.log(error);
-    //   },
-    // });
+        this.userService.setUser(data.data);
+
+        this.router.navigate(['/feed']);
+      },
+      error: (error: any) => {
+        console.log(error);
+      },
+    });
   }
 
   changeForm(formName: string) {

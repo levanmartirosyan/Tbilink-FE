@@ -11,6 +11,7 @@ import { AuthInput } from '../auth-input/auth-input';
 import { Router, RouterModule } from '@angular/router';
 
 import { CommonService } from '../../../../core/services/common-service';
+import { CodeType } from '../../../../core/enums/code-types';
 
 @Component({
   selector: 'app-send-verification-code-form',
@@ -32,6 +33,7 @@ export class sendVerificationCodeForm {
   }
 
   public sendVerificationCodeForm: FormGroup = new FormGroup({
+    codeType: new FormControl(CodeType.PasswordRecovery, [Validators.required]),
     email: new FormControl('', [
       Validators.required,
       Validators.email,
@@ -39,38 +41,36 @@ export class sendVerificationCodeForm {
     ]),
   });
 
-  recover() {
+  sendCode() {
     if (!this.sendVerificationCodeForm.valid) {
       return;
     }
 
     console.log(this.sendVerificationCodeForm.value);
 
-    // this.api.login(this.loginForm.value).subscribe({
-    //   next: (data: ServiceResponse<number>) => {
-    //     console.log(data);
-    //   },
-    //   error: (error: ServiceResponse<number>) => {
-    //     console.log(error);
-    //   },
-    // });
-    // sessionStorage.setItem(
-    //   'recover-email',
-    //   this.sendVerificationCodeForm.value.email
-    // );
+    this.api
+      .sendVerificationCode(this.sendVerificationCodeForm.value)
+      .subscribe({
+        next: (data: any) => {
+          this.commonService.setUserEmailExists(true);
 
-    this.commonService.setUserEmailExists(true);
+          const formAction = {
+            type: 'password-recovery',
+            email: this.sendVerificationCodeForm.value.email,
+            code: '',
+          };
 
-    const formAction = {
-      type: 'password-recovery',
-      email: this.sendVerificationCodeForm.value.email,
-    };
+          this.commonService.setRecEmail(formAction);
 
-    this.commonService.setRecEmail(formAction);
+          sessionStorage.setItem('form-action', JSON.stringify(formAction));
 
-    sessionStorage.setItem('form-action', JSON.stringify(formAction));
-
-    this.router.navigate(['/auth/verify-email']);
+          this.router.navigate(['/auth/verify-email']);
+          console.log(data);
+        },
+        error: (error: any) => {
+          console.log(error);
+        },
+      });
   }
 
   receiveData(formName: string) {

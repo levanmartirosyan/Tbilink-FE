@@ -28,8 +28,6 @@ export class EnterCodeForm implements OnInit {
     this.getFormAction();
   }
 
-  @Output() sendFormName = new EventEmitter<string>();
-
   private getFormAction() {
     const data = sessionStorage.getItem('form-action');
     if (data) {
@@ -65,17 +63,34 @@ export class EnterCodeForm implements OnInit {
       return;
     }
 
-    this.commonService.setIsEmailVerified(true);
+    this.api.verifyEmail(this.enterCodeForm.value).subscribe({
+      next: (data: any) => {
+        console.log(data);
 
-    this.sendFormName.emit('enter-new-password');
+        if (this.formAction.type === 'password-recovery') {
+          this.commonService.setIsEmailVerified(true);
+          const formActionData = sessionStorage.getItem('form-action');
+          if (formActionData) {
+            const formAction = {
+              type: 'password-recovery',
+              email: this.enterCodeForm.value.email,
+              code: this.enterCodeForm.value.code,
+            };
 
-    if (this.formAction.type === 'password-recovery') {
-      this.router.navigate(['/auth/create-new-password']);
-    } else if (this.formAction.type === 'registration') {
-      this.router.navigate(['/']);
-    }
+            sessionStorage.setItem('form-action', JSON.stringify(formAction));
+          }
 
-    console.log(this.enterCodeForm.value);
+          this.router.navigate(['/auth/create-new-password']);
+        } else if (this.formAction.type === 'registration') {
+          this.commonService.setUserEmailExists(false);
+          sessionStorage.removeItem('form-action');
+          this.router.navigate(['/']);
+        }
+      },
+      error: (error: any) => {
+        console.log(error);
+      },
+    });
   }
 
   otp: string[] = ['', '', '', '', '', ''];
@@ -138,7 +153,5 @@ export class EnterCodeForm implements OnInit {
     return this.otp.join('');
   }
 
-  changeForm(formName: string) {
-    this.sendFormName.emit(formName);
-  }
+  changeForm(formName: string) {}
 }

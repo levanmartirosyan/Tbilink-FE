@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { User } from '../types/user';
 import { BehaviorSubject } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  constructor() {
-    const savedUser = window.localStorage.getItem('user');
+  constructor(private cookies: CookieService) {
+    const savedUser = cookies.get('TB-UserData');
     if (savedUser) {
       this.user.next(JSON.parse(savedUser));
     }
@@ -18,7 +19,12 @@ export class UserService {
 
   public setUser(user: User | null): void {
     this.user.next(user);
-    window.localStorage.setItem('user', JSON.stringify(user));
+    this.cookies.set('TB-UserData', JSON.stringify(user), {
+      expires: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
+      secure: true,
+      sameSite: 'Strict',
+      path: '/',
+    });
   }
 
   public getUser(): User | null {
@@ -27,6 +33,6 @@ export class UserService {
 
   public logout(): void {
     this.user.next(null);
-    window.localStorage.removeItem('user');
+    this.cookies.delete('TB-UserData', '/');
   }
 }

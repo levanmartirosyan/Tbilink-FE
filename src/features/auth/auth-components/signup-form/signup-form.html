@@ -1,14 +1,3 @@
-<!-- <div class="selector">
-  <div class="indicator" [style.left]="'calc(50% + 2px)'"></div>
-
-  <div class="option" routerLink="/auth/signin">
-    <span>Sign In</span>
-  </div>
-  <div class="option active" routerLink="/auth/signup">
-    <span>Sign Up</span>
-  </div>
-</div> -->
-
 <form [formGroup]="registerForm" (ngSubmit)="register()">
   <div class="inputs names">
     <app-auth-input
@@ -45,11 +34,13 @@
       type="password"
       placeholder="Password"
       formControlName="password"
+      [className]="registerForm.get('password')?.hasError('pattern') ? 'checkError' : 'default'"
     ></app-auth-input>
     <app-auth-input
       type="password"
       placeholder="Repeat Password"
       formControlName="repPassword"
+      [className]="registerForm.get('repPassword')?.hasError('pattern') ? 'checkError' : 'default'"
     ></app-auth-input>
   </div>
   <app-auth-button

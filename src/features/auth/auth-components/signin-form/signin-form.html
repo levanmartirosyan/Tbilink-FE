@@ -1,14 +1,3 @@
-<!-- <div class="selector">
-  <div class="indicator" [style.left]=" '4px'"></div>
-
-  <div class="option active" routerLink="/auth/signin">
-    <span>Sign In</span>
-  </div>
-  <div class="option" routerLink="/auth/signup">
-    <span>Sign Up</span>
-  </div>
-</div> -->
-
 <form [formGroup]="loginForm" (ngSubmit)="login()">
   <div class="inputs">
     <app-auth-input

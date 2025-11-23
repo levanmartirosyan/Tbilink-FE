@@ -1,0 +1,268 @@
+section {
+  width: 100vw;
+  height: 100vh;
+  padding-top: 64px;
+  background: var(--auth-background);
+  .container {
+    max-width: 1280px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    .profile {
+      width: 100%;
+      .cover-img {
+        width: 100%;
+        height: 320px;
+        position: relative;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center;
+          border-radius: 4px;
+        }
+        .edit-cover {
+          padding: 0 12px;
+          height: 40px;
+          border-radius: 12px;
+          position: absolute;
+          top: 18px;
+          right: 18px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          background: color-mix(
+            in srgb,
+            var(--auth-form-background) 60%,
+            transparent
+          );
+          cursor: pointer;
+          lucide-icon {
+            width: 16px;
+            height: 16px;
+            color: var(--text-color);
+            transition: 0.3s ease;
+          }
+          p {
+            font-size: 14px;
+            color: var(--text-color);
+            transition: 0.3s ease;
+          }
+          &:hover {
+            p {
+              color: var(--primary);
+            }
+            lucide-icon {
+              color: var(--primary);
+            }
+          }
+        }
+      }
+      .user-info {
+        padding: 0 28px;
+        height: 107px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .info {
+          position: relative;
+          display: flex;
+          align-items: center;
+          .avatar {
+            overflow: hidden;
+            width: 155px;
+            height: 155px;
+            border-radius: 50%;
+            position: absolute;
+            top: -45px;
+            img {
+              width: 100%;
+              height: 100%;
+              border-radius: 50%;
+              object-fit: cover;
+              object-position: center;
+              border: 5px solid var(--auth-form-background);
+            }
+          }
+          .names {
+            padding-left: 183px;
+            padding-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            h2 {
+              color: var(--text-color);
+            }
+            .params {
+              display: flex;
+              align-items: center;
+              gap: 4px;
+              lucide-icon {
+                width: 17px;
+                height: 17px;
+                color: var(--text-unfocused);
+              }
+              p {
+                font-size: 15px;
+                color: var(--text-unfocused);
+              }
+            }
+          }
+        }
+        .btns {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          .btn {
+            padding: 0 20px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            p {
+              font-size: 14px;
+              font-weight: bold;
+            }
+            lucide-icon {
+              width: 16px;
+              height: 16px;
+            }
+          }
+          .follow {
+            background: linear-gradient(90deg, #7572ff 0%, #f1592a 100%);
+            transition: opacity 0.3s ease;
+            &.following {
+              background: var(--auth-input-background);
+            }
+            &:hover {
+              opacity: 0.7;
+            }
+          }
+          .message {
+            background: var(--auth-input-background);
+            transition: 0.3s ease;
+            &:hover {
+              background-color: var(--auth-input-border);
+            }
+          }
+          .settings {
+            padding: 0 18px;
+            background: var(--auth-input-background);
+            transition: 0.3s ease;
+            position: relative;
+            lucide-icon {
+              width: 22px;
+              height: 22px;
+            }
+            &:hover {
+              background-color: var(--auth-input-border);
+            }
+            .settings-menu {
+              position: absolute;
+              right: 0;
+              bottom: -82px;
+              width: 140px;
+              border-radius: 10px;
+              background: color-mix(
+                in srgb,
+                var(--auth-input-background) 100%,
+                transparent
+              );
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              box-shadow: -4px 6px 10px rgba(0, 0, 0, 0.05),
+                4px 6px 10px rgba(0, 0, 0, 0.05);
+              overflow: hidden;
+              transition: opacity 0.28s ease, transform 0.28s ease,
+                visibility 0s linear 0.28s;
+              opacity: 0;
+              visibility: hidden;
+              pointer-events: none;
+              transform: translateY(-10px);
+              .menu-item {
+                width: 100%;
+                cursor: pointer;
+                padding: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 6px;
+                transition: 0.3s ease;
+                lucide-icon {
+                  width: 17px;
+                  height: 17px;
+                }
+                p {
+                  font-size: 15px;
+                  font-weight: normal;
+                }
+                &:hover {
+                  color: var(--primary);
+                  background: color-mix(
+                    in srgb,
+                    var(--primary) 12%,
+                    transparent
+                  );
+                }
+              }
+              &.active {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: all;
+                transform: translateY(0);
+                transition-delay: 0s;
+              }
+            }
+          }
+        }
+      }
+      .description-followers {
+        padding: 0 28px;
+        margin-top: 30px;
+        .descr {
+          p {
+            font-size: 15px;
+            color: var(--text-unfocused);
+          }
+        }
+        .followers-counter {
+          margin-top: 30px;
+          display: flex;
+          align-items: center;
+          gap: 26px;
+          .counter {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            span {
+              color: var(--text-color);
+              font-size: 19px;
+              font-weight: bold;
+            }
+            p {
+              color: var(--text-unfocused);
+              font-size: 15px;
+            }
+          }
+          .separator {
+            width: 1px;
+            height: 30px;
+            background-color: var(--text-unfocused);
+            opacity: 0.4;
+            border-radius: 8px;
+          }
+        }
+      }
+    }
+  }
+}

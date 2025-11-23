@@ -23,7 +23,7 @@ export const routes: Routes = [
   {
     path: 'auth',
     component: Auth,
-    // canActivate: [authCheckGuard],
+    canActivate: [authCheckGuard],
     children: [
       {
         path: '',
@@ -49,19 +49,19 @@ export const routes: Routes = [
   {
     path: 'feed',
     component: Feed,
-    // canActivate: [authGuard],
+    canActivate: [authGuard],
     children: [],
   },
   {
     path: 'messenger',
     component: Messenger,
-    // canActivate: [authGuard],
+    canActivate: [authGuard],
     children: [],
   },
   {
     path: 'profile',
     component: Profile,
-    // canActivate: [authGuard],
+    canActivate: [authGuard],
     children: [],
   },
 ];

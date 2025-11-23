@@ -29,6 +29,14 @@ export class NewPasswordForm implements OnInit {
 
   ngOnInit(): void {
     this.commonService.setAuthAction('enter-new-password');
+
+    const formActionData = sessionStorage.getItem('form-action');
+    if (formActionData) {
+      this.newPassForm.patchValue({
+        code: JSON.parse(formActionData).code,
+        email: JSON.parse(formActionData).email,
+      });
+    }
   }
 
   private passwordsMatchValidator: ValidatorFn = (
@@ -43,7 +51,15 @@ export class NewPasswordForm implements OnInit {
   };
 
   public newPassForm: FormGroup = new FormGroup({
-    // resetToken: new FormControl('', [Validators.required]),
+    code: new FormControl('', [
+      Validators.required,
+      Validators.minLength(6),
+      Validators.maxLength(6),
+    ]),
+    email: new FormControl('', [
+      Validators.required,
+      Validators.pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/),
+    ]),
     password: new FormControl('', [
       Validators.required,
       Validators.pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/),
@@ -58,7 +74,23 @@ export class NewPasswordForm implements OnInit {
     if (this.newPassForm.invalid) {
       return;
     }
+
     console.log(this.newPassForm.value);
-    this.router.navigate(['/auth/signin']);
+
+    this.api.resetPassword(this.newPassForm.value).subscribe({
+      next: (data: any) => {
+        console.log(data);
+
+        this.commonService.setUserEmailExists(false);
+        this.commonService.setIsEmailVerified(false);
+
+        sessionStorage.removeItem('form-action');
+
+        this.router.navigate(['/auth/signin']);
+      },
+      error: (error: any) => {
+        console.log(error);
+      },
+    });
   }
 }

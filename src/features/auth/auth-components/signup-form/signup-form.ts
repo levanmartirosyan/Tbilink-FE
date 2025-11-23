@@ -58,12 +58,6 @@ export class SignupForm {
         Validators.required,
         Validators.pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/),
       ]),
-      country: new FormControl(''),
-      city: new FormControl(''),
-      phoneNumber: new FormControl(''),
-      profilePhotoUrl: new FormControl(''),
-      coverPhotoUrl: new FormControl(''),
-      description: new FormControl(''),
     },
     { validators: this.passwordsMatchValidator }
   );
@@ -75,27 +69,28 @@ export class SignupForm {
 
     console.log(this.registerForm.value);
 
-    // this.api.login(this.loginForm.value).subscribe({
-    //   next: (data: ServiceResponse<number>) => {
-    //     console.log(data);
-    //   },
-    //   error: (error: ServiceResponse<number>) => {
-    //     console.log(error);
-    //   },
-    // });
+    this.api.signup(this.registerForm.value).subscribe({
+      next: (data: any) => {
+        console.log(data);
 
-    this.commonService.setUserEmailExists(true);
+        this.commonService.setUserEmailExists(true);
 
-    const formAction = {
-      type: 'registration',
-      email: this.registerForm.value.email,
-    };
+        const formAction = {
+          type: 'registration',
+          email: this.registerForm.value.email,
+          code: '',
+        };
 
-    this.commonService.setRecEmail(formAction);
+        this.commonService.setRecEmail(formAction);
 
-    sessionStorage.setItem('form-action', JSON.stringify(formAction));
+        sessionStorage.setItem('form-action', JSON.stringify(formAction));
 
-    this.router.navigate(['/auth/verify-email']);
+        this.router.navigate(['/auth/verify-email']);
+      },
+      error: (error: any) => {
+        console.log(error);
+      },
+    });
   }
 
   changeForm(formName: string) {

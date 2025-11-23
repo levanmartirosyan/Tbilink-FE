@@ -2,24 +2,46 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
   QueryList,
+  ViewChild,
   ViewChildren,
 } from '@angular/core';
 import { ThemeSwitcher } from '../theme-switcher/theme-switcher';
 import { LucideAngularModule } from 'lucide-angular';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { UserService } from '../../core/services/user-service';
+import { User } from '../../core/types/user';
+import { CommonModule } from '@angular/common';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-nav',
-  imports: [ThemeSwitcher, LucideAngularModule, RouterModule],
+  imports: [ThemeSwitcher, LucideAngularModule, RouterModule, CommonModule],
   templateUrl: './nav.html',
   styleUrl: './nav.scss',
 })
-export class Nav implements AfterViewInit {
+export class Nav implements AfterViewInit, OnInit, OnDestroy {
   @ViewChildren('navItem') navItems!: QueryList<ElementRef>;
   indicator!: HTMLElement;
 
-  constructor(private router: Router, private el: ElementRef) {}
+  @ViewChild('profileWrapper', { read: ElementRef })
+  profileWrapper!: ElementRef;
+
+  constructor(
+    private router: Router,
+    private el: ElementRef,
+    public userService: UserService
+  ) {}
+
+  public userData!: User | null;
+  private destroy$ = new Subject<void>();
+
+  ngOnInit(): void {
+    this.getCurrentUser();
+  }
 
   ngAfterViewInit() {
     this.indicator = this.el.nativeElement.querySelector('.active-indicator');
@@ -29,8 +51,24 @@ export class Nav implements AfterViewInit {
       }
     });
 
-    // initial position
     this.moveIndicator();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  getCurrentUser() {
+    this.userService.user$.pipe(takeUntil(this.destroy$)).subscribe((u) => {
+      this.userData = u;
+    });
+
+    this.router.events.pipe(takeUntil(this.destroy$)).subscribe((evt) => {
+      if (evt instanceof NavigationEnd) {
+        setTimeout(() => this.moveIndicator(), 0);
+      }
+    });
   }
 
   moveIndicator() {
@@ -43,5 +81,31 @@ export class Nav implements AfterViewInit {
         this.indicator.style.width = item.offsetWidth + 'px';
       }
     });
+  }
+
+  public profileMenu: boolean = false;
+  toggleProfileMenu() {
+    this.profileMenu = !this.profileMenu;
+  }
+
+  logout() {
+    this.userService.logout();
+
+    this.router.navigate(['/']);
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event) {
+    if (!this.profileMenu) return;
+
+    const target = event.target as Node | null;
+    if (!target) {
+      this.profileMenu = false;
+      return;
+    }
+
+    if (!this.profileWrapper.nativeElement.contains(target)) {
+      this.profileMenu = false;
+    }
   }
 }
