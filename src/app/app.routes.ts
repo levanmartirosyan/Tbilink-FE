@@ -13,6 +13,8 @@ import { authGuard } from '../core/guards/auth-guard';
 import { authCheckGuard } from '../core/guards/auth-check-guard';
 import { Messenger } from '../features/messenger/messenger';
 import { Profile } from '../features/profile/profile';
+import { Search } from '../features/search/search';
+import { ProfileSettings } from '../features/profile/profile-settings/profile-settings';
 
 export const routes: Routes = [
   {
@@ -53,6 +55,12 @@ export const routes: Routes = [
     children: [],
   },
   {
+    path: 'search',
+    component: Search,
+    canActivate: [authGuard],
+    children: [],
+  },
+  {
     path: 'messenger',
     component: Messenger,
     canActivate: [authGuard],
@@ -63,5 +71,10 @@ export const routes: Routes = [
     component: Profile,
     canActivate: [authGuard],
     children: [],
+  },
+  {
+    path: 'profile/settings',
+    component: ProfileSettings,
+    canActivate: [authGuard],
   },
 ];

@@ -5,21 +5,34 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { Nav } from '../../shared/nav/nav';
 import { ApiService } from '../../core/services/api-service';
 import { FullUser } from '../../core/types/user';
 import { LucideAngularModule } from 'lucide-angular';
 import { CommonModule } from '@angular/common';
 import { FormatNumberPipe } from '../../core/pipes/format-number-pipe';
+import { NavSwitcher } from '../../shared/nav-switcher/nav-switcher';
+import { UserService } from '../../core/services/user-service';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
-  imports: [Nav, LucideAngularModule, CommonModule, FormatNumberPipe],
+  imports: [
+    LucideAngularModule,
+    CommonModule,
+    FormatNumberPipe,
+    NavSwitcher,
+    RouterModule,
+  ],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
 export class Profile implements OnInit {
-  constructor(private api: ApiService, private el: ElementRef) {}
+  constructor(
+    private api: ApiService,
+    private el: ElementRef,
+    private userService: UserService,
+    private router: Router
+  ) {}
 
   @ViewChild('settingsWrapper', { read: ElementRef })
   settingsWrapper!: ElementRef;
@@ -61,5 +74,11 @@ export class Profile implements OnInit {
     if (!this.settingsWrapper.nativeElement.contains(target)) {
       this.settingsMenu = false;
     }
+  }
+
+  logout() {
+    this.userService.logout();
+
+    this.router.navigate(['/']);
   }
 }

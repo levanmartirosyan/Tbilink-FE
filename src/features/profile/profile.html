@@ -1,4 +1,4 @@
-<app-nav></app-nav>
+<app-nav-switcher></app-nav-switcher>
 <section>
   <div class="container">
     <div class="profile">
@@ -55,13 +55,17 @@
             <lucide-icon name="cog" [size]="22"></lucide-icon>
 
             <div class="settings-menu" [class.active]="settingsMenu">
-              <div class="menu-item" routerLink="/profile">
+              <div class="menu-item" routerLink="/profile/settings">
                 <lucide-icon name="user-pen" [size]="17"></lucide-icon>
                 <p>Edit Profile</p>
               </div>
               <div class="menu-item">
                 <lucide-icon name="share-2" [size]="17"></lucide-icon>
                 <p>Share Profile</p>
+              </div>
+              <div class="menu-item" (click)="logout()">
+                <lucide-icon name="log-out" [size]="17"></lucide-icon>
+                <p>Log Out</p>
               </div>
             </div>
           </div>

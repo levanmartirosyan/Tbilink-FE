@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { NavSwitcher } from '../../shared/nav-switcher/nav-switcher';
 
 @Component({
-  selector: 'app-feed',
+  selector: 'app-search',
   imports: [NavSwitcher],
-  templateUrl: './feed.html',
-  styleUrl: './feed.scss',
+  templateUrl: './search.html',
+  styleUrl: './search.scss',
 })
-export class Feed {}
+export class Search {}

@@ -14,7 +14,7 @@ import { Enviroment } from '../../enviroment/enviroment';
 })
 export class ApiService {
   constructor(private http: HttpClient, private apiUrl: Enviroment) {
-    this.url = apiUrl.publicUrl;
+    this.url = apiUrl.localUrl;
   }
 
   private url: string;

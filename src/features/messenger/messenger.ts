@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { Nav } from '../../shared/nav/nav';
+import { NavSwitcher } from '../../shared/nav-switcher/nav-switcher';
 
 @Component({
   selector: 'app-messenger',
-  imports: [Nav],
+  imports: [NavSwitcher],
   templateUrl: './messenger.html',
   styleUrl: './messenger.scss',
 })
