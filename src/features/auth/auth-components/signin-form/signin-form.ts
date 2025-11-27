@@ -13,6 +13,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { SignInRequest } from '../../../../core/interfaces/auth-interfaces';
 import { ServiceResponse } from '../../../../core/interfaces/Response';
 import { UserService } from '../../../../core/services/user-service';
+import { CommonService } from '../../../../core/services/common-service';
 
 @Component({
   selector: 'app-signin-form',
@@ -25,7 +26,8 @@ export class SigninForm {
     private api: ApiService,
     private userService: UserService,
     private cookies: CookieService,
-    private router: Router
+    private router: Router,
+    private commonService: CommonService
   ) {}
 
   @Output() sendFormName = new EventEmitter<string>();
@@ -47,16 +49,21 @@ export class SigninForm {
       return;
     }
 
+    this.commonService.setShowLoader(true);
+
     this.api.signin(this.loginForm.value).subscribe({
       next: (data: any) => {
         console.log(data.data);
 
         this.userService.setUser(data.data);
 
+        this.commonService.setShowLoader(false);
+
         this.router.navigate(['/feed']);
       },
       error: (error: any) => {
         console.log(error);
+        this.commonService.setShowLoader(false);
       },
     });
   }

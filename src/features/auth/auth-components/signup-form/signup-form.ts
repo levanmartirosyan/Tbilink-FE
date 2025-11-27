@@ -69,6 +69,8 @@ export class SignupForm {
 
     console.log(this.registerForm.value);
 
+    this.commonService.setShowLoader(true);
+
     this.api.signup(this.registerForm.value).subscribe({
       next: (data: any) => {
         console.log(data);
@@ -85,10 +87,13 @@ export class SignupForm {
 
         sessionStorage.setItem('form-action', JSON.stringify(formAction));
 
+        this.commonService.setShowLoader(false);
+
         this.router.navigate(['/auth/verify-email']);
       },
       error: (error: any) => {
         console.log(error);
+        this.commonService.setShowLoader(false);
       },
     });
   }

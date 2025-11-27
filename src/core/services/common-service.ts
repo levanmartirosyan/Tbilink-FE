@@ -35,4 +35,11 @@ export class CommonService {
   setUserEmailExists(response: boolean) {
     this.userEmailExists.next(response);
   }
+
+  private showLoader = new Subject<boolean>();
+  showLoader$ = this.showLoader.asObservable();
+
+  setShowLoader(value: boolean) {
+    this.showLoader.next(value);
+  }
 }

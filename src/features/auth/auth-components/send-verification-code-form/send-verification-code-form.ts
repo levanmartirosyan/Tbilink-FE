@@ -48,6 +48,8 @@ export class sendVerificationCodeForm {
 
     console.log(this.sendVerificationCodeForm.value);
 
+    this.commonService.setShowLoader(true);
+
     this.api
       .sendVerificationCode(this.sendVerificationCodeForm.value)
       .subscribe({
@@ -64,11 +66,14 @@ export class sendVerificationCodeForm {
 
           sessionStorage.setItem('form-action', JSON.stringify(formAction));
 
+          this.commonService.setShowLoader(false);
+
           this.router.navigate(['/auth/verify-email']);
           console.log(data);
         },
         error: (error: any) => {
           console.log(error);
+          this.commonService.setShowLoader(false);
         },
       });
   }

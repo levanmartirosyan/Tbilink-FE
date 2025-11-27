@@ -1,3 +1,9 @@
-<button type="submit" [class.disabled]="isDisabled" [disabled]="isDisabled">
-  {{text}}
+<button
+  type="submit"
+  [class.disabled]="isDisabled "
+  [disabled]="isDisabled || (commonService.showLoader$ | async)"
+>
+  @if (commonService.showLoader$ | async) {
+  <app-bar-loader></app-bar-loader>
+  } @else { {{ text }} }
 </button>

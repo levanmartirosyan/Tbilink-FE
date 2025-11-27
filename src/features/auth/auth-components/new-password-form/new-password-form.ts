@@ -77,6 +77,8 @@ export class NewPasswordForm implements OnInit {
 
     console.log(this.newPassForm.value);
 
+    this.commonService.setShowLoader(true);
+
     this.api.resetPassword(this.newPassForm.value).subscribe({
       next: (data: any) => {
         console.log(data);
@@ -86,10 +88,13 @@ export class NewPasswordForm implements OnInit {
 
         sessionStorage.removeItem('form-action');
 
+        this.commonService.setShowLoader(false);
+
         this.router.navigate(['/auth/signin']);
       },
       error: (error: any) => {
         console.log(error);
+        this.commonService.setShowLoader(false);
       },
     });
   }

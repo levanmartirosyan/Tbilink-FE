@@ -63,6 +63,8 @@ export class EnterCodeForm implements OnInit {
       return;
     }
 
+    this.commonService.setShowLoader(true);
+
     this.api.verifyEmail(this.enterCodeForm.value).subscribe({
       next: (data: any) => {
         console.log(data);
@@ -80,15 +82,21 @@ export class EnterCodeForm implements OnInit {
             sessionStorage.setItem('form-action', JSON.stringify(formAction));
           }
 
+          this.commonService.setShowLoader(false);
+
           this.router.navigate(['/auth/create-new-password']);
         } else if (this.formAction.type === 'registration') {
           this.commonService.setUserEmailExists(false);
           sessionStorage.removeItem('form-action');
+
+          this.commonService.setShowLoader(false);
+
           this.router.navigate(['/']);
         }
       },
       error: (error: any) => {
         console.log(error);
+        this.commonService.setShowLoader(false);
       },
     });
   }
