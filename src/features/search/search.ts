@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { NavSwitcher } from '../../shared/nav-switcher/nav-switcher';
 
 @Component({
   selector: 'app-search',
-  imports: [NavSwitcher],
+  imports: [],
   templateUrl: './search.html',
   styleUrl: './search.scss',
 })

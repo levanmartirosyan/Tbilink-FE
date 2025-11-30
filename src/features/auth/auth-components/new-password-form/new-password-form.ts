@@ -13,6 +13,7 @@ import {
 import { ApiService } from '../../../../core/services/api-service';
 import { CommonService } from '../../../../core/services/common-service';
 import { Router } from '@angular/router';
+import { ToastService } from '../../../../core/services/toast-service';
 
 @Component({
   selector: 'app-new-password-form',
@@ -24,7 +25,8 @@ export class NewPasswordForm implements OnInit {
   constructor(
     private api: ApiService,
     private commonService: CommonService,
-    private router: Router
+    private router: Router,
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -90,11 +92,16 @@ export class NewPasswordForm implements OnInit {
 
         this.commonService.setShowLoader(false);
 
+        this.toastService.success('Password reset successfully.');
+
         this.router.navigate(['/auth/signin']);
       },
       error: (error: any) => {
         console.log(error);
         this.commonService.setShowLoader(false);
+        this.toastService.error(
+          error.error.message || 'Failed to reset password. Please try again.'
+        );
       },
     });
   }

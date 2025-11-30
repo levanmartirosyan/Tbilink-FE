@@ -12,6 +12,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormSwither } from './auth-components/form-swither/form-swither';
 import { AuthGreeting } from './auth-components/auth-greeting/auth-greeting';
+import { Toast } from '../../shared/toast/toast';
 
 @Component({
   selector: 'app-auth',
@@ -21,6 +22,7 @@ import { AuthGreeting } from './auth-components/auth-greeting/auth-greeting';
     CommonModule,
     FormSwither,
     AuthGreeting,
+    Toast,
   ],
   templateUrl: './auth.html',
   styleUrl: './auth.scss',

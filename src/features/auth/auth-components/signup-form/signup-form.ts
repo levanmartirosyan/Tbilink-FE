@@ -13,6 +13,7 @@ import { AuthButton } from '../auth-button/auth-button';
 import { AuthInput } from '../auth-input/auth-input';
 import { Router, RouterModule } from '@angular/router';
 import { CommonService } from '../../../../core/services/common-service';
+import { ToastService } from '../../../../core/services/toast-service';
 
 @Component({
   selector: 'app-signup-form',
@@ -24,7 +25,8 @@ export class SignupForm {
   constructor(
     private api: ApiService,
     private commonService: CommonService,
-    private router: Router
+    private router: Router,
+    private toastService: ToastService
   ) {}
 
   @Output() sendFormName = new EventEmitter<string>();
@@ -89,11 +91,16 @@ export class SignupForm {
 
         this.commonService.setShowLoader(false);
 
+        this.toastService.success(
+          'Registration successful. verification code sent to your email.'
+        );
+
         this.router.navigate(['/auth/verify-email']);
       },
       error: (error: any) => {
         console.log(error);
         this.commonService.setShowLoader(false);
+        this.toastService.error(error.error.message || 'Registration failed.');
       },
     });
   }

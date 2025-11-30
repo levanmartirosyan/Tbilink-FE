@@ -12,6 +12,7 @@ import { Router, RouterModule } from '@angular/router';
 
 import { CommonService } from '../../../../core/services/common-service';
 import { CodeType } from '../../../../core/enums/code-types';
+import { ToastService } from '../../../../core/services/toast-service';
 
 @Component({
   selector: 'app-send-verification-code-form',
@@ -23,7 +24,8 @@ export class sendVerificationCodeForm {
   constructor(
     private api: ApiService,
     private commonService: CommonService,
-    private router: Router
+    private router: Router,
+    private toastService: ToastService
   ) {}
 
   public authAction: string = 'recovery';
@@ -68,12 +70,18 @@ export class sendVerificationCodeForm {
 
           this.commonService.setShowLoader(false);
 
+          this.toastService.success('Verification code sent successfully.');
+
           this.router.navigate(['/auth/verify-email']);
           console.log(data);
         },
         error: (error: any) => {
           console.log(error);
           this.commonService.setShowLoader(false);
+          this.toastService.error(
+            error.error.message ||
+              'Failed to send verification code. Please try again.'
+          );
         },
       });
   }

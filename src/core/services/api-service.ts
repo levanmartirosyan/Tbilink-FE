@@ -4,10 +4,13 @@ import {
   ResetPasswordRequest,
   sendVerificationCodeRequest,
   SignInRequest,
+  SignInResponse,
   SingUpRequest,
   VerifyEmailRequest,
 } from '../interfaces/auth-interfaces';
 import { Enviroment } from '../../enviroment/enviroment';
+import { Observable } from 'rxjs';
+import { ServiceResponse } from '../interfaces/Response';
 
 @Injectable({
   providedIn: 'root',
@@ -19,8 +22,13 @@ export class ApiService {
 
   private url: string;
 
-  signin(signinBody: SignInRequest) {
-    return this.http.post(this.url + 'auth/signin', signinBody);
+  signin(
+    signinBody: SignInRequest
+  ): Observable<ServiceResponse<SignInResponse>> {
+    return this.http.post<ServiceResponse<SignInResponse>>(
+      this.url + 'auth/signin',
+      signinBody
+    );
   }
 
   signup(signupBody: SingUpRequest) {

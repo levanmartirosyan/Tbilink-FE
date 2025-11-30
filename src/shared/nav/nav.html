@@ -5,15 +5,13 @@
       <h2 routerLink="/">TBILINK</h2>
     </div>
     <nav>
-      <div class="item" #navItem routerLink="/feed" routerLinkActive="active">
+      <div class="item" routerLink="/feed" routerLinkActive="active">
         <lucide-icon name="house" [size]="20"></lucide-icon>
       </div>
-      <div
-        class="item"
-        #navItem
-        routerLink="/messenger"
-        routerLinkActive="active"
-      >
+      <div class="item" routerLink="/search" routerLinkActive="active">
+        <lucide-icon name="search" [size]="20"></lucide-icon>
+      </div>
+      <div class="item" routerLink="/messenger" routerLinkActive="active">
         <lucide-icon name="message-circle" [size]="20"></lucide-icon>
       </div>
       <div class="item">

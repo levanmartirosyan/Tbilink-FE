@@ -1,0 +1,125 @@
+:host {
+  width: 100%;
+  .post-card {
+    width: 100%;
+    background: var(--auth-form-background);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.05);
+    .post-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      .profile-avatar {
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        position: relative;
+        .avatar {
+          cursor: pointer;
+          position: relative;
+          img {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center;
+          }
+          .statusIndicator {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background-color: var(--indicator-inactive);
+            position: absolute;
+            right: 1px;
+            bottom: 1px;
+            border: 2px solid var(--auth-form-background);
+            &.active {
+              background-color: var(--indicator-active);
+              border: 2px solid var(--auth-form-background);
+            }
+          }
+        }
+      }
+      .user-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        .username {
+          font-size: 16px;
+          font-weight: 600;
+          color: var(--text-color);
+        }
+        .timestamp {
+          font-size: 12px;
+          color: var(--secondary-text-color);
+        }
+      }
+    }
+    .post-content {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      p {
+        font-size: 14px;
+        color: var(--text-color);
+      }
+      .img {
+        width: 100%;
+        height: 400px;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center;
+
+          border-radius: 12px;
+        }
+      }
+    }
+    .post-actions {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 24px;
+      position: relative;
+      margin-top: 20px;
+      .action {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        transition: 0.3s ease;
+        color: var(--text-color);
+        cursor: pointer;
+        lucide-icon {
+          width: 20px;
+          height: 20px;
+          &.liked {
+            color: red;
+          }
+        }
+        span {
+          font-size: 15px;
+        }
+        &:hover {
+          color: var(--primary);
+        }
+      }
+      &::after {
+        content: "";
+        position: absolute;
+        top: -20px;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        border-radius: 5px;
+        background: var(--auth-input-border);
+      }
+    }
+  }
+}

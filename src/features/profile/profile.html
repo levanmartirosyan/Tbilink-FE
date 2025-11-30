@@ -1,4 +1,3 @@
-<app-nav-switcher></app-nav-switcher>
 <section>
   <div class="container">
     <div class="profile">
@@ -12,86 +11,8 @@
           <p>Edit Cover</p>
         </div>
       </div>
-      <div class="user-info">
-        <div class="info">
-          <div class="avatar">
-            <img
-              [src]="userData?.profilePhotoUrl ?? 'assets/icons/profile.png'"
-              alt=""
-            />
-          </div>
-          <div class="names">
-            <h2>{{userData?.firstName + " " + userData?.lastName}}</h2>
-            <div class="params">
-              <lucide-icon name="at-sign" [size]="17"></lucide-icon>
-              <p>{{userData?.userName}}</p>
-            </div>
-            @if (userData?.country !== null || userData?.city !== null) {
-            <div class="params">
-              <lucide-icon name="map-pin" [size]="17"></lucide-icon>
-              <p>{{userData?.country + ','}} {{userData?.city}}</p>
-            </div>
-            }
-            <div class="params">
-              <lucide-icon name="calendar" [size]="17"></lucide-icon>
-              <p>Joined: {{userData?.registerDate | date: "MMMM yyyy"}}</p>
-            </div>
-          </div>
-        </div>
-        <div class="btns">
-          <!-- <div class="follow btn">
-            <lucide-icon name="user-plus" [size]="16"></lucide-icon>
-            <p>Follow</p>
-          </div>
-          <div class="message btn">
-            <lucide-icon name="message-circle" [size]="16"></lucide-icon>
-            <p>Message</p>
-          </div> -->
-          <div
-            class="settings btn"
-            #settingsWrapper
-            (click)="toggleSettingsMenu()"
-          >
-            <lucide-icon name="cog" [size]="22"></lucide-icon>
-
-            <div class="settings-menu" [class.active]="settingsMenu">
-              <div class="menu-item" routerLink="/profile/settings">
-                <lucide-icon name="user-pen" [size]="17"></lucide-icon>
-                <p>Edit Profile</p>
-              </div>
-              <div class="menu-item">
-                <lucide-icon name="share-2" [size]="17"></lucide-icon>
-                <p>Share Profile</p>
-              </div>
-              <div class="menu-item" (click)="logout()">
-                <lucide-icon name="log-out" [size]="17"></lucide-icon>
-                <p>Log Out</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="description-followers">
-        <div class="descr">
-          <p>{{userData?.description || 'No Description.'}}</p>
-        </div>
-        <div class="followers-counter">
-          <div class="counter">
-            <span>{{userData?.postCount | formatNumber}}</span>
-            <p>Posts</p>
-          </div>
-          <div class="separator"></div>
-          <div class="counter">
-            <span>{{userData?.followersCount | formatNumber}}</span>
-            <p>Followers</p>
-          </div>
-          <div class="separator"></div>
-          <div class="counter">
-            <span>{{userData?.followingCount | formatNumber}}</span>
-            <p>Followings</p>
-          </div>
-        </div>
-      </div>
+      <app-profile-info [userData]="userData"></app-profile-info>
+      <app-followers-counter [userData]="userData"></app-followers-counter>
     </div>
   </div>
 </section>

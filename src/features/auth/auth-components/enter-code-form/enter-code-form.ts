@@ -10,6 +10,7 @@ import { AuthButton } from '../auth-button/auth-button';
 import { ApiService } from '../../../../core/services/api-service';
 import { CommonService } from '../../../../core/services/common-service';
 import { Router } from '@angular/router';
+import { ToastService } from '../../../../core/services/toast-service';
 
 @Component({
   selector: 'app-enter-code-form',
@@ -21,7 +22,8 @@ export class EnterCodeForm implements OnInit {
   constructor(
     private api: ApiService,
     private commonService: CommonService,
-    private router: Router
+    private router: Router,
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -84,6 +86,8 @@ export class EnterCodeForm implements OnInit {
 
           this.commonService.setShowLoader(false);
 
+          this.toastService.success('Email verified successfully.');
+
           this.router.navigate(['/auth/create-new-password']);
         } else if (this.formAction.type === 'registration') {
           this.commonService.setUserEmailExists(false);
@@ -91,12 +95,26 @@ export class EnterCodeForm implements OnInit {
 
           this.commonService.setShowLoader(false);
 
+          this.toastService.success('Email verified successfully.');
+
           this.router.navigate(['/']);
+        } else if (this.formAction.type === 'email-verification-from-signin') {
+          sessionStorage.removeItem('form-action');
+
+          this.commonService.setShowLoader(false);
+
+          this.toastService.success(
+            'Email verified successfully, Please sign in again.'
+          );
+          this.router.navigate(['/auth/signin']);
         }
       },
       error: (error: any) => {
         console.log(error);
         this.commonService.setShowLoader(false);
+        this.toastService.error(
+          error.error.message || 'Verification failed. Please try again.'
+        );
       },
     });
   }

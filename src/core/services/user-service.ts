@@ -7,10 +7,17 @@ import { CookieService } from 'ngx-cookie-service';
   providedIn: 'root',
 })
 export class UserService {
+  private readonly USER_COOKIE_KEY = 'TB-UserData';
+
   constructor(private cookies: CookieService) {
-    const savedUser = cookies.get('TB-UserData');
+    const savedUser = cookies.get(this.USER_COOKIE_KEY);
     if (savedUser) {
-      this.user.next(JSON.parse(savedUser));
+      try {
+        this.user.next(JSON.parse(savedUser));
+      } catch {
+        this.cookies.delete(this.USER_COOKIE_KEY, '/');
+        this.user.next(null);
+      }
     }
   }
 
@@ -19,7 +26,7 @@ export class UserService {
 
   public setUser(user: User | null): void {
     this.user.next(user);
-    this.cookies.set('TB-UserData', JSON.stringify(user), {
+    this.cookies.set(this.USER_COOKIE_KEY, JSON.stringify(user), {
       expires: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
       secure: true,
       sameSite: 'Strict',
@@ -33,6 +40,6 @@ export class UserService {
 
   public logout(): void {
     this.user.next(null);
-    this.cookies.delete('TB-UserData', '/');
+    this.cookies.delete(this.USER_COOKIE_KEY, '/');
   }
 }

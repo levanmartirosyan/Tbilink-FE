@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   HostListener,
@@ -11,7 +10,7 @@ import {
 } from '@angular/core';
 import { ThemeSwitcher } from '../theme-switcher/theme-switcher';
 import { LucideAngularModule } from 'lucide-angular';
-import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../core/services/user-service';
 import { User } from '../../core/types/user';
 import { CommonModule } from '@angular/common';
@@ -23,7 +22,7 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './nav.html',
   styleUrl: './nav.scss',
 })
-export class Nav implements AfterViewInit, OnInit, OnDestroy {
+export class Nav implements OnInit, OnDestroy {
   @ViewChildren('navItem') navItems!: QueryList<ElementRef>;
   indicator!: HTMLElement;
 
@@ -43,17 +42,6 @@ export class Nav implements AfterViewInit, OnInit, OnDestroy {
     this.getCurrentUser();
   }
 
-  ngAfterViewInit() {
-    this.indicator = this.el.nativeElement.querySelector('.active-indicator');
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.moveIndicator();
-      }
-    });
-
-    this.moveIndicator();
-  }
-
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -62,24 +50,6 @@ export class Nav implements AfterViewInit, OnInit, OnDestroy {
   getCurrentUser() {
     this.userService.user$.pipe(takeUntil(this.destroy$)).subscribe((u) => {
       this.userData = u;
-    });
-
-    this.router.events.pipe(takeUntil(this.destroy$)).subscribe((evt) => {
-      if (evt instanceof NavigationEnd) {
-        setTimeout(() => this.moveIndicator(), 0);
-      }
-    });
-  }
-
-  moveIndicator() {
-    const currentRoute = this.router.url;
-    const items = this.el.nativeElement.querySelectorAll('.item');
-
-    items.forEach((item: HTMLElement) => {
-      if (item.getAttribute('ng-reflect-router-link') === currentRoute) {
-        this.indicator.style.left = item.offsetLeft + 'px';
-        this.indicator.style.width = item.offsetWidth + 'px';
-      }
     });
   }
 
@@ -91,7 +61,7 @@ export class Nav implements AfterViewInit, OnInit, OnDestroy {
   logout() {
     this.userService.logout();
 
-    this.router.navigate(['/']);
+    this.router.navigate(['/auth/signin']);
   }
 
   @HostListener('document:click', ['$event'])

@@ -27,3 +27,45 @@ export interface ResetPasswordRequest {
   password: string;
   repPassword: string;
 }
+
+export interface SignInResponse {
+  tokens: {
+    accessToken: string;
+    refreshToken: string;
+    expiresAt: string;
+  };
+  data: {
+    firstName: string;
+    lastName: string;
+    userName: string;
+    email: string;
+    profilePhotoUrl: string;
+    role: string;
+    isEmailVerified: boolean;
+  };
+}
+
+export interface SingUpResponse {
+  firstName: string;
+  lastName: string;
+  userName: string;
+  email: string;
+  password: string;
+  repPassword: string;
+}
+
+export interface sendVerificationCodeResponse {
+  email: string;
+}
+
+export interface VerifyEmailResponse {
+  email: string;
+  code: string;
+}
+
+export interface ResetPasswordResponse {
+  code: string;
+  email: string;
+  password: string;
+  repPassword: string;
+}

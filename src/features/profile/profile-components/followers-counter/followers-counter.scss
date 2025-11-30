@@ -1,0 +1,41 @@
+:host {
+  .description-followers {
+    padding: 0 28px;
+    margin-top: 30px;
+    .descr {
+      p {
+        font-size: 15px;
+        color: var(--text-unfocused);
+      }
+    }
+    .followers-counter {
+      margin-top: 30px;
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      .counter {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        span {
+          color: var(--text-color);
+          font-size: 19px;
+          font-weight: bold;
+        }
+        p {
+          color: var(--text-unfocused);
+          font-size: 15px;
+        }
+      }
+      .separator {
+        width: 1px;
+        height: 30px;
+        background-color: var(--text-unfocused);
+        opacity: 0.4;
+        border-radius: 8px;
+      }
+    }
+  }
+}
