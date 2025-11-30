@@ -14,13 +14,46 @@ import { authCheckGuard } from '../core/guards/auth-check-guard';
 import { Messenger } from '../features/messenger/messenger';
 import { Profile } from '../features/profile/profile';
 import { Search } from '../features/search/search';
-import { ProfileSettings } from '../features/profile/profile-settings/profile-settings';
+import { ProfileSettings } from '../features/profile/profile-components/profile-settings/profile-settings';
+import { Main } from '../features/main/main';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'auth',
-    pathMatch: 'full',
+    component: Main,
+    canActivate: [authGuard],
+    canActivateChild: [authGuard],
+    children: [
+      {
+        path: '',
+        redirectTo: 'feed',
+        pathMatch: 'full',
+      },
+      {
+        path: 'feed',
+        component: Feed,
+        children: [],
+      },
+      {
+        path: 'search',
+        component: Search,
+        children: [],
+      },
+      {
+        path: 'messenger',
+        component: Messenger,
+        children: [],
+      },
+      {
+        path: 'profile',
+        component: Profile,
+        children: [],
+      },
+      {
+        path: 'profile/settings',
+        component: ProfileSettings,
+      },
+    ],
   },
   {
     path: 'auth',
@@ -47,34 +80,5 @@ export const routes: Routes = [
         canActivate: [createPasswordGuard],
       },
     ],
-  },
-  {
-    path: 'feed',
-    component: Feed,
-    canActivate: [authGuard],
-    children: [],
-  },
-  {
-    path: 'search',
-    component: Search,
-    canActivate: [authGuard],
-    children: [],
-  },
-  {
-    path: 'messenger',
-    component: Messenger,
-    canActivate: [authGuard],
-    children: [],
-  },
-  {
-    path: 'profile',
-    component: Profile,
-    canActivate: [authGuard],
-    children: [],
-  },
-  {
-    path: 'profile/settings',
-    component: ProfileSettings,
-    canActivate: [authGuard],
   },
 ];

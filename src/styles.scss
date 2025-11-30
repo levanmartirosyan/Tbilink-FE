@@ -35,11 +35,37 @@
   }
 }
 
+html,
+body {
+  touch-action: pan-x pan-y;
+  -ms-touch-action: pan-x pan-y;
+  height: 100vh;
+}
+
 body {
   width: 100%;
   background: var(--auth-background);
+  background-attachment: fixed;
   color: var(--text-color);
   position: relative;
+  scrollbar-width: thin;
+  overflow: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--auth-input-border);
+  border-radius: 4px;
+}
+
+.user-select-none {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 :root[data-theme="light"] {

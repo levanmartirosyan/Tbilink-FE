@@ -1,6 +1,6 @@
 <button
   type="submit"
-  [class.disabled]="isDisabled "
+  [class.disabled]="isDisabled"
   [disabled]="isDisabled || (commonService.showLoader$ | async)"
 >
   @if (commonService.showLoader$ | async) {

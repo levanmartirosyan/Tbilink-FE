@@ -9,11 +9,10 @@ import {
 } from '@angular/forms';
 import { ApiService } from '../../../../core/services/api-service';
 import { Router, RouterModule } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
-import { SignInRequest } from '../../../../core/interfaces/auth-interfaces';
-import { ServiceResponse } from '../../../../core/interfaces/Response';
 import { UserService } from '../../../../core/services/user-service';
 import { CommonService } from '../../../../core/services/common-service';
+import { ToastService } from '../../../../core/services/toast-service';
+import { CodeType } from '../../../../core/enums/code-types';
 
 @Component({
   selector: 'app-signin-form',
@@ -25,9 +24,9 @@ export class SigninForm {
   constructor(
     private api: ApiService,
     private userService: UserService,
-    private cookies: CookieService,
     private router: Router,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private toastService: ToastService
   ) {}
 
   @Output() sendFormName = new EventEmitter<string>();
@@ -46,13 +45,13 @@ export class SigninForm {
 
   login() {
     if (!this.loginForm.valid) {
-      return;
+      return this.toastService.error('Please fill in all required fields.');
     }
 
     this.commonService.setShowLoader(true);
 
     this.api.signin(this.loginForm.value).subscribe({
-      next: (data: any) => {
+      next: (data) => {
         console.log(data.data);
 
         this.userService.setUser(data.data);
@@ -64,11 +63,47 @@ export class SigninForm {
       error: (error: any) => {
         console.log(error);
         this.commonService.setShowLoader(false);
+        this.toastService.error(
+          error.error.message || 'Sign In failed. Please try again.'
+        );
+
+        if (!error.error.data?.isEmailVerified) {
+          this.sendVerificationCode();
+        }
       },
     });
   }
 
   changeForm(formName: string) {
     this.sendFormName.emit(formName);
+  }
+
+  sendVerificationCode() {
+    this.commonService.setUserEmailExists(true);
+
+    const formAction = {
+      type: 'email-verification-from-signin',
+      email: this.loginForm.value.email,
+      code: '',
+    };
+
+    this.commonService.setRecEmail(formAction);
+
+    sessionStorage.setItem('form-action', JSON.stringify(formAction));
+
+    const sendCodeForm = {
+      codeType: CodeType.EmailVerification,
+      email: this.loginForm.value.email,
+    };
+
+    this.api.sendVerificationCode(sendCodeForm).subscribe({
+      next: (data: any) => {
+        console.log(data);
+
+        this.toastService.dismiss();
+
+        this.router.navigate(['/auth/verify-email']);
+      },
+    });
   }
 }

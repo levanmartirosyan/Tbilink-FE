@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { NavSwitcher } from '../../shared/nav-switcher/nav-switcher';
+import { AddPost } from './feed-components/add-post/add-post';
+import { PostCard } from './feed-components/post-card/post-card';
 
 @Component({
   selector: 'app-feed',
-  imports: [NavSwitcher],
+  imports: [AddPost, PostCard],
   templateUrl: './feed.html',
   styleUrl: './feed.scss',
 })

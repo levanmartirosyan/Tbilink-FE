@@ -9,7 +9,6 @@
     padding: 0 12px;
     background-color: var(--auth-input-background);
     color: var(--text-color);
-    transition: background-color 0.1s ease-in-out, color 0.1s ease-in-out;
     &:focus {
       border: 2px solid var(--auth-input-focus);
     }
