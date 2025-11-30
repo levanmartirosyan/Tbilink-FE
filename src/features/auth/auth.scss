@@ -6,7 +6,7 @@ app-theme-switcher {
 :host {
   height: 100%;
   display: block;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   padding: 20px 0;
   section {
