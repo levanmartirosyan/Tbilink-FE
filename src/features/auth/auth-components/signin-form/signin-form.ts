@@ -100,8 +100,6 @@ export class SigninForm {
       next: (data: any) => {
         console.log(data);
 
-        this.toastService.dismiss();
-
         this.router.navigate(['/auth/verify-email']);
       },
     });

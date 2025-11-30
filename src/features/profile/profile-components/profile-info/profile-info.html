@@ -15,7 +15,7 @@
       @if (userData?.country !== null || userData?.city !== null) {
       <div class="params">
         <lucide-icon name="map-pin" [size]="17"></lucide-icon>
-        <p>{{userData?.country + ','}} {{userData?.city}}</p>
+        <p>{{userData?.country + ',' + ' '+ userData?.city}}</p>
       </div>
       }
       <div class="params">
