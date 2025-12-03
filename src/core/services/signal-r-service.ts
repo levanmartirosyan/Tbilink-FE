@@ -26,7 +26,7 @@ export class SignalRService {
     }
 
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(this.apiUrl.hubUrlLocal, {
+      .withUrl(this.apiUrl.hubUrlPublic, {
         accessTokenFactory: () => user.tokens.accessToken,
       })
       .withAutomaticReconnect()
