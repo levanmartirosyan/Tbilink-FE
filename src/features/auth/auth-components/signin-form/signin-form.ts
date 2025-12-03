@@ -13,6 +13,7 @@ import { UserService } from '../../../../core/services/user-service';
 import { CommonService } from '../../../../core/services/common-service';
 import { ToastService } from '../../../../core/services/toast-service';
 import { CodeType } from '../../../../core/enums/code-types';
+import { SignalRService } from '../../../../core/services/signal-r-service';
 
 @Component({
   selector: 'app-signin-form',
@@ -26,7 +27,8 @@ export class SigninForm {
     private userService: UserService,
     private router: Router,
     private commonService: CommonService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private signalRService: SignalRService
   ) {}
 
   @Output() sendFormName = new EventEmitter<string>();
@@ -59,6 +61,8 @@ export class SigninForm {
         this.commonService.setShowLoader(false);
 
         this.router.navigate(['/feed']);
+
+        this.signalRService.createHubConnection(data.data);
       },
       error: (error: any) => {
         console.log(error);
@@ -67,7 +71,7 @@ export class SigninForm {
           error.error.message || 'Sign In failed. Please try again.'
         );
 
-        if (!error.error.data?.isEmailVerified) {
+        if (!error.error.data?.isEmailVerified && error.error.data !== null) {
           this.sendVerificationCode();
         }
       },

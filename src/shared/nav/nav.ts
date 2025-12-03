@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
   ElementRef,
   HostListener,
   OnDestroy,
@@ -12,9 +13,10 @@ import { ThemeSwitcher } from '../theme-switcher/theme-switcher';
 import { LucideAngularModule } from 'lucide-angular';
 import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../core/services/user-service';
-import { User } from '../../core/types/user';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
+import { SignalRService } from '../../core/services/signal-r-service';
+import { User } from '../../core/types/user';
 
 @Component({
   selector: 'app-nav',
@@ -32,7 +34,8 @@ export class Nav implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private el: ElementRef,
-    public userService: UserService
+    public userService: UserService,
+    public signalRService: SignalRService
   ) {}
 
   public userData!: User | null;

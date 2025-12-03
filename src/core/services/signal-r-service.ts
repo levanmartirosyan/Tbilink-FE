@@ -32,27 +32,29 @@ export class SignalRService {
       .withAutomaticReconnect()
       .build();
 
-    this.hubConnection.start().catch((error) => console.log(error));
+    this.hubConnection.start().catch((error: any) => console.log(error));
 
     this.hubConnection.off('UserOnline');
-    this.hubConnection.on('UserOnline', (userId) => {
-      this.onlineUsers.update((users) => [...users, userId]);
+    this.hubConnection.on('UserOnline', (userId: string) => {
+      this.onlineUsers.update((users: string[]) => [...users, userId]);
     });
 
     this.hubConnection.off('UserOffline');
-    this.hubConnection.on('UserOffline', (userId) => {
-      this.onlineUsers.update((users) => users.filter((x) => x !== userId));
+    this.hubConnection.on('UserOffline', (userId: string) => {
+      this.onlineUsers.update((users: string[]) =>
+        users.filter((x: string) => x !== userId)
+      );
     });
 
     this.hubConnection.off('GetOnlineUsers');
-    this.hubConnection.on('GetOnlineUsers', (userIds) => {
+    this.hubConnection.on('GetOnlineUsers', (userIds: string[]) => {
       this.onlineUsers.set(userIds);
     });
   }
 
   stopHubConnection(): void {
     if (this.hubConnection) {
-      this.hubConnection.stop().catch((err) => console.log(err));
+      this.hubConnection.stop().catch((err: any) => console.log(err));
       this.onlineUsers.set([]);
     }
   }

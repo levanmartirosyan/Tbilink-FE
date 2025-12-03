@@ -84,6 +84,17 @@
         &:hover {
           color: var(--primary);
         }
+        .filePreviewWrapper {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          .file-preview {
+            width: 26px;
+            height: 26px;
+            border-radius: 4px;
+            object-fit: cover;
+          }
+        }
       }
       .btn {
         width: 50px;

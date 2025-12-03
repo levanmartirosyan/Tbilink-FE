@@ -1,22 +1,49 @@
-<div class="add-post-card">
+<form
+  class="add-post-card"
+  [formGroup]="addPostForm"
+  (ngSubmit)="uploadImage()"
+>
   <div class="top">
     <div class="profile-avatar">
       <div class="avatar">
-        <img [src]=" 'assets/icons/profile.png'" alt="Avatar" />
-        <div class="statusIndicator"></div>
+        <img
+          [src]="userData?.data?.profilePhotoUrl || 'assets/icons/profile.png'"
+          alt="Avatar"
+        />
+        <div
+          class="statusIndicator"
+          [class.active]="signalRService.isUserOnline(userData?.data?.id || '')"
+        ></div>
       </div>
     </div>
     <div class="input">
-      <textarea placeholder="What's on your mind?"></textarea>
+      <textarea
+        placeholder="What's on your mind?"
+        formControlName="content"
+      ></textarea>
     </div>
   </div>
   <div class="bottom">
-    <div class="photos">
+    <div class="photos" (click)="fileInput.click()">
       <lucide-icon name="image" [size]="20"></lucide-icon>
-      <span>Photo | Video</span>
+      <span>Photo</span>
+
+      @if (selectedFile != null) {
+      <div class="filePreviewWrapper">
+        <p>|</p>
+        <img [src]="filePreview" alt="Selected" class="file-preview" />
+      </div>
+      }
     </div>
+    <input
+      #fileInput
+      type="file"
+      accept="image/*,video/*"
+      (change)="onFileSelected($event)"
+      style="display: none"
+    />
     <div class="btn">
-      <button>Post</button>
+      <button type="submit">Post</button>
     </div>
   </div>
-</div>
+</form>
