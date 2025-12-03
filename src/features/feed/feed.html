@@ -1,8 +1,11 @@
 <section>
   <div class="container">
-    <app-add-post></app-add-post>
-    <app-post-card></app-post-card>
-    <app-post-card></app-post-card>
-    <app-post-card></app-post-card>
+    <app-add-post (newPostCreated)="getNewPosts($event)"></app-add-post>
+    @for (post of postData; track $index) {
+    <app-post-card
+      [postData]="post"
+      (deletePostNewData)="getNewPosts($event)"
+    ></app-post-card>
+    }
   </div>
 </section>

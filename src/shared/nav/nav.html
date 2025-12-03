@@ -26,7 +26,10 @@
             [src]="userData?.data?.profilePhotoUrl || 'assets/icons/profile.png'"
             alt="Avatar"
           />
-          <div class="statusIndicator"></div>
+          <div
+            class="statusIndicator"
+            [class.active]="signalRService.isUserOnline(userData?.data?.id || '')"
+          ></div>
         </div>
 
         <div class="profile-menu" [class.active]="profileMenu">

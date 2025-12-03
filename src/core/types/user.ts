@@ -5,6 +5,7 @@ export type User = {
     expiresAt: string;
   };
   data: {
+    id: string;
     firstName: string;
     lastName: string;
     userName: string;
