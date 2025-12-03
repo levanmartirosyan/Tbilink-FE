@@ -17,7 +17,7 @@ import { ServiceResponse } from '../interfaces/Response';
 })
 export class ApiService {
   constructor(private http: HttpClient, private apiUrl: Enviroment) {
-    this.url = apiUrl.localUrl;
+    this.url = apiUrl.publicUrl;
   }
 
   private url: string;
