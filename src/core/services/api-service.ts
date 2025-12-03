@@ -17,7 +17,7 @@ import { ServiceResponse } from '../interfaces/Response';
 })
 export class ApiService {
   constructor(private http: HttpClient, private apiUrl: Enviroment) {
-    this.url = apiUrl.publicUrl;
+    this.url = apiUrl.localUrl;
   }
 
   private url: string;
@@ -52,5 +52,31 @@ export class ApiService {
 
   getUserData() {
     return this.http.get(this.url + 'user/me');
+  }
+
+  uploadPublicFile(formData: FormData, folder: string) {
+    formData.append('Folder', folder);
+
+    return this.http.post(this.url + 'storage/upload/public', formData);
+  }
+
+  getAllPosts() {
+    return this.http.get(this.url + 'post/all');
+  }
+
+  getPostById(postId: string) {
+    return this.http.get(this.url + 'post?postId=' + postId);
+  }
+
+  createPost(postBody: any) {
+    return this.http.post(this.url + 'post/create', postBody);
+  }
+
+  updatePost(postBody: any) {
+    return this.http.put(this.url + 'post/update', postBody);
+  }
+
+  deletePost(postId: string) {
+    return this.http.delete(this.url + 'post/delete?postId=' + postId);
   }
 }

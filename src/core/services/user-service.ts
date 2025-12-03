@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { User } from '../types/user';
 import { BehaviorSubject } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
+import { SignalRService } from './signal-r-service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,11 +10,15 @@ import { CookieService } from 'ngx-cookie-service';
 export class UserService {
   private readonly USER_COOKIE_KEY = 'TB-UserData';
 
-  constructor(private cookies: CookieService) {
+  constructor(
+    private cookies: CookieService,
+    private signalRService: SignalRService
+  ) {
     const savedUser = cookies.get(this.USER_COOKIE_KEY);
     if (savedUser) {
       try {
         this.user.next(JSON.parse(savedUser));
+        this.signalRService.createHubConnection(this.user.value!);
       } catch {
         this.cookies.delete(this.USER_COOKIE_KEY, '/');
         this.user.next(null);
@@ -41,5 +46,7 @@ export class UserService {
   public logout(): void {
     this.user.next(null);
     this.cookies.delete(this.USER_COOKIE_KEY, '/');
+
+    this.signalRService.stopHubConnection();
   }
 }
