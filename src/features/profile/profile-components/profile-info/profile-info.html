@@ -1,10 +1,7 @@
 <div class="user-info">
   <div class="info">
     <div class="avatar">
-      <img
-        [src]="userData?.profilePhotoUrl ?? 'assets/icons/profile.png'"
-        alt=""
-      />
+      <img [src]=" 'assets/icons/profile.png'" alt="" />
     </div>
     <div class="names">
       <h2>{{userData?.firstName + " " + userData?.lastName}}</h2>
@@ -25,14 +22,16 @@
     </div>
   </div>
   <div class="btns">
-    <!-- <div class="follow btn">
-            <lucide-icon name="user-plus" [size]="16"></lucide-icon>
-            <p>Follow</p>
-          </div>
-          <div class="message btn">
-            <lucide-icon name="message-circle" [size]="16"></lucide-icon>
-            <p>Message</p>
-          </div> -->
+    @if (userData?.id !== currentUserId) {
+    <div class="follow btn">
+      <lucide-icon name="user-plus" [size]="16"></lucide-icon>
+      <p>Follow</p>
+    </div>
+    <div class="message btn">
+      <lucide-icon name="message-circle" [size]="16"></lucide-icon>
+      <p>Message</p>
+    </div>
+    } @if (userData?.id == currentUserId) {
     <div class="settings btn" #settingsWrapper (click)="toggleSettingsMenu()">
       <lucide-icon name="cog" [size]="22"></lucide-icon>
 
@@ -51,5 +50,6 @@
         </div>
       </div>
     </div>
+    }
   </div>
 </div>

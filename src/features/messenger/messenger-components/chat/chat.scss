@@ -1,0 +1,82 @@
+:host {
+  width: 100%;
+  .chat {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid var(--auth-input-border);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    &:hover {
+      background-color: var(--chat-hover-background);
+    }
+    .left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      .avatar {
+        cursor: pointer;
+        position: relative;
+        img {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          object-fit: cover;
+          object-position: center;
+        }
+        .statusIndicator {
+          width: 14px;
+          height: 14px;
+          border-radius: 50%;
+          background-color: var(--indicator-inactive);
+          position: absolute;
+          right: 1px;
+          bottom: 1px;
+          border: 2px solid var(--auth-form-background);
+          &.active {
+            background-color: var(--indicator-active);
+            border: 2px solid var(--auth-form-background);
+          }
+        }
+      }
+      .chat-info {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        p {
+          font-size: 16px;
+          color: var(--text-unfocused);
+        }
+      }
+    }
+    .right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+      span {
+        font-size: 15px;
+        color: var(--text-unfocused);
+      }
+      .unread-badge {
+        width: 20px;
+        height: 20px;
+        background-color: var(--primary);
+
+        border-radius: 50%;
+        display: inline-block;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        span {
+          font-size: 13px;
+          color: #fff;
+          height: 13px;
+        }
+      }
+    }
+  }
+}

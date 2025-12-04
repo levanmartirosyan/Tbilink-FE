@@ -157,5 +157,21 @@
         }
       }
     }
+    @media screen and (max-width: 768px) {
+      flex-direction: column;
+      position: relative;
+      .info {
+        width: 100%;
+        flex-direction: column;
+        .names {
+          padding: 0;
+          margin-top: 120px;
+          align-items: center;
+        }
+      }
+      .btns {
+        display: none;
+      }
+    }
   }
 }

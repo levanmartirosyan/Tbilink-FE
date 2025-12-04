@@ -1,0 +1,24 @@
+:host {
+  flex: 2.15;
+  .chat-area {
+    width: 100%;
+    height: 100%;
+    background-color: var(--auth-form-background);
+    padding: 20px;
+    border-right: 1px solid var(--auth-input-border);
+    .no-messages {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      color: var(--primary);
+      lucide-icon {
+        width: 50px;
+        height: 50px;
+      }
+    }
+  }
+}

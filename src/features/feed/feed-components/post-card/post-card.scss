@@ -17,6 +17,7 @@
         display: flex;
         align-items: center;
         gap: 16px;
+        cursor: pointer;
         .profile-avatar {
           width: 54px;
           height: 54px;
@@ -65,8 +66,19 @@
       }
       .postSettings {
         position: relative;
+        padding: 10px;
+        border-radius: 12px;
+        background: var(--auth-input-background);
+        transition: 0.3s ease;
+        cursor: pointer;
+
+        &:hover {
+          background-color: var(--auth-input-border);
+        }
         .settings-icon {
-          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           lucide-icon {
             width: 22px;
             height: 22px;
@@ -76,14 +88,10 @@
         .post-settings-menu {
           position: absolute;
           right: 0;
-          bottom: -98px;
+          bottom: -80px;
           width: 122px;
           border-radius: 10px;
-          background: color-mix(
-            in srgb,
-            var(--auth-form-background) 100%,
-            transparent
-          );
+          background: var(--auth-input-background);
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -96,6 +104,7 @@
           visibility: hidden;
           pointer-events: none;
           transform: translateY(-10px);
+          z-index: 10;
           .menu-item {
             width: 100%;
             cursor: pointer;

@@ -63,7 +63,7 @@ export class AddPost implements OnInit, OnDestroy {
       Validators.required,
       Validators.minLength(1),
     ]),
-    imageUrl: new FormControl('', [Validators.required]),
+    imageUrl: new FormControl(''),
   });
 
   selectedFile: File | null = null;
@@ -88,29 +88,32 @@ export class AddPost implements OnInit, OnDestroy {
 
   uploadImage(): void {
     if (this.selectedFile === null) {
-      return this.toastService.error('Please select a file to upload.');
+      this.addPostForm.patchValue({
+        userId: this.userData?.data?.id,
+      });
+      return this.createPost();
+    } else {
+      const formData = new FormData();
+      formData.append('file', this.selectedFile);
+
+      this.apiService.uploadPublicFile(formData, 'posts').subscribe({
+        next: (data: any) => {
+          console.log('File uploaded successfully:', data.data.fileUrl);
+          this.addPostForm.patchValue({
+            userId: this.userData?.data?.id,
+            imageUrl: data.data.path,
+          });
+
+          console.log(this.addPostForm.value);
+
+          this.createPost();
+        },
+        error: (err: any) => {
+          console.log('File upload failed:', err);
+          this.toastService.error('File upload failed. Please try again.');
+        },
+      });
     }
-
-    const formData = new FormData();
-    formData.append('file', this.selectedFile);
-
-    this.apiService.uploadPublicFile(formData, 'posts').subscribe({
-      next: (data: any) => {
-        console.log('File uploaded successfully:', data.data.fileUrl);
-        this.addPostForm.patchValue({
-          userId: this.userData?.data?.id,
-          imageUrl: data.data.path,
-        });
-
-        console.log(this.addPostForm.value);
-
-        this.createPost();
-      },
-      error: (err: any) => {
-        console.log('File upload failed:', err);
-        this.toastService.error('File upload failed. Please try again.');
-      },
-    });
   }
 
   createPost(): void {

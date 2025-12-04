@@ -84,6 +84,7 @@ body {
   --primary: #f16849;
   --indicator-active: #22c55e;
   --indicator-inactive: #919191;
+  --chat-hover-background: #d1d4d8;
 }
 
 :root[data-theme="dark"] {
@@ -100,4 +101,5 @@ body {
   --primary: #f16849;
   --indicator-active: #22c55e;
   --indicator-inactive: #919191;
+  --chat-hover-background: #2c3e5a;
 }

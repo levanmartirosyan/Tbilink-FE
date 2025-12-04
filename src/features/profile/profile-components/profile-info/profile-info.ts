@@ -17,9 +17,12 @@ import { CommonModule } from '@angular/common';
   styleUrl: './profile-info.scss',
 })
 export class ProfileInfo {
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(private userService: UserService, private router: Router) {
+    this.currentUserId = this.userService.getUser()?.data.id;
+  }
 
   @Input() userData?: any;
+  public currentUserId?: string;
 
   @ViewChild('settingsWrapper', { read: ElementRef })
   settingsWrapper!: ElementRef;

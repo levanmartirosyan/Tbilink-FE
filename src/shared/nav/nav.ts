@@ -11,10 +11,10 @@ import {
 } from '@angular/core';
 import { ThemeSwitcher } from '../theme-switcher/theme-switcher';
 import { LucideAngularModule } from 'lucide-angular';
-import { Router, RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { UserService } from '../../core/services/user-service';
 import { CommonModule } from '@angular/common';
-import { Subject, takeUntil } from 'rxjs';
+import { filter, Subject, Subscription, takeUntil } from 'rxjs';
 import { SignalRService } from '../../core/services/signal-r-service';
 import { User } from '../../core/types/user';
 
@@ -41,13 +41,23 @@ export class Nav implements OnInit, OnDestroy {
   public userData!: User | null;
   private destroy$ = new Subject<void>();
 
+  private sub!: Subscription;
+
   ngOnInit(): void {
     this.getCurrentUser();
+
+    this.sub = this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event) => {
+        this.profileMenu = false;
+      });
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+
+    this.sub.unsubscribe();
   }
 
   getCurrentUser() {

@@ -1,6 +1,6 @@
 <div class="post-card">
   <div class="post-header">
-    <div class="user">
+    <div class="user" (click)="goToUserProfile()">
       <div class="profile-avatar">
         <div class="avatar">
           <img
@@ -24,8 +24,12 @@
       </div>
     </div>
     @if (postData?.userId === userService.getUser()?.data?.id) {
-    <div class="postSettings" #settingsWrapper>
-      <div class="settings-icon" (click)="togglepostSettingsMenu()">
+    <div
+      class="postSettings"
+      #settingsWrapper
+      (click)="togglepostSettingsMenu()"
+    >
+      <div class="settings-icon">
         <lucide-icon name="settings-2" [size]="22"></lucide-icon>
       </div>
       <div class="post-settings-menu" [class.active]="postSettingsMenu">
@@ -43,6 +47,7 @@
   </div>
   <div class="post-content">
     <p>{{postData?.content}}</p>
+    @if (postData?.imageUrl) {
     <div class="img">
       <img
         class="post-image"
@@ -50,6 +55,7 @@
         alt="Post Image"
       />
     </div>
+    }
   </div>
   <div class="post-actions">
     <div class="action">
