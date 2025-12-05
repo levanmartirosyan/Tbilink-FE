@@ -8,11 +8,11 @@ import {
 import { FormatNumberPipe } from '../../../../core/pipes/format-number-pipe';
 import { LucideAngularModule } from 'lucide-angular';
 import { UserService } from '../../../../core/services/user-service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-followers-counter',
-  imports: [FormatNumberPipe, LucideAngularModule],
+  imports: [FormatNumberPipe, LucideAngularModule, RouterModule],
   templateUrl: './followers-counter.html',
   styleUrl: './followers-counter.scss',
 })

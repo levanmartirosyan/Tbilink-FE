@@ -9,6 +9,7 @@ import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../../../core/services/user-service';
 import { LucideAngularModule } from 'lucide-angular';
 import { CommonModule } from '@angular/common';
+import { Enviroment } from '../../../../enviroment/enviroment';
 
 @Component({
   selector: 'app-profile-info',
@@ -17,7 +18,11 @@ import { CommonModule } from '@angular/common';
   styleUrl: './profile-info.scss',
 })
 export class ProfileInfo {
-  constructor(private userService: UserService, private router: Router) {
+  constructor(
+    private userService: UserService,
+    private router: Router,
+    public env: Enviroment
+  ) {
     this.currentUserId = this.userService.getUser()?.data.id;
   }
 

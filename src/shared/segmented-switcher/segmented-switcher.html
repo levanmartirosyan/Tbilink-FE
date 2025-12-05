@@ -1,0 +1,11 @@
+<div class="switcher user-select-none">
+  @for (option of options; track $index) {
+  <div
+    class="option"
+    [class.active]="selectedOption === option.toLowerCase()"
+    (click)="selectOption(option)"
+  >
+    {{option}}
+  </div>
+  }
+</div>

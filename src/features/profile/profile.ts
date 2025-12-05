@@ -11,6 +11,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { RouterModule } from '@angular/router';
 import { FollowersCounter } from './profile-components/followers-counter/followers-counter';
 import { ProfileInfo } from './profile-components/profile-info/profile-info';
+import { Enviroment } from '../../enviroment/enviroment';
 
 @Component({
   selector: 'app-profile',
@@ -19,7 +20,7 @@ import { ProfileInfo } from './profile-components/profile-info/profile-info';
   styleUrl: './profile.scss',
 })
 export class Profile implements OnInit {
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, public env: Enviroment) {}
 
   ngOnInit(): void {
     this.getUserData();

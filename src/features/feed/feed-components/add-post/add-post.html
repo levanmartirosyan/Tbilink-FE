@@ -7,7 +7,7 @@
     <div class="profile-avatar">
       <div class="avatar">
         <img
-          [src]="userData?.data?.profilePhotoUrl || 'assets/icons/profile.png'"
+          [src]="env.storageUrl + userData?.data?.profilePhotoUrl || 'assets/icons/profile.png'"
           alt="Avatar"
         />
         <div

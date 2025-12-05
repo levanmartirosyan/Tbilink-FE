@@ -16,6 +16,12 @@ import { Profile } from '../features/profile/profile';
 import { Search } from '../features/search/search';
 import { ProfileSettings } from '../features/profile/profile-components/profile-settings/profile-settings';
 import { Main } from '../features/main/main';
+import { ProfileInfo } from '../features/profile/profile-components/profile-settings/components/profile-info/profile-info';
+import { Account } from '../features/profile/profile-components/profile-settings/components/account/account';
+import { Privacy } from '../features/profile/profile-components/profile-settings/components/privacy/privacy';
+import { Notifications } from '../features/profile/profile-components/profile-settings/components/notifications/notifications';
+import { Language } from '../features/profile/profile-components/profile-settings/components/language/language';
+import { NotFound } from '../features/not-found/not-found';
 
 export const routes: Routes = [
   {
@@ -50,8 +56,35 @@ export const routes: Routes = [
         children: [],
       },
       {
-        path: 'profile/settings',
+        path: 'settings',
         component: ProfileSettings,
+        children: [
+          {
+            path: '',
+            redirectTo: 'profile',
+            pathMatch: 'full',
+          },
+          {
+            path: 'profile',
+            component: ProfileInfo,
+          },
+          {
+            path: 'account',
+            component: Account,
+          },
+          {
+            path: 'privacy',
+            component: Privacy,
+          },
+          {
+            path: 'notifications',
+            component: Notifications,
+          },
+          {
+            path: 'language',
+            component: Language,
+          },
+        ],
       },
     ],
   },
@@ -80,5 +113,9 @@ export const routes: Routes = [
         canActivate: [createPasswordGuard],
       },
     ],
+  },
+  {
+    path: '**',
+    component: NotFound,
   },
 ];

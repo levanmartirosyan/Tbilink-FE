@@ -17,13 +17,14 @@
       border: none;
       outline: none;
       cursor: pointer;
-      .theme-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      lucide-icon {
+        width: 20px;
+        height: 20px;
         color: var(--text-color);
         transition: 0.3s ease;
-        lucide-icon {
-          width: 20px;
-          height: 20px;
-        }
       }
     }
   }
@@ -31,7 +32,7 @@
     .theme-switcher {
       background: color-mix(in srgb, var(--primary) 12%, transparent);
       button {
-        .theme-icon {
+        lucide-icon {
           color: var(--primary) !important;
         }
       }

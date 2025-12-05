@@ -19,6 +19,7 @@ import {
 import { DomSanitizer } from '@angular/platform-browser';
 import { ToastService } from '../../../../core/services/toast-service';
 import { ApiService } from '../../../../core/services/api-service';
+import { Enviroment } from '../../../../enviroment/enviroment';
 
 @Component({
   selector: 'app-add-post',
@@ -32,7 +33,8 @@ export class AddPost implements OnInit, OnDestroy {
     public signalRService: SignalRService,
     private sanitizer: DomSanitizer,
     private toastService: ToastService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    public env: Enviroment
   ) {}
 
   @Output() newPostCreated = new EventEmitter<void>();

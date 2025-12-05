@@ -1,0 +1,12 @@
+:host {
+  width: 100%;
+  .content {
+    width: 100%;
+    border: 1px solid var(--auth-input-border);
+    border-radius: 6px;
+    overflow: hidden;
+    padding: 20px;
+    background-color: var(--auth-form-background);
+    margin-top: 20px;
+  }
+}

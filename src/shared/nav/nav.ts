@@ -17,6 +17,7 @@ import { CommonModule } from '@angular/common';
 import { filter, Subject, Subscription, takeUntil } from 'rxjs';
 import { SignalRService } from '../../core/services/signal-r-service';
 import { User } from '../../core/types/user';
+import { Enviroment } from '../../enviroment/enviroment';
 
 @Component({
   selector: 'app-nav',
@@ -35,7 +36,8 @@ export class Nav implements OnInit, OnDestroy {
     private router: Router,
     private el: ElementRef,
     public userService: UserService,
-    public signalRService: SignalRService
+    public signalRService: SignalRService,
+    public env: Enviroment
   ) {}
 
   public userData!: User | null;

@@ -42,4 +42,11 @@ export class CommonService {
   setShowLoader(value: boolean) {
     this.showLoader.next(value);
   }
+
+  private setSegmentedSwitcherOption = new BehaviorSubject<string>('option1');
+  setSegmentedSwitcherOption$ = this.setSegmentedSwitcherOption.asObservable();
+
+  setSwitcherotion(value: string) {
+    this.setSegmentedSwitcherOption.next(value);
+  }
 }

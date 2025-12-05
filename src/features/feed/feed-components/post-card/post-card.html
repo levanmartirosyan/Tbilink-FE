@@ -4,7 +4,7 @@
       <div class="profile-avatar">
         <div class="avatar">
           <img
-            [src]="postData?.avatar || 'assets/icons/profile.png'"
+            [src]="env.storageUrl + postData?.avatar || 'assets/icons/profile.png'"
             alt="Avatar"
           />
           <div
