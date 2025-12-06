@@ -11,6 +11,7 @@ import {
 import { Enviroment } from '../../enviroment/enviroment';
 import { Observable } from 'rxjs';
 import { ServiceResponse } from '../interfaces/Response';
+import { SendMessageRequest } from '../interfaces/message-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -78,5 +79,21 @@ export class ApiService {
 
   deletePost(postId: string) {
     return this.http.delete(this.url + 'post/delete?postId=' + postId);
+  }
+
+  sendMessage(messageBody: SendMessageRequest) {
+    return this.http.post(this.url + 'message/send', messageBody);
+  }
+
+  getMessageThread(recipientId: number) {
+    return this.http.get(this.url + `message/thread/${recipientId}`);
+  }
+
+  getAllChats() {
+    return this.http.get(this.url + 'message/chats');
+  }
+
+  deleteMessage(messageId: number) {
+    return this.http.delete(this.url + `message/delete/${messageId}`);
   }
 }

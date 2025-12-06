@@ -49,4 +49,11 @@ export class CommonService {
   setSwitcherotion(value: string) {
     this.setSegmentedSwitcherOption.next(value);
   }
+
+  private ChatSelectOption = new BehaviorSubject<boolean>(false);
+  ChatSelectOption$ = this.ChatSelectOption.asObservable();
+
+  setChatSelectOption(value: boolean) {
+    this.ChatSelectOption.next(value);
+  }
 }

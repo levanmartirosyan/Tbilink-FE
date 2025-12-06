@@ -1,18 +1,33 @@
 <div class="chat">
   <div class="left">
     <div class="avatar">
-      <img [src]=" 'assets/icons/profile.png'" alt="Avatar" />
-      <div class="statusIndicator active"></div>
+      <img
+        [src]=" chatData.participants[0].profilePhotoUrl || 'assets/icons/profile.png'"
+        alt="Avatar"
+      />
+      <div
+        class="statusIndicator"
+        [class.active]="signalRService.isUserOnline(chatData.participants[0].id)"
+      ></div>
     </div>
     <div class="chat-info">
-      <h3>User Name</h3>
-      <p>Last message preview...</p>
+      <h3>
+        {{chatData.participants[0].firstName + ' ' +
+        chatData.participants[0].lastName}}
+      </h3>
+      <p>
+        {{userService.getUser()?.data?.id == chatData.lastMessage.senderId ?
+        'You: ' : chatData.participants[0].firstName + ': '}}
+        {{chatData.lastMessage.content}}
+      </p>
     </div>
   </div>
   <div class="right">
-    <span class="timestamp">2m ago</span>
+    <span class="timestamp"
+      >{{chatData.lastActivity | relativeTimePipe: 'chat'}}</span
+    >
     <div class="unread-badge">
-      <span>3</span>
+      <span>{{chatData.unreadCount}}</span>
     </div>
   </div>
 </div>

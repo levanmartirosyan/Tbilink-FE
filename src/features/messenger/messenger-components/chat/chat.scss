@@ -55,15 +55,15 @@
     .right {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-end;
       gap: 7px;
       span {
-        font-size: 15px;
+        font-size: 14px;
         color: var(--text-unfocused);
       }
       .unread-badge {
-        width: 20px;
-        height: 20px;
+        width: 16px;
+        height: 16px;
         background-color: var(--primary);
 
         border-radius: 50%;
@@ -72,9 +72,8 @@
         justify-content: center;
         align-items: center;
         span {
-          font-size: 13px;
+          font-size: 12px !important;
           color: #fff;
-          height: 13px;
         }
       }
     }

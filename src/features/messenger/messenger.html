@@ -8,12 +8,14 @@
         </div>
       </div>
       <div class="chat-list">
-        <app-chat></app-chat>
-        <app-chat></app-chat>
-        <app-chat></app-chat>
-        <app-chat></app-chat>
+        @for (chat of allChats; track $index) {
+        <app-chat
+          [chatData]="chat"
+          (click)="selectChat(chat.participants)"
+        ></app-chat>
+        }
       </div>
     </div>
-    <app-chat-area></app-chat-area>
+    <app-chat-area [otherUserId]="selectedChatParticipants"></app-chat-area>
   </div>
 </div>

@@ -1,10 +1,10 @@
 :host {
   flex: 2.15;
+  height: 100vh;
   .chat-area {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     background-color: var(--auth-form-background);
-    padding: 20px;
     border-right: 1px solid var(--auth-input-border);
     .no-messages {
       height: 100%;
@@ -18,6 +18,213 @@
       lucide-icon {
         width: 50px;
         height: 50px;
+      }
+    }
+    .chat {
+      width: 100%;
+      height: calc(100% - 64px);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      position: relative;
+      .head {
+        min-height: 84px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 10px;
+        border-bottom: 1px solid var(--auth-input-border);
+        .user-info {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          .avatar {
+            cursor: pointer;
+            position: relative;
+            img {
+              width: 48px;
+              height: 48px;
+              border-radius: 50%;
+              object-fit: cover;
+              object-position: center;
+            }
+            .statusIndicator {
+              width: 14px;
+              height: 14px;
+              border-radius: 50%;
+              background-color: var(--indicator-inactive);
+              position: absolute;
+              right: 1px;
+              bottom: 1px;
+              border: 2px solid var(--auth-form-background);
+              &.active {
+                background-color: var(--indicator-active);
+                border: 2px solid var(--auth-form-background);
+              }
+            }
+          }
+          .user-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 4px;
+            h3 {
+              color: var(--text-color);
+            }
+            .lastActive {
+              font-size: 14px;
+              color: var(--text-unfocused);
+            }
+          }
+        }
+        .actions {
+          display: flex;
+          align-items: center;
+          gap: 24px;
+          .action {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: var(--text-unfocused);
+            transition: 0.3s ease;
+            cursor: pointer;
+            border-radius: 12px;
+            lucide-icon {
+              width: 22px;
+              height: 22px;
+            }
+            &.active {
+              color: var(--primary);
+              background: color-mix(in srgb, var(--primary) 12%, transparent);
+            }
+            &:hover {
+              color: var(--primary);
+              background: color-mix(in srgb, var(--primary) 12%, transparent);
+            }
+          }
+        }
+      }
+      .messages {
+        width: 100%;
+        overflow-y: auto;
+        padding: 10px 14px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 14px;
+        .wrapper {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          .message {
+            width: fit-content;
+            padding: 10px 15px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.4;
+            word-wrap: break-word;
+            background: var(--auth-background);
+            &.sent {
+              background-color: var(--message-sent-background);
+              color: var(--text-color);
+              align-self: flex-end;
+              border-bottom-right-radius: 0;
+            }
+            &.received {
+              background-color: var(--message-received-background);
+              color: var(--text-color);
+              align-self: flex-start;
+              border-bottom-left-radius: 0;
+            }
+          }
+          .timestamp {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-unfocused);
+            &.sent {
+              align-self: flex-end;
+            }
+            &.received {
+              align-self: flex-start;
+            }
+          }
+        }
+      }
+      .chat-input {
+        width: 100%;
+        min-height: 64px;
+        margin-top: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px;
+        border-top: 1px solid var(--auth-input-border);
+        background-color: var(--auth-form-background);
+        .actions {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          lucide-icon {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: 0.3s ease;
+            &:hover {
+              color: var(--primary);
+            }
+          }
+        }
+        input {
+          flex: 1;
+          width: 100%;
+          height: 100%;
+          padding: 0 10px;
+          border: 1px solid var(--auth-input-border);
+          border-radius: 8px;
+          font-size: 14px;
+          outline: none;
+          background-color: var(--auth-input-background);
+          color: var(--text-color);
+          transition: 0.3s ease;
+          &:focus {
+            border-color: var(--auth-input-focus);
+          }
+          &::placeholder {
+            color: var(--text-unfocused);
+          }
+        }
+        button {
+          border-radius: 8px;
+          background: linear-gradient(90deg, #7572ff 0%, #f1592a 100%);
+          cursor: pointer;
+          font-size: 14px;
+          font-weight: bold;
+          border: 1px solid var(--border-color-base);
+          color: #fff;
+          border: none;
+          border-radius: 8px;
+          width: 70px;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+          transition: 0.3s ease;
+          gap: 2px;
+          &:hover {
+            opacity: 0.8;
+          }
+          lucide-icon {
+            width: 18px;
+            height: 18px;
+          }
+        }
       }
     }
   }

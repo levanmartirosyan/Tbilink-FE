@@ -3,10 +3,10 @@ export class Enviroment {
   public readonly publicUrl: string =
     'https://tbilink-api-e9e49368f5e1.herokuapp.com/api/';
 
-  public readonly hubUrlLocal: string = 'https://localhost:7292/hubs/users';
+  public readonly hubUrlLocal: string = 'https://localhost:7292/';
 
   public readonly hubUrlPublic: string =
-    'https://tbilink-api-e9e49368f5e1.herokuapp.com/hubs/users';
+    'https://tbilink-api-e9e49368f5e1.herokuapp.com/';
 
   public readonly supabaseUrl: string =
     'https://ypvppaifguwqanzoajan.supabase.co';

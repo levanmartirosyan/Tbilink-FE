@@ -1,7 +1,87 @@
 <div class="chat-area">
+  @if (!(commonService.ChatSelectOption$ | async)) {
   <div class="no-messages">
     <lucide-icon name="message-circle" [size]="50"></lucide-icon>
     <h2>Select a chat to start messaging</h2>
     <p>Choose a conversation from the list</p>
   </div>
+  } @else if (commonService.ChatSelectOption$ | async) {
+  <div class="chat">
+    <div class="head">
+      <div class="user-info">
+        <div class="avatar">
+          <img
+            [src]="
+            otherUserId[0]?.profilePhotoUrl || 'assets/icons/profile.png'
+          "
+            alt="Avatar"
+          />
+          <div
+            class="statusIndicator"
+            [class.active]="
+            signalRService.isUserOnline(otherUserId[0]?.id?.toString() || '')
+          "
+          ></div>
+        </div>
+        <div class="user-details">
+          <h3>
+            {{otherUserId[0]?.firstName + ' ' + otherUserId[0]?.lastName}}
+          </h3>
+          <div class="lastActive">
+            Last active:
+            <span>{{otherUserId[0]?.firstName}} </span>
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <div class="action">
+          <lucide-icon name="phone-call" [size]="22"></lucide-icon>
+        </div>
+        <div class="action">
+          <lucide-icon name="video" [size]="22"></lucide-icon>
+        </div>
+        <div class="action">
+          <lucide-icon name="settings" [size]="22"></lucide-icon>
+        </div>
+      </div>
+    </div>
+    <div class="messages" #messagesContainer>
+      @for ( message of chatMessages(); track $index) {
+      <div class="wrapper">
+        <div
+          class="message"
+          [class.sent]="isSent(message)"
+          [class.received]="!isSent(message)"
+        >
+          <p>{{ message.content }}</p>
+        </div>
+        <span
+          class="timestamp"
+          [class.sent]="isSent(message)"
+          [class.received]="!isSent(message)"
+        >
+          {{ message.messageSent | relativeTimePipe:'chat' }}</span
+        >
+      </div>
+      }
+    </div>
+    <div class="chat-input">
+      <div class="actions">
+        <lucide-icon name="paperclip" [size]="22"></lucide-icon>
+        <lucide-icon name="smile-plus" [size]="22"></lucide-icon>
+      </div>
+      <input
+        type="text"
+        [formControl]="messageInput"
+        placeholder="Type a message..."
+        (keyup.enter)="sendMessage()"
+      />
+      <button (click)="sendMessage()">
+        <lucide-icon name="send" [size]="18"></lucide-icon>
+        Send
+      </button>
+    </div>
+  </div>
+
+  }
 </div>

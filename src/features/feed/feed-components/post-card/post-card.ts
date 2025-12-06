@@ -12,7 +12,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { FormatNumberPipe } from '../../../../core/pipes/format-number-pipe';
 import { Enviroment } from '../../../../enviroment/enviroment';
 import { CommonModule } from '@angular/common';
-import { RelativeTimePipePipe } from '../../../../core/pipes/relative-time-pipe-pipe';
+import { RelativeTimePipe } from '../../../../core/pipes/relative-time-pipe-pipe';
 import { SignalRService } from '../../../../core/services/signal-r-service';
 import { ApiService } from '../../../../core/services/api-service';
 import { ToastService } from '../../../../core/services/toast-service';
@@ -24,7 +24,7 @@ import { UserService } from '../../../../core/services/user-service';
     LucideAngularModule,
     FormatNumberPipe,
     CommonModule,
-    RelativeTimePipePipe,
+    RelativeTimePipe,
   ],
   templateUrl: './post-card.html',
   styleUrl: './post-card.scss',
