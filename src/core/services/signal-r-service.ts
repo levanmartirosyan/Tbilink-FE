@@ -17,7 +17,7 @@ export class SignalRService {
     private apiUrl: Enviroment,
     private audioNotification: AudioNotificationService
   ) {
-    this.hubUrl = this.apiUrl.hubUrlLocal;
+    this.hubUrl = this.apiUrl.hubUrlPublic;
   }
 
   /* ------------------ Presence hub ------------------ */
