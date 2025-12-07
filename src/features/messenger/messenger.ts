@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, effect } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { Chat } from './messenger-components/chat/chat';
 import { ChatArea } from './messenger-components/chat-area/chat-area';
@@ -18,7 +18,67 @@ export class Messenger implements OnInit, OnDestroy {
     public signalRService: SignalRService,
     private apiService: ApiService,
     private commonService: CommonService
-  ) {}
+  ) {
+    effect(() => {
+      const newMsg = this.signalRService.newMessageReceived();
+      if (newMsg) {
+        console.log('New message received, updating chat list:', newMsg);
+        this.updateChatWithNewMessage(newMsg.message);
+      }
+    });
+
+    effect(() => {
+      const chatUpdate = this.signalRService.chatUpdates();
+      if (chatUpdate) {
+        console.log('Chat updated:', chatUpdate);
+        this.updateChatData(chatUpdate);
+      }
+    });
+
+    effect(() => {
+      const notification = this.signalRService.newMessageNotification();
+      if (notification) {
+        console.log('New message notification received:', notification);
+        this.updateChatWithNotification(notification);
+      }
+    });
+
+    effect(() => {
+      const readData = this.signalRService.messagesMarkedAsRead();
+      if (readData) {
+        console.log('Messages marked as read:', readData);
+        const readByUserId = readData.ReadByUserId;
+        const chatIndex = this.allChats.findIndex(
+          (chat) => chat.participants[0].id === readByUserId
+        );
+        if (chatIndex !== -1) {
+          this.allChats[chatIndex].unreadCount = 0;
+          this.allChats = [...this.allChats];
+        }
+      }
+    });
+
+    effect(() => {
+      const counts = this.signalRService.chatUnreadCounts();
+      if (this.allChats.length > 0) {
+        let updated = false;
+        this.allChats.forEach((chat: any) => {
+          const partnerId = chat.participants?.[0]?.id;
+          if (partnerId) {
+            const newCount = counts[partnerId] ?? 0;
+            if (chat.unreadCount !== newCount) {
+              chat.unreadCount = newCount;
+              updated = true;
+            }
+          }
+        });
+        if (updated) {
+          this.allChats = [...this.allChats];
+          console.log('Updated chat unread counts from signal:', counts);
+        }
+      }
+    });
+  }
 
   onlineUserIds: any[] = [];
   ngOnInit() {
@@ -30,6 +90,62 @@ export class Messenger implements OnInit, OnDestroy {
     this.getAllChats();
   }
 
+  private getAllChats() {
+    this.apiService.getAllChats().subscribe({
+      next: (data: any) => {
+        this.allChats = data.data;
+        console.log('All chats:', this.allChats);
+
+        const currentCounts = this.signalRService.chatUnreadCounts();
+        this.allChats.forEach((chat: any) => {
+          const partnerId = chat.participants?.[0]?.id;
+          if (partnerId && currentCounts[partnerId] !== undefined) {
+            chat.unreadCount = currentCounts[partnerId];
+          }
+        });
+        console.log('Current unread counts from signal:', currentCounts);
+
+        if (this.allChats && this.allChats.length > 0) {
+          const firstChatPartner = this.allChats[0].participants[0];
+
+          if (firstChatPartner?.id) {
+            setTimeout(() => {
+              const user = this.getUserFromCookie();
+              if (user) {
+                console.log(
+                  'Auto-connecting to first chat (silent):',
+                  firstChatPartner.id
+                );
+                this.signalRService.connectToMessageHubSilent(
+                  user,
+                  firstChatPartner.id
+                );
+              }
+            }, 500);
+          }
+        }
+      },
+      error: (error: any) => {
+        console.log('Error fetching chats:', error);
+      },
+    });
+  }
+
+  private getUserFromCookie() {
+    const userCookie = document.cookie
+      .split('; ')
+      .find((row) => row.startsWith('TB-UserData='));
+
+    if (userCookie) {
+      try {
+        return JSON.parse(decodeURIComponent(userCookie.split('=')[1]));
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  }
+
   ngOnDestroy(): void {
     this.commonService.setChatSelectOption(false);
   }
@@ -39,18 +155,7 @@ export class Messenger implements OnInit, OnDestroy {
   }
 
   public allChats: any[] = [];
-  getAllChats() {
-    this.apiService.getAllChats().subscribe({
-      next: (data: any) => {
-        this.allChats = data.data;
-        console.log('All chats:', this.allChats);
-      },
-      error: (error: any) => {
-        console.log('Error fetching chats:', error);
-      },
-    });
-  }
-
+  public currentOpenChatPartnerId: number | null = null;
   public selectedChatParticipants: ChatParticipantDto[] = [];
 
   selectChat(chat: ChatParticipantDto[]) {
@@ -60,6 +165,7 @@ export class Messenger implements OnInit, OnDestroy {
 
     if (!chat || !Array.isArray(chat)) {
       this.selectedChatParticipants = [];
+      this.currentOpenChatPartnerId = null;
       return;
     }
 
@@ -67,7 +173,79 @@ export class Messenger implements OnInit, OnDestroy {
       (participant: any) => participant.id !== currentUserId
     );
 
+    if (this.selectedChatParticipants.length > 0) {
+      this.currentOpenChatPartnerId = this.selectedChatParticipants[0].id;
+    } else {
+      this.currentOpenChatPartnerId = null;
+    }
+
     this.commonService.setChatSelectOption(true);
     console.log(this.selectedChatParticipants);
+  }
+
+  private updateChatWithNewMessage(message: any): void {
+    const chatIndex = this.allChats.findIndex(
+      (chat) =>
+        chat.participants[0].id === message.senderId ||
+        chat.participants[0].id === message.recipientId
+    );
+
+    if (chatIndex !== -1) {
+      this.allChats[chatIndex].lastMessage = message;
+      this.allChats[chatIndex].lastActivity = message.messageSent;
+
+      const currentUserId = this.signalRService.currentThread;
+      const messageSenderId = message.senderId;
+
+      if (
+        message.senderId !== currentUserId &&
+        messageSenderId !== this.currentOpenChatPartnerId
+      ) {
+        const partnerId = message.senderId;
+        this.allChats[chatIndex].unreadCount =
+          (this.signalRService.chatUnreadCounts()?.[partnerId] ?? 0) + 1;
+      }
+
+      this.allChats = [...this.allChats];
+    }
+  }
+
+  private updateChatData(chatUpdate: any): void {
+    const chatIndex = this.allChats.findIndex(
+      (chat) => chat.participants[0].id === chatUpdate.ChatPartnerId
+    );
+
+    if (chatIndex !== -1) {
+      this.allChats[chatIndex].lastMessage = chatUpdate.LastMessage;
+      this.allChats[chatIndex].lastActivity = chatUpdate.LastActivity;
+      this.allChats[chatIndex].unreadCount = chatUpdate.UnreadCount;
+
+      this.allChats = [...this.allChats];
+    }
+  }
+
+  private updateChatWithNotification(notification: any): void {
+    const chatIndex = this.allChats.findIndex(
+      (chat) => chat.participants[0].id === notification.SenderId
+    );
+
+    if (chatIndex !== -1) {
+      this.allChats[chatIndex].lastMessage = {
+        id: notification.MessageId,
+        senderId: notification.SenderId,
+        senderName: notification.SenderName,
+        content: notification.Message,
+        messageSent: notification.Timestamp,
+      };
+      this.allChats[chatIndex].lastActivity = notification.Timestamp;
+
+      if (notification.SenderId !== this.currentOpenChatPartnerId) {
+        const currentCount =
+          this.signalRService.chatUnreadCounts()?.[notification.SenderId] ?? 0;
+        this.allChats[chatIndex].unreadCount = currentCount + 1;
+      }
+
+      this.allChats = [...this.allChats];
+    }
   }
 }

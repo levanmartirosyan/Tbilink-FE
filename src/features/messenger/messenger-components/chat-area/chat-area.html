@@ -27,9 +27,14 @@
           <h3>
             {{otherUserId[0]?.firstName + ' ' + otherUserId[0]?.lastName}}
           </h3>
-          <div class="lastActive">
-            Last active:
-            <span>{{otherUserId[0]?.firstName}} </span>
+          <div class="lastActive" [class.online]="isOtherUserOnline()">
+            @if (isOtherUserOnline()) {
+            <span>Online</span>
+            } @else if (getLastActiveDate()) {
+            <span>{{getLastActiveDate() | relativeTimePipe: 'active'}}</span>
+            } @else {
+            <span>Offline</span>
+            }
           </div>
         </div>
       </div>
@@ -45,8 +50,13 @@
         </div>
       </div>
     </div>
-    <div class="messages" #messagesContainer>
-      @for ( message of chatMessages(); track $index) {
+    <div class="messages" #messagesContainer (scroll)="onScroll()">
+      @for ( message of chatMessages(); track $index) { @if
+      (isFirstMessageOfMinute(message, $index)) {
+      <div class="time-separator">
+        <span>{{ message.messageSent | relativeTimePipe:'chat' }}</span>
+      </div>
+      }
       <div class="wrapper">
         <div
           class="message"
@@ -55,13 +65,15 @@
         >
           <p>{{ message.content }}</p>
         </div>
-        <span
-          class="timestamp"
-          [class.sent]="isSent(message)"
-          [class.received]="!isSent(message)"
-        >
-          {{ message.messageSent | relativeTimePipe:'chat' }}</span
-        >
+        @if (isSent(message) && isLastSentMessage(message, $index)) {
+        <span class="read-status">{{ getReadStatus(message) }}</span>
+        }
+      </div>
+      } @if (isOtherUserTyping()) {
+      <div class="wrapper">
+        <div class="message received">
+          <app-dot-loader></app-dot-loader>
+        </div>
       </div>
       }
     </div>
@@ -75,6 +87,8 @@
         [formControl]="messageInput"
         placeholder="Type a message..."
         (keyup.enter)="sendMessage()"
+        (input)="onTyping()"
+        (blur)="onInputBlur()"
       />
       <button (click)="sendMessage()">
         <lucide-icon name="send" [size]="18"></lucide-icon>

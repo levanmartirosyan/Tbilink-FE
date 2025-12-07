@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { ThemeSwitcher } from '../theme-switcher/theme-switcher';
 import { RouterModule } from '@angular/router';
+import { SignalRService } from '../../core/services/signal-r-service';
 
 @Component({
   selector: 'app-nav-mobile',
@@ -10,5 +11,5 @@ import { RouterModule } from '@angular/router';
   styleUrl: './nav-mobile.scss',
 })
 export class NavMobile {
-  constructor() {}
+  constructor(public signalRService: SignalRService) {}
 }

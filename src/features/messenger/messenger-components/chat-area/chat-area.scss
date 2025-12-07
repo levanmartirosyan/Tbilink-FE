@@ -75,6 +75,9 @@
             .lastActive {
               font-size: 14px;
               color: var(--text-unfocused);
+              &.online {
+                color: var(--indicator-active);
+              }
             }
           }
         }
@@ -114,8 +117,33 @@
         padding: 10px 14px;
         display: flex;
         flex-direction: column;
-        justify-content: center;
         gap: 14px;
+        .time-separator {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          margin: 8px 0;
+          &::before,
+          &::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(
+              90deg,
+              transparent,
+              var(--text-unfocused),
+              transparent
+            );
+          }
+          span {
+            font-size: 12px;
+            color: var(--text-unfocused);
+            white-space: nowrap;
+            padding: 0 8px;
+            font-weight: 500;
+          }
+        }
         .wrapper {
           display: flex;
           flex-direction: column;
@@ -128,6 +156,12 @@
             line-height: 1.4;
             word-wrap: break-word;
             background: var(--auth-background);
+            p {
+              max-width: 300px;
+              word-wrap: break-word;
+              margin: 0;
+            }
+
             &.sent {
               background-color: var(--message-sent-background);
               color: var(--text-color);
@@ -140,6 +174,14 @@
               align-self: flex-start;
               border-bottom-left-radius: 0;
             }
+          }
+
+          .read-status {
+            font-size: 11px;
+            color: var(--text-unfocused);
+            align-self: flex-end;
+            margin-top: 2px;
+            padding-right: 8px;
           }
           .timestamp {
             text-align: center;

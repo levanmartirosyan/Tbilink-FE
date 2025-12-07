@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-type Context = 'default' | 'chat';
+type Context = 'default' | 'chat' | 'active';
 
 @Pipe({
   name: 'relativeTimePipe',
@@ -19,6 +19,19 @@ export class RelativeTimePipe implements PipeTransform {
     const diffSeconds = (now.getTime() - date.getTime()) / 1000;
 
     const sameYear = date.getFullYear() === now.getFullYear();
+
+    if (context === 'active') {
+      if (diffSeconds < 60) return 'Active just now';
+      if (diffSeconds < 3600)
+        return `Active ${Math.floor(diffSeconds / 60)}m ago`;
+      if (diffSeconds < 86400)
+        return `Active ${Math.floor(diffSeconds / 3600)}h ago`;
+      if (diffSeconds < 172800) return 'Active yesterday';
+
+      return sameYear
+        ? `Active ${this.shortDayMonth(date)}`
+        : `Active ${this.shortDayMonthYear(date)}`;
+    }
 
     if (context === 'chat') {
       if (diffSeconds < 60) return 'now';

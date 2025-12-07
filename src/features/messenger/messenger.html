@@ -6,6 +6,11 @@
           <lucide-icon name="message-circle" [size]="24"></lucide-icon>
           <h2>Chats</h2>
         </div>
+        <div class="create-chat">
+          <div class="action">
+            <lucide-icon name="message-circle-plus" [size]="20"></lucide-icon>
+          </div>
+        </div>
       </div>
       <div class="chat-list">
         @for (chat of allChats; track $index) {

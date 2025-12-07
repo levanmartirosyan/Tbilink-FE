@@ -23,7 +23,15 @@
       <p>Search</p>
     </div>
     <div class="item" routerLink="/messenger" routerLinkActive="active">
-      <lucide-icon name="message-circle" [size]="24"></lucide-icon>
+      <div class="icon-wrapper">
+        <lucide-icon name="message-circle" [size]="24"></lucide-icon>
+        @if (signalRService.totalUnreadCount() > 0) {
+        <span class="unread-badge"
+          >{{ signalRService.totalUnreadCount() > 99 ? '99+' :
+          signalRService.totalUnreadCount() }}</span
+        >
+        }
+      </div>
       <p>Messenger</p>
     </div>
     <div class="item" routerLink="/profile" routerLinkActive="active">

@@ -13,6 +13,9 @@
       </div>
       <div class="item" routerLink="/messenger" routerLinkActive="active">
         <lucide-icon name="message-circle" [size]="20"></lucide-icon>
+        @if (signalRService.totalUnreadCount() > 0) {
+        <span class="unread-badge">{{signalRService.totalUnreadCount()}}</span>
+        }
       </div>
       <div class="item">
         <lucide-icon name="bell" [size]="20"></lucide-icon>
