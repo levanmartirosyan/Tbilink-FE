@@ -157,6 +157,7 @@ export class Messenger implements OnInit, OnDestroy {
   public allChats: any[] = [];
   public currentOpenChatPartnerId: number | null = null;
   public selectedChatParticipants: ChatParticipantDto[] = [];
+  public isChatSelected = false;
 
   selectChat(chat: ChatParticipantDto[]) {
     console.log(chat);
@@ -166,6 +167,7 @@ export class Messenger implements OnInit, OnDestroy {
     if (!chat || !Array.isArray(chat)) {
       this.selectedChatParticipants = [];
       this.currentOpenChatPartnerId = null;
+      this.isChatSelected = false;
       return;
     }
 
@@ -175,12 +177,18 @@ export class Messenger implements OnInit, OnDestroy {
 
     if (this.selectedChatParticipants.length > 0) {
       this.currentOpenChatPartnerId = this.selectedChatParticipants[0].id;
+      this.isChatSelected = true;
     } else {
       this.currentOpenChatPartnerId = null;
+      this.isChatSelected = false;
     }
 
     this.commonService.setChatSelectOption(true);
     console.log(this.selectedChatParticipants);
+  }
+
+  onBackToList(): void {
+    this.isChatSelected = false;
   }
 
   private updateChatWithNewMessage(message: any): void {

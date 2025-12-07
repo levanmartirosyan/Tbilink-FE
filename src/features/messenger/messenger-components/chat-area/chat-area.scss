@@ -1,11 +1,26 @@
 :host {
   flex: 2.15;
   height: 100vh;
+
+  @media screen and (max-width: 768px) {
+    flex: 1;
+    width: 100%;
+    height: calc(100dvh - 64px);
+  }
+
   .chat-area {
     width: 100%;
     height: 100vh;
     background-color: var(--auth-form-background);
     border-right: 1px solid var(--auth-input-border);
+
+    @media screen and (max-width: 768px) {
+      height: calc(100dvh - 64px);
+      border-right: none;
+      display: flex;
+      flex-direction: column;
+    }
+
     .no-messages {
       height: 100%;
       width: 100%;
@@ -27,6 +42,13 @@
       flex-direction: column;
       overflow-y: auto;
       position: relative;
+
+      @media screen and (max-width: 768px) {
+        height: 100%;
+        flex: 1;
+        overflow: hidden;
+      }
+
       .head {
         min-height: 84px;
         width: 100%;
@@ -35,13 +57,53 @@
         justify-content: space-between;
         padding: 0 10px;
         border-bottom: 1px solid var(--auth-input-border);
+
+        @media screen and (max-width: 768px) {
+          min-height: 64px;
+          padding: 0 12px;
+        }
+
         .user-info {
           display: flex;
           align-items: center;
           gap: 10px;
+
+          .back-button {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: 0.2s ease;
+
+            @media screen and (max-width: 768px) {
+              display: flex;
+            }
+
+            &:hover {
+              background-color: var(--auth-input-border);
+            }
+
+            lucide-icon {
+              width: 24px;
+              height: 24px;
+            }
+          }
+
           .avatar {
             cursor: pointer;
             position: relative;
+
+            @media screen and (max-width: 768px) {
+              img {
+                width: 40px;
+                height: 40px;
+              }
+            }
+
             img {
               width: 48px;
               height: 48px;
@@ -58,6 +120,12 @@
               right: 1px;
               bottom: 1px;
               border: 2px solid var(--auth-form-background);
+
+              @media screen and (max-width: 768px) {
+                width: 12px;
+                height: 12px;
+              }
+
               &.active {
                 background-color: var(--indicator-active);
                 border: 2px solid var(--auth-form-background);
@@ -71,10 +139,19 @@
             gap: 4px;
             h3 {
               color: var(--text-color);
+
+              @media screen and (max-width: 768px) {
+                font-size: 15px;
+              }
             }
             .lastActive {
               font-size: 14px;
               color: var(--text-unfocused);
+
+              @media screen and (max-width: 768px) {
+                font-size: 12px;
+              }
+
               &.online {
                 color: var(--indicator-active);
               }
@@ -85,6 +162,11 @@
           display: flex;
           align-items: center;
           gap: 24px;
+
+          @media screen and (max-width: 768px) {
+            gap: 8px;
+          }
+
           .action {
             width: 36px;
             height: 36px;
@@ -96,9 +178,20 @@
             transition: 0.3s ease;
             cursor: pointer;
             border-radius: 12px;
+
+            @media screen and (max-width: 768px) {
+              width: 32px;
+              height: 32px;
+            }
+
             lucide-icon {
               width: 22px;
               height: 22px;
+
+              @media screen and (max-width: 768px) {
+                width: 20px;
+                height: 20px;
+              }
             }
             &.active {
               color: var(--primary);
@@ -118,6 +211,14 @@
         display: flex;
         flex-direction: column;
         gap: 14px;
+        flex: 1;
+
+        @media screen and (max-width: 768px) {
+          padding: 8px 10px;
+          gap: 10px;
+          min-height: 0;
+        }
+
         .time-separator {
           display: flex;
           align-items: center;
@@ -142,6 +243,10 @@
             white-space: nowrap;
             padding: 0 8px;
             font-weight: 500;
+
+            @media screen and (max-width: 768px) {
+              font-size: 11px;
+            }
           }
         }
         .wrapper {
@@ -156,10 +261,21 @@
             line-height: 1.4;
             word-wrap: break-word;
             background: var(--auth-background);
+
+            @media screen and (max-width: 768px) {
+              padding: 8px 12px;
+              font-size: 14px;
+              max-width: 85%;
+            }
+
             p {
               max-width: 300px;
               word-wrap: break-word;
               margin: 0;
+
+              @media screen and (max-width: 768px) {
+                max-width: 100%;
+              }
             }
 
             &.sent {
@@ -207,16 +323,36 @@
         padding: 10px;
         border-top: 1px solid var(--auth-input-border);
         background-color: var(--auth-form-background);
+        flex-shrink: 0;
+
+        @media screen and (max-width: 768px) {
+          min-height: 64px;
+          padding: 8px 12px;
+          padding-bottom: 72px;
+          gap: 8px;
+        }
+
         .actions {
           display: flex;
           align-items: center;
           gap: 10px;
+
+          @media screen and (max-width: 768px) {
+            gap: 6px;
+          }
+
           lucide-icon {
             width: 22px;
             height: 22px;
             cursor: pointer;
             color: var(--text-color);
             transition: 0.3s ease;
+
+            @media screen and (max-width: 768px) {
+              width: 20px;
+              height: 20px;
+            }
+
             &:hover {
               color: var(--primary);
             }
@@ -225,7 +361,7 @@
         input {
           flex: 1;
           width: 100%;
-          height: 100%;
+          height: 44px;
           padding: 0 10px;
           border: 1px solid var(--auth-input-border);
           border-radius: 8px;
@@ -234,6 +370,13 @@
           background-color: var(--auth-input-background);
           color: var(--text-color);
           transition: 0.3s ease;
+
+          @media screen and (max-width: 768px) {
+            font-size: 16px; // Prevents zoom on iOS
+            padding: 0 12px;
+            height: 44px;
+          }
+
           &:focus {
             border-color: var(--auth-input-focus);
           }
@@ -252,13 +395,21 @@
           border: none;
           border-radius: 8px;
           width: 70px;
-          height: 100%;
+          height: 44px;
           display: flex;
           justify-content: center;
           align-items: center;
           cursor: pointer;
           transition: 0.3s ease;
           gap: 2px;
+
+          @media screen and (max-width: 768px) {
+            width: 44px;
+            min-width: 70px;
+            height: 44px;
+            padding: 0;
+          }
+
           &:hover {
             opacity: 0.8;
           }

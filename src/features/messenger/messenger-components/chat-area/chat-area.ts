@@ -1,6 +1,8 @@
 import {
   Component,
   Input,
+  Output,
+  EventEmitter,
   OnDestroy,
   OnInit,
   OnChanges,
@@ -37,6 +39,7 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
   chatMessages;
   messageInput = new FormControl('');
   @Input() otherUserId: ChatParticipantDto[] = [];
+  @Output() backToList = new EventEmitter<void>();
 
   editingMessageId: number | null = null;
   editContent: string = '';
@@ -103,6 +106,13 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
     const other = this.otherUserId?.[0];
     if (!other?.id) return false;
     return this.signalRService.isUserOnline(other.id.toString());
+  }
+
+  /**
+   * Go back to chat list (mobile)
+   */
+  goBack(): void {
+    this.backToList.emit();
   }
 
   ngOnInit(): void {}
