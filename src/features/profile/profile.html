@@ -13,6 +13,17 @@
       </div>
       <app-profile-info [userData]="userData"></app-profile-info>
       <app-followers-counter [userData]="userData"></app-followers-counter>
+
+      <div class="meta">
+        <app-segmented-switcher
+          route="profile"
+          [options]="['Posts', 'Photos', 'Reposts', 'About']"
+        ></app-segmented-switcher>
+
+        <div class="meta-info">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
     </div>
   </div>
 </section>

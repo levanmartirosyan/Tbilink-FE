@@ -22,6 +22,10 @@ import { Privacy } from '../features/profile/profile-components/profile-settings
 import { Notifications } from '../features/profile/profile-components/profile-settings/components/notifications/notifications';
 import { Language } from '../features/profile/profile-components/profile-settings/components/language/language';
 import { NotFound } from '../features/not-found/not-found';
+import { Posts } from '../features/profile/profile-components/posts/posts';
+import { Photos } from '../features/profile/profile-components/photos/photos';
+import { Reposts } from '../features/profile/profile-components/reposts/reposts';
+import { About } from '../features/profile/profile-components/about/about';
 
 export const routes: Routes = [
   {
@@ -53,7 +57,29 @@ export const routes: Routes = [
       {
         path: 'profile',
         component: Profile,
-        children: [],
+        children: [
+          {
+            path: '',
+            redirectTo: 'posts',
+            pathMatch: 'full',
+          },
+          {
+            path: 'posts',
+            component: Posts,
+          },
+          {
+            path: 'photos',
+            component: Photos,
+          },
+          {
+            path: 'reposts',
+            component: Reposts,
+          },
+          {
+            path: 'about',
+            component: About,
+          },
+        ],
       },
       {
         path: 'settings',

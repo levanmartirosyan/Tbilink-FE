@@ -73,6 +73,28 @@
             }
           }
         }
+
+        .meta {
+          display: flex;
+          flex-direction: column;
+          padding: 1.5rem;
+          gap: 1rem;
+
+          &::ng-deep {
+            app-segmented-switcher {
+              width: 70%;
+
+              @media (max-width: 768px) {
+                width: 100%;
+              }
+            }
+          }
+
+          @media (max-width: 768px) {
+            padding: 1rem;
+            gap: 0.5rem;
+          }
+        }
       }
     }
   }

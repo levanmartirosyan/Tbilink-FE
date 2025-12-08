@@ -12,21 +12,28 @@ import { RouterModule } from '@angular/router';
 import { FollowersCounter } from './profile-components/followers-counter/followers-counter';
 import { ProfileInfo } from './profile-components/profile-info/profile-info';
 import { Enviroment } from '../../enviroment/enviroment';
+import { SegmentedSwitcher } from '../../shared/segmented-switcher/segmented-switcher';
 
 @Component({
   selector: 'app-profile',
-  imports: [LucideAngularModule, RouterModule, FollowersCounter, ProfileInfo],
+  imports: [
+    LucideAngularModule,
+    RouterModule,
+    FollowersCounter,
+    ProfileInfo,
+    SegmentedSwitcher,
+  ],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
 export class Profile implements OnInit {
   constructor(private api: ApiService, public env: Enviroment) {}
 
+  public userData?: FullUser;
+
   ngOnInit(): void {
     this.getUserData();
   }
-
-  public userData?: FullUser;
 
   getUserData() {
     this.api.getUserData().subscribe({

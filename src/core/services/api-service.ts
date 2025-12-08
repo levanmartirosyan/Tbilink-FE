@@ -12,6 +12,7 @@ import { Enviroment } from '../../enviroment/enviroment';
 import { Observable } from 'rxjs';
 import { ServiceResponse } from '../interfaces/Response';
 import { SendMessageRequest } from '../interfaces/message-interface';
+import { IPost } from '../interfaces/IPost';
 
 @Injectable({
   providedIn: 'root',
@@ -61,8 +62,8 @@ export class ApiService {
     return this.http.post(this.url + 'storage/upload/public', formData);
   }
 
-  getAllPosts() {
-    return this.http.get(this.url + 'post/all');
+  getAllPosts(): Observable<ServiceResponse<IPost[]>> {
+    return this.http.get<ServiceResponse<IPost[]>>(this.url + 'post/all');
   }
 
   getPostById(postId: string) {
