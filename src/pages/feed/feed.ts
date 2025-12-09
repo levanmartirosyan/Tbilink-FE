@@ -4,10 +4,11 @@ import { PostCard } from './feed-components/post-card/post-card';
 import { ApiService } from '../../core/services/api-service';
 import { Title } from '@angular/platform-browser';
 import { EditPostModal } from './feed-components/edit-post-modal/edit-post-modal';
+import { CommentModal } from './feed-components/comment-modal/comment-modal';
 
 @Component({
   selector: 'app-feed',
-  imports: [AddPost, PostCard, EditPostModal],
+  imports: [AddPost, PostCard, EditPostModal, CommentModal],
   templateUrl: './feed.html',
   styleUrl: './feed.scss',
 })
@@ -24,6 +25,10 @@ export class Feed implements OnInit {
   public editPostModal: boolean = false;
 
   public selectedPost: any = null;
+
+  public commentModal: boolean = false;
+
+  public selectedCommentPost: any = null;
 
   getAllPosts() {
     this.api.getAllPosts().subscribe({
@@ -53,7 +58,16 @@ export class Feed implements OnInit {
     this.selectedPost = post;
   }
 
+  toggleCommentModal(post: any) {
+    this.commentModal = !this.commentModal;
+    this.selectedCommentPost = post;
+  }
+
   closeEditPostModal = () => {
     this.editPostModal = false;
+  };
+
+  closeCommentModal = () => {
+    this.commentModal = false;
   };
 }

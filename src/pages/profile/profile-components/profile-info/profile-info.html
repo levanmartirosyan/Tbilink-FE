@@ -2,7 +2,7 @@
   <div class="info">
     <div class="avatar">
       <img
-        [src]="env.storageUrl + userData?.profilePhotoUrl || 'assets/icons/profile.png'"
+        [src]="(userData?.profilePhotoUrl ? env.storageUrl + userData?.profilePhotoUrl : 'assets/icons/profile.png')"
         alt=""
       />
     </div>

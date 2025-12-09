@@ -26,7 +26,7 @@
       <div class="profile" #profileWrapper>
         <div class="avatar" (click)="toggleProfileMenu()">
           <img
-            [src]="env.storageUrl + userData?.data?.profilePhotoUrl || 'assets/icons/profile.png' "
+            [src]="(userData?.data?.profilePhotoUrl ? env.storageUrl + userData?.data?.profilePhotoUrl : 'assets/icons/profile.png')"
             alt="Avatar"
           />
           <div

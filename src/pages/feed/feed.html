@@ -6,6 +6,7 @@
       [postData]="post"
       (deletePostNewData)="getNewPosts($event)"
       (openEditPostModal)="toggleEditPostModal(post)"
+      (openCommentModal)="toggleCommentModal($event)"
     ></app-post-card>
     }
   </div>
@@ -17,4 +18,9 @@
   [toggleEditPostModal]="closeEditPostModal"
   (postUpdated)="getAllPosts()"
 ></app-edit-post-modal>
+} @if (commentModal && selectedCommentPost) {
+<app-comment-modal
+  [postData]="selectedCommentPost"
+  [toggleCommentModal]="closeCommentModal"
+></app-comment-modal>
 }

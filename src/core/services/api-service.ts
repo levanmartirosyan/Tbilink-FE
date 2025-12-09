@@ -80,6 +80,18 @@ export class ApiService {
     return this.http.delete(this.url + 'post/delete?postId=' + postId);
   }
 
+  likePost(postId: string) {
+    return this.http.post(this.url + `post/${postId}/like`, {});
+  }
+
+  hasUserLikedPost(postId: string) {
+    return this.http.get(this.url + `post/${postId}/liked`);
+  }
+
+  postLikesCount(postId: string) {
+    return this.http.get(this.url + `post/${postId}/likes/count`);
+  }
+
   sendMessage(messageBody: SendMessageRequest) {
     return this.http.post(this.url + 'message/send', messageBody);
   }
@@ -94,5 +106,30 @@ export class ApiService {
 
   deleteMessage(messageId: number) {
     return this.http.delete(this.url + `message/delete/${messageId}`);
+  }
+
+  // Comment endpoints
+  getPostComments(postId: string) {
+    return this.http.get(this.url + `post/${postId}/comments`);
+  }
+
+  createComment(postId: string, content: string) {
+    return this.http.post(this.url + `post/${postId}/comments/create`, {
+      content,
+    });
+  }
+
+  updateComment(commentId: string, content: string) {
+    return this.http.put(this.url + `post/comments/${commentId}/update`, {
+      content,
+    });
+  }
+
+  deleteComment(commentId: string) {
+    return this.http.delete(this.url + `post/comments/${commentId}/delete`);
+  }
+
+  likeComment(commentId: string) {
+    return this.http.post(this.url + `post/comments/${commentId}/like`, {});
   }
 }

@@ -3,7 +3,7 @@
     <div class="profile">
       <div class="cover-img">
         <img
-          [src]="env.storageUrl + userData?.coverPhotoUrl || 'assets/icons/cover.png'"
+          [src]="(userData?.coverPhotoUrl ? env.storageUrl + userData?.coverPhotoUrl : 'assets/icons/cover.png')"
           alt=""
         />
         <div class="edit-cover">

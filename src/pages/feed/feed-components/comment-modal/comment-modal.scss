@@ -1,0 +1,323 @@
+:host {
+  .modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    z-index: 1001;
+    max-width: 450px;
+    max-height: 90vh;
+    background-color: var(--auth-form-background);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 16px 8px 16px;
+      border-bottom: none;
+
+      .close-btn {
+        cursor: pointer;
+        color: var(--text-color);
+        transition: 0.2s ease;
+
+        &:hover {
+          color: var(--primary);
+        }
+      }
+    }
+
+    .modal-content {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      padding: 0 16px;
+
+      .post-section {
+        padding: 12px 0;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        .post-header {
+          display: flex;
+          align-items: center;
+
+          .user {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            .profile-avatar {
+              width: 54px;
+              height: 54px;
+              border-radius: 50%;
+              position: relative;
+              .avatar {
+                cursor: pointer;
+                position: relative;
+                img {
+                  width: 54px;
+                  height: 54px;
+                  border-radius: 50%;
+                  object-fit: cover;
+                  object-position: center;
+                }
+                .statusIndicator {
+                  width: 14px;
+                  height: 14px;
+                  border-radius: 50%;
+                  background-color: var(--indicator-inactive);
+                  position: absolute;
+                  right: 1px;
+                  bottom: 1px;
+                  border: 2px solid var(--auth-form-background);
+                  &.active {
+                    background-color: var(--indicator-active);
+                    border: 2px solid var(--auth-form-background);
+                  }
+                }
+              }
+            }
+            .user-info {
+              display: flex;
+              flex-direction: column;
+              gap: 4px;
+              .username {
+                font-size: 16px;
+                font-weight: 600;
+                color: var(--text-color);
+              }
+              .username-tag {
+                font-size: 12px;
+                color: var(--secondary-text-color);
+                margin: 0;
+              }
+            }
+          }
+        }
+
+        .post-content {
+          p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--text-color);
+            line-height: 1.4;
+          }
+        }
+
+        .post-image {
+          width: 100%;
+          border-radius: 8px;
+          overflow: hidden;
+          max-height: 250px;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+      }
+
+      .comments-section {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 8px 0;
+
+        h4 {
+          margin: 0;
+          font-size: 12px;
+          font-weight: 600;
+          color: var(--text-unfocused);
+          text-transform: uppercase;
+          padding-bottom: 8px;
+          border-bottom: 1px solid var(--auth-input-border);
+        }
+
+        .comments-list {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+
+          .comment-item {
+            display: flex;
+            gap: 10px;
+            background: var(--auth-background);
+            padding: 10px;
+            border-radius: 8px;
+
+            .avatar {
+              width: 32px;
+              height: 32px;
+              border-radius: 50%;
+              object-fit: cover;
+              flex-shrink: 0;
+            }
+
+            .comment-content {
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+              gap: 4px;
+
+              .comment-header {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                strong {
+                  font-size: 13px;
+                  color: var(--text-color);
+                }
+
+                .time {
+                  font-size: 12px;
+                  color: var(--text-unfocused);
+                }
+              }
+
+              p {
+                margin: 0;
+                font-size: 13px;
+                color: var(--text-color);
+                line-height: 1.3;
+                word-wrap: break-word;
+              }
+
+              .comment-actions {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 8px;
+                margin-top: 4px;
+                .like-section {
+                  display: flex;
+                  align-items: center;
+                  gap: 4px;
+                  lucide-icon {
+                    width: 18px;
+                    height: 18px;
+                    cursor: pointer;
+                    color: var(--text-unfocused);
+                    transition: 0.2s ease;
+
+                    &.liked {
+                      color: var(--primary);
+                    }
+
+                    &:hover {
+                      color: var(--primary);
+                    }
+                  }
+                }
+
+                span {
+                  font-size: 12px;
+                  color: var(--text-unfocused);
+
+                  &.reply {
+                    color: var(--primary);
+                    cursor: pointer;
+                    margin-left: auto;
+
+                    &:hover {
+                      text-decoration: underline;
+                    }
+                  }
+
+                  &.delete {
+                    color: #ff3333;
+                    cursor: pointer;
+
+                    &:hover {
+                      text-decoration: underline;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        .no-comments {
+          text-align: center;
+          font-size: 13px;
+          color: var(--text-unfocused);
+          padding: 20px 0;
+        }
+      }
+    }
+    .input-section {
+      padding: 12px 16px 16px 16px;
+      border-top: 1px solid var(--auth-input-border);
+      background-color: var(--auth-form-background);
+      flex-shrink: 0;
+      form {
+        width: 100%;
+        .input-wrapper {
+          display: flex;
+          gap: 8px;
+          align-items: center;
+
+          .comment-input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid var(--auth-input-border);
+            border-radius: 8px;
+            background-color: var(--auth-input-background);
+            color: var(--text-color);
+            font-size: 13px;
+            resize: vertical;
+            min-height: 40px;
+            max-height: 80px;
+            font-family: inherit;
+            outline: none;
+            transition: 0.3s ease;
+            &:focus {
+              border-color: var(--auth-input-focus);
+            }
+            &::placeholder {
+              color: var(--text-unfocused);
+            }
+          }
+
+          .send-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(90deg, #7572ff 0%, #f1592a 100%);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            color: white;
+            transition: 0.3s ease;
+            flex-shrink: 0;
+
+            &:hover {
+              opacity: 0.9;
+            }
+
+            &:active {
+              transform: scale(0.95);
+            }
+
+            lucide-icon {
+              color: white;
+            }
+          }
+        }
+      }
+    }
+  }
+}

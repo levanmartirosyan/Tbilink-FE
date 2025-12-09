@@ -96,6 +96,10 @@ export class AddPost implements OnInit, OnDestroy {
       });
       return this.createPost();
     } else {
+      if (this.addPostForm.value.content.trim() === '') {
+        return this.toastService.error('Content cannot be empty.');
+      }
+
       const formData = new FormData();
       formData.append('file', this.selectedFile);
 

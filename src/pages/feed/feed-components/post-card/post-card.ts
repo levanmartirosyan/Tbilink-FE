@@ -40,11 +40,16 @@ export class PostCard {
 
   @Output() deletePostNewData = new EventEmitter<void>();
   @Output() openEditPostModal = new EventEmitter<boolean>();
+  @Output() openCommentModal = new EventEmitter<any>();
 
   @ViewChild('settingsWrapper', { read: ElementRef })
   settingsWrapper!: ElementRef;
 
   public env: any = env;
+
+  get userHasLiked(): boolean {
+    return this.postData?.isLikedByCurrentUser || false;
+  }
 
   public postSettingsMenu: boolean = false;
   togglepostSettingsMenu() {
@@ -105,5 +110,22 @@ export class PostCard {
 
   reportPost() {
     this.toastService.info('Report post feature coming soon.');
+  }
+
+  openCommentModalFn() {
+    this.openCommentModal.emit(this.postData);
+  }
+
+  likePost() {
+    if (!this.postData?.id) return;
+    this.apiService.likePost(this.postData.id).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        this.getAllPosts();
+      },
+      error: (err: any) => {
+        console.log(err);
+      },
+    });
   }
 }
