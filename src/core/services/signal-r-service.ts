@@ -5,27 +5,22 @@ import {
   HubConnectionState,
 } from '@microsoft/signalr';
 import { User } from '../types/user';
-import { Enviroment } from '../../enviroment/enviroment';
 import { MessageDto } from '../interfaces/message-interface';
 import { AudioNotificationService } from './audio-notification-service';
+import { env } from '../../enviroment/enviroment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SignalRService {
-  constructor(
-    private apiUrl: Enviroment,
-    private audioNotification: AudioNotificationService
-  ) {
-    this.hubUrl = this.apiUrl.hubUrlPublic;
-  }
+  constructor(private audioNotification: AudioNotificationService) {}
 
   /* ------------------ Presence hub ------------------ */
   hubConnection?: HubConnection;
   onlineUsers = signal<string[]>([]);
   lastActiveUsers = signal<Record<string, Date>>({});
 
-  private hubUrl: string;
+  private hubUrl: string = env.hubUrlPublic;
 
   createHubConnection(user: User) {
     if (

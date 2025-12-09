@@ -8,7 +8,6 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideLucideIcons } from '../core/providers/lucide-icons';
-import { provideEnvironment } from '../core/providers/enviroment';
 import { tokenInterceptor } from '../core/interceptors/token-interceptor';
 
 export const appConfig: ApplicationConfig = {
@@ -18,6 +17,5 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(withInterceptors([tokenInterceptor])),
     provideLucideIcons(),
-    provideEnvironment(),
   ],
 };

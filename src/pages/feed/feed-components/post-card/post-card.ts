@@ -1,0 +1,109 @@
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
+import { FormatNumberPipe } from '../../../../core/pipes/format-number-pipe';
+import { CommonModule } from '@angular/common';
+import { RelativeTimePipe } from '../../../../core/pipes/relative-time-pipe-pipe';
+import { SignalRService } from '../../../../core/services/signal-r-service';
+import { ApiService } from '../../../../core/services/api-service';
+import { ToastService } from '../../../../core/services/toast-service';
+import { UserService } from '../../../../core/services/user-service';
+import { env } from '../../../../enviroment/enviroment';
+
+@Component({
+  selector: 'app-post-card',
+  imports: [
+    LucideAngularModule,
+    FormatNumberPipe,
+    CommonModule,
+    RelativeTimePipe,
+  ],
+  templateUrl: './post-card.html',
+  styleUrl: './post-card.scss',
+})
+export class PostCard {
+  constructor(
+    public signalRService: SignalRService,
+    private apiService: ApiService,
+    private toastService: ToastService,
+    public userService: UserService
+  ) {}
+
+  @Input() postData: any;
+
+  @Output() deletePostNewData = new EventEmitter<void>();
+  @Output() openEditPostModal = new EventEmitter<boolean>();
+
+  @ViewChild('settingsWrapper', { read: ElementRef })
+  settingsWrapper!: ElementRef;
+
+  public env: any = env;
+
+  public postSettingsMenu: boolean = false;
+  togglepostSettingsMenu() {
+    this.postSettingsMenu = !this.postSettingsMenu;
+  }
+
+  public editPostModal: boolean = false;
+  toggleEditPostModal() {
+    this.editPostModal = !this.editPostModal;
+    this.openEditPostModal.emit(this.postSettingsMenu);
+  }
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: Event) {
+    if (!this.postSettingsMenu) return;
+
+    const target = event.target as Node | null;
+    if (!target) {
+      this.postSettingsMenu = false;
+      return;
+    }
+
+    if (!this.settingsWrapper.nativeElement.contains(target)) {
+      this.postSettingsMenu = false;
+    }
+  }
+
+  deletePost() {
+    if (!this.postData?.id) return;
+
+    this.apiService.deletePost(this.postData.id).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        this.postSettingsMenu = false;
+        this.toastService.success('Post deleted successfully.');
+        this.getAllPosts();
+      },
+      error: (err: any) => {
+        console.log(err);
+        this.toastService.error(err.error.message || 'Failed to delete post.');
+      },
+    });
+  }
+
+  getAllPosts() {
+    this.apiService.getAllPosts().subscribe({
+      next: (data: any) => {
+        console.log(data);
+        this.deletePostNewData.emit(data.data);
+      },
+      error: (err: any) => {
+        console.log(err);
+      },
+    });
+  }
+
+  goToUserProfile() {}
+
+  reportPost() {
+    this.toastService.info('Report post feature coming soon.');
+  }
+}

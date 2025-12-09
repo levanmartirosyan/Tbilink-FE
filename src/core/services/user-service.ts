@@ -1,10 +1,10 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { User } from '../types/user';
 import { BehaviorSubject } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { SignalRService } from './signal-r-service';
 import { HttpClient } from '@angular/common/http';
-import { Enviroment } from '../../enviroment/enviroment';
+import { env } from '../../enviroment/enviroment';
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +15,7 @@ export class UserService {
   constructor(
     private cookies: CookieService,
     private signalRService: SignalRService,
-    private http: HttpClient,
-    private env: Enviroment
+    private http: HttpClient
   ) {
     const savedUser = cookies.get(this.USER_COOKIE_KEY);
     if (savedUser) {
@@ -50,8 +49,7 @@ export class UserService {
   }
 
   private fetchInitialUnreadCounts(): void {
-    // Fetch all chats to initialize unread counts using HttpClient directly
-    this.http.get<any>(this.env.localUrl + 'message/chats').subscribe({
+    this.http.get<any>(env.publicUrl + 'message/chats').subscribe({
       next: (response: any) => {
         if (response?.data) {
           const unreadCounts: Record<number, number> = {};
@@ -61,7 +59,6 @@ export class UserService {
               unreadCounts[partnerId] = chat.unreadCount;
             }
           });
-          // Only update if API has actual unread counts, otherwise keep localStorage data
           if (Object.keys(unreadCounts).length > 0) {
             this.signalRService.setUnreadCounts(unreadCounts);
             console.log('Initial unread counts loaded from API:', unreadCounts);

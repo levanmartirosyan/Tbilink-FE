@@ -1,0 +1,20 @@
+<section>
+  <div class="container">
+    <app-add-post (newPostCreated)="getNewPosts($event)"></app-add-post>
+    @for (post of postData; track $index) {
+    <app-post-card
+      [postData]="post"
+      (deletePostNewData)="getNewPosts($event)"
+      (openEditPostModal)="toggleEditPostModal(post)"
+    ></app-post-card>
+    }
+  </div>
+</section>
+
+@if (editPostModal && selectedPost) {
+<app-edit-post-modal
+  [postData]="selectedPost"
+  [toggleEditPostModal]="closeEditPostModal"
+  (postUpdated)="getAllPosts()"
+></app-edit-post-modal>
+}

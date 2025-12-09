@@ -1,0 +1,211 @@
+:host {
+  width: 100%;
+  .post-card {
+    width: 100%;
+    background: var(--auth-form-background);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.05);
+    .post-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .user {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        cursor: pointer;
+        .profile-avatar {
+          width: 54px;
+          height: 54px;
+          border-radius: 50%;
+          position: relative;
+          .avatar {
+            cursor: pointer;
+            position: relative;
+            img {
+              width: 54px;
+              height: 54px;
+              border-radius: 50%;
+              object-fit: cover;
+              object-position: center;
+            }
+            .statusIndicator {
+              width: 14px;
+              height: 14px;
+              border-radius: 50%;
+              background-color: var(--indicator-inactive);
+              position: absolute;
+              right: 1px;
+              bottom: 1px;
+              border: 2px solid var(--auth-form-background);
+              &.active {
+                background-color: var(--indicator-active);
+                border: 2px solid var(--auth-form-background);
+              }
+            }
+          }
+        }
+        .user-info {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          .username {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-color);
+          }
+          .timestamp {
+            font-size: 12px;
+            color: var(--secondary-text-color);
+          }
+        }
+      }
+      .postSettings {
+        position: relative;
+        padding: 10px;
+        border-radius: 12px;
+        background: var(--auth-input-background);
+        transition: 0.3s ease;
+        cursor: pointer;
+
+        &:hover {
+          background-color: var(--auth-input-border);
+        }
+        .settings-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          lucide-icon {
+            width: 22px;
+            height: 22px;
+            color: var(--text-color);
+          }
+        }
+        .post-settings-menu {
+          position: absolute;
+          right: 0;
+          top: 100%;
+          margin-top: 5px;
+          width: 122px;
+          border-radius: 10px;
+          background: var(--auth-input-background);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          box-shadow: -4px 6px 10px rgba(0, 0, 0, 0.05),
+            4px 6px 10px rgba(0, 0, 0, 0.05);
+          overflow: hidden;
+          transition: opacity 0.28s ease, transform 0.28s ease,
+            visibility 0s linear 0.28s;
+          opacity: 0;
+          visibility: hidden;
+          pointer-events: none;
+          transform: translateY(-10px);
+          z-index: 10;
+          .menu-item {
+            width: 100%;
+            cursor: pointer;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 6px;
+            transition: 0.3s ease;
+            lucide-icon {
+              width: 17px;
+              height: 17px;
+            }
+            p {
+              font-size: 15px;
+            }
+            &:hover {
+              color: var(--primary);
+              background: color-mix(in srgb, var(--primary) 12%, transparent);
+            }
+          }
+          &.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: all;
+            transform: translateY(0);
+            transition-delay: 0s;
+          }
+          &.admin-menu {
+            width: 150px;
+          }
+        }
+      }
+    }
+    .post-content {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      p {
+        font-size: 14px;
+        color: var(--text-color);
+      }
+      .img {
+        width: 100%;
+        height: 400px;
+        overflow: hidden;
+        border-radius: 12px;
+        backdrop-filter: brightness(0.65);
+        background-color: var(--auth-input-background);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          object-position: center;
+        }
+      }
+    }
+    .post-actions {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 24px;
+      position: relative;
+      margin-top: 20px;
+      .action {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        transition: 0.3s ease;
+        color: var(--text-color);
+        cursor: pointer;
+        lucide-icon {
+          width: 20px;
+          height: 20px;
+          &.liked {
+            color: red;
+          }
+        }
+        span {
+          font-size: 15px;
+        }
+        &:hover {
+          color: var(--primary);
+        }
+      }
+      &::after {
+        content: "";
+        position: absolute;
+        top: -20px;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        border-radius: 5px;
+        background: var(--auth-input-border);
+      }
+    }
+  }
+}

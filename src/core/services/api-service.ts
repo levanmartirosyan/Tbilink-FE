@@ -8,21 +8,19 @@ import {
   SingUpRequest,
   VerifyEmailRequest,
 } from '../interfaces/auth-interfaces';
-import { Enviroment } from '../../enviroment/enviroment';
 import { Observable } from 'rxjs';
 import { ServiceResponse } from '../interfaces/Response';
 import { SendMessageRequest } from '../interfaces/message-interface';
 import { IPost } from '../interfaces/IPost';
+import { env } from '../../enviroment/enviroment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private http: HttpClient, private apiUrl: Enviroment) {
-    this.url = apiUrl.publicUrl;
-  }
+  constructor(private http: HttpClient) {}
 
-  private url: string;
+  private url: string = env.publicUrl;
 
   signin(
     signinBody: SignInRequest
