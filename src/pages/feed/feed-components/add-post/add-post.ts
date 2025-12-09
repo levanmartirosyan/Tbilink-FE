@@ -96,8 +96,9 @@ export class AddPost implements OnInit, OnDestroy {
       });
       return this.createPost();
     } else {
-      if (this.addPostForm.value.content.trim() === '') {
-        return this.toastService.error('Content cannot be empty.');
+      if (this.addPostForm.value.content === '') {
+        this.toastService.error('Content cannot be empty.');
+        return;
       }
 
       const formData = new FormData();
@@ -112,6 +113,7 @@ export class AddPost implements OnInit, OnDestroy {
           });
 
           console.log(this.addPostForm.value);
+          this.selectedFile = null;
 
           this.createPost();
         },
