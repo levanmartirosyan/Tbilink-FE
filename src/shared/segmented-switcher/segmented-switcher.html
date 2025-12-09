@@ -2,7 +2,7 @@
   @for (option of options; track $index) {
   <div
     class="option"
-    [class.active]="selectedOption === option.toLowerCase()"
+    [class.active]="selectedOption.toLowerCase() === option.toLowerCase()"
     (click)="selectOption(option)"
   >
     {{option}}
