@@ -6,6 +6,7 @@
           <img
             [src]="(postData?.avatar ? env.storageUrl + postData?.avatar : 'assets/icons/profile.png')"
             alt="Avatar"
+            loading="lazy"
           />
           <div
             class="statusIndicator"
@@ -84,11 +85,16 @@
     <p>{{postData?.content}}</p>
     @if (postData?.imageUrl) {
     <div class="img">
+      @defer (on viewport) {
       <img
         class="post-image"
         [src]="env.storageUrl + postData?.imageUrl"
         alt="Post Image"
+        loading="lazy"
       />
+      } @placeholder {
+      <div></div>
+      }
     </div>
     }
   </div>

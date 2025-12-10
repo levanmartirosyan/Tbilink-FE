@@ -1,1 +1,37 @@
-<p>about works!</p>
+<div class="wrapper">
+  @if (userData?.isPublicProfile && userData != null) {
+  <div class="item">
+    <h3>Contact Information</h3>
+    @if (userData?.country !== null || userData?.city !== null) {
+    <div class="info-row">
+      <lucide-icon name="map-pin" [size]="20"></lucide-icon>
+      <span>{{userData?.country + ',' + ' '+ userData?.city}}</span>
+    </div>
+    } @if (userData?.showEmail) {
+    <div class="info-row">
+      <lucide-icon name="mail" [size]="20"></lucide-icon>
+      <span class="value">{{ userData?.email || 'Not provided' }}</span>
+    </div>
+    } @if (userData?.showPhone) {
+    <div class="info-row">
+      <lucide-icon name="phone" [size]="20"></lucide-icon>
+      <span class="value">{{ userData?.phoneNumber || 'Not provided' }}</span>
+    </div>
+    }
+    <div class="info-row">
+      <lucide-icon name="calendar" [size]="17"></lucide-icon>
+      <span>Joined: {{userData?.registerDate | date: "MMMM yyyy"}}</span>
+    </div>
+  </div>
+  <div class="item">
+    <h3>Bio</h3>
+    <div class="info-row">
+      <span> {{userData?.description}}</span>
+    </div>
+  </div>
+  } @else if (!userData?.isPublicProfile && userData != null) {
+  <h3>Profile is private</h3>
+  } @else {
+  <app-spinner-loader></app-spinner-loader>
+  }
+</div>

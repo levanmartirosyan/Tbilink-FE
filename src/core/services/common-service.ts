@@ -56,4 +56,15 @@ export class CommonService {
   setChatSelectOption(value: boolean) {
     this.ChatSelectOption.next(value);
   }
+
+  private profileUserData = new BehaviorSubject<any>(null);
+  profileUserData$ = this.profileUserData.asObservable();
+
+  setProfileUserData(userData: any) {
+    this.profileUserData.next(userData);
+  }
+
+  getProfileUserData() {
+    return this.profileUserData.asObservable();
+  }
 }

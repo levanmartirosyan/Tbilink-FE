@@ -1,0 +1,26 @@
+.wrapper {
+  width: 100%;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: var(--auth-form-background);
+  border: 1px solid var(--auth-input-border);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  .item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    .info-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-unfocused);
+      lucide-icon {
+        width: 20px;
+        height: 20px;
+        color: var(--secondary-text-color);
+      }
+    }
+  }
+}

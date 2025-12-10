@@ -60,8 +60,24 @@ export class ApiService {
     return this.http.post(this.url + 'storage/upload/public', formData);
   }
 
-  getAllPosts(): Observable<ServiceResponse<IPost[]>> {
+  getAllPosts() {
     return this.http.get<ServiceResponse<IPost[]>>(this.url + 'post/all');
+  }
+
+  getAllPostsPaginated(
+    pageNumber: number = 1,
+    pageSize: number = 5
+  ): Observable<ServiceResponse<IPost[]>> {
+    return this.http.get<ServiceResponse<IPost[]>>(
+      this.url +
+        `post/all/paginated?pageNumber=${pageNumber}&pageSize=${pageSize}`
+    );
+  }
+
+  getPostsByUserId(userId?: string) {
+    return this.http.get<ServiceResponse<IPost[]>>(
+      this.url + `post/user/${userId}`
+    );
   }
 
   getPostById(postId: string) {

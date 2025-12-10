@@ -3,5 +3,7 @@
   <div class="container">
     <img [src]="env.storageUrl + photo.imageUrl" alt="photo" />
   </div>
-  } }
+  } } @empty {
+  <app-spinner-loader></app-spinner-loader>
+  }
 </div>

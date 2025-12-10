@@ -1,1 +1,19 @@
-<p>posts works!</p>
+<div class="wrapper">
+  @for (posts of data; track $index) { @if (posts.imageUrl) {
+  <div class="container">
+    <img [src]="env.storageUrl + posts.imageUrl" alt="photo" />
+    <div class="like-comment-count">
+      <div class="item">
+        <lucide-icon name="heart" [size]="20"></lucide-icon>
+        <span>{{posts.likeCount}}</span>
+      </div>
+      <div class="item">
+        <lucide-icon name="message-circle" [size]="20"></lucide-icon>
+        <span>{{posts.commentCount}}</span>
+      </div>
+    </div>
+  </div>
+  } }@empty {
+  <app-spinner-loader></app-spinner-loader>
+  }
+</div>

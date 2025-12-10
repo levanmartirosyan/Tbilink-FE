@@ -4,10 +4,11 @@ import { IPost } from '../../../../core/interfaces/IPost';
 import { UserService } from '../../../../core/services/user-service';
 import { map, switchMap, take } from 'rxjs';
 import { env } from '../../../../enviroment/enviroment';
+import { SpinnerLoader } from '../../../../shared/loadings/spinner-loader/spinner-loader';
 
 @Component({
   selector: 'app-photos',
-  imports: [],
+  imports: [SpinnerLoader],
   templateUrl: './photos.html',
   styleUrl: './photos.scss',
 })
@@ -18,21 +19,10 @@ export class Photos implements OnInit {
   public env: any = env;
 
   public ngOnInit(): void {
-    this.user.user$
-      .pipe(
-        take(1),
-        switchMap((user) =>
-          this.apiService
-            .getAllPosts()
-            .pipe(
-              map((res) =>
-                res.data.filter((d) => d.userId === Number(user?.data.id))
-              )
-            )
-        )
-      )
-      .subscribe((filteredPosts) => {
-        this.data = filteredPosts;
+    this.apiService
+      .getPostsByUserId(this.user.getUser()?.data?.id)
+      .subscribe((posts) => {
+        this.data = posts.data;
         console.log(this.data);
       });
   }

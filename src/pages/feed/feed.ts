@@ -5,12 +5,22 @@ import { ApiService } from '../../core/services/api-service';
 import { Title } from '@angular/platform-browser';
 import { EditPostModal } from './feed-components/edit-post-modal/edit-post-modal';
 import { CommentModal } from './feed-components/comment-modal/comment-modal';
+import { CommonModule } from '@angular/common';
+import { PostSkeleton } from '../../shared/loadings/skeletons/post-skeleton/post-skeleton';
 
 @Component({
   selector: 'app-feed',
-  imports: [AddPost, PostCard, EditPostModal, CommentModal],
+  imports: [
+    AddPost,
+    PostCard,
+    EditPostModal,
+    CommentModal,
+    CommonModule,
+    PostSkeleton,
+  ],
   templateUrl: './feed.html',
   styleUrl: './feed.scss',
+  host: { '(scroll)': 'onScroll($event)' },
 })
 export class Feed implements OnInit {
   constructor(private api: ApiService, private title: Title) {}
@@ -20,30 +30,96 @@ export class Feed implements OnInit {
     this.getAllPosts();
   }
 
-  public postData: any;
-
+  public postData: any[] = [];
   public editPostModal: boolean = false;
-
   public selectedPost: any = null;
-
   public commentModal: boolean = false;
-
   public selectedCommentPost: any = null;
+  public isLoading: boolean = false;
+
+  private currentPage = 1;
+  private pageSize = 5;
+  private hasMorePosts = true;
+  private scrollTimeout: any = null;
 
   getAllPosts() {
-    this.api.getAllPosts().subscribe({
-      next: (data: any) => {
-        console.log(data);
+    if (this.isLoading || !this.hasMorePosts) {
+      console.log(
+        'Load blocked - isLoading:',
+        this.isLoading,
+        'hasMorePosts:',
+        this.hasMorePosts
+      );
+      return;
+    }
 
-        this.postData = data.data.sort(
+    this.isLoading = true;
+    console.log('Loading page:', this.currentPage);
+    this.api.getAllPostsPaginated(this.currentPage, this.pageSize).subscribe({
+      next: (response: any) => {
+        console.log(
+          'Page',
+          this.currentPage,
+          'loaded:',
+          response.data.data.length,
+          'posts'
+        );
+
+        // Access response.data.data for paginated posts
+        const newPosts = response.data.data.sort(
           (a: any, b: any) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
+
+        if (this.currentPage === 1) {
+          this.postData = newPosts;
+          console.log('First page. Total posts:', this.postData.length);
+        } else {
+          this.postData = [...this.postData, ...newPosts];
+          console.log(
+            'Appended page',
+            this.currentPage,
+            '. Total posts now:',
+            this.postData.length
+          );
+        }
+
+        this.hasMorePosts = response.data.hasNextPage;
+        this.currentPage++;
+        this.isLoading = false;
+        console.log(
+          'Next hasMorePosts:',
+          this.hasMorePosts,
+          'Next page will be:',
+          this.currentPage
+        );
       },
       error: (err: any) => {
-        console.log(err);
+        console.error('Error loading posts:', err);
+        this.isLoading = false;
       },
     });
+  }
+
+  onScroll(event: any) {
+    const scrollTop = event.target.scrollTop;
+    const scrollHeight = event.target.scrollHeight;
+    const clientHeight = event.target.clientHeight;
+    const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
+
+    // Load more when scrolled to 85% of page
+    if (scrollPercentage > 0.85 && !this.isLoading && this.hasMorePosts) {
+      // Debounce the scroll event
+      if (this.scrollTimeout) clearTimeout(this.scrollTimeout);
+
+      this.scrollTimeout = setTimeout(() => {
+        console.log(
+          'Scroll threshold reached. Loading page:',
+          this.currentPage
+        );
+        this.getAllPosts();
+      }, 300);
+    }
   }
 
   getNewPosts(event: any) {

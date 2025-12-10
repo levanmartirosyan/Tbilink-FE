@@ -1,7 +1,8 @@
 .wrapper {
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
+  gap: 8px;
 
   @media (max-width: 1280px) {
     grid-template-columns: repeat(4, 1fr);
@@ -20,7 +21,8 @@
   }
 
   .container {
-    width: 100%;
+    width: 220px;
+    height: 220px;
     aspect-ratio: 1 / 1;
     overflow: hidden;
     border-radius: 8px;
@@ -40,5 +42,13 @@
       object-fit: cover;
       display: block;
     }
+  }
+
+  app-spinner-loader {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
   }
 }

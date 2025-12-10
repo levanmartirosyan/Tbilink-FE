@@ -8,6 +8,9 @@
       (openEditPostModal)="toggleEditPostModal(post)"
       (openCommentModal)="toggleCommentModal($event)"
     ></app-post-card>
+
+    }@empty {
+    <app-post-skeleton></app-post-skeleton>
     }
   </div>
 </section>

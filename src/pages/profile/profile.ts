@@ -6,6 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ApiService } from '../../core/services/api-service';
+import { CommonService } from '../../core/services/common-service';
 import { FullUser } from '../../core/types/user';
 import { LucideAngularModule } from 'lucide-angular';
 import { RouterModule } from '@angular/router';
@@ -27,7 +28,7 @@ import { env } from '../../enviroment/enviroment';
   styleUrl: './profile.scss',
 })
 export class Profile implements OnInit {
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, private commonService: CommonService) {}
 
   public userData?: FullUser;
 
@@ -43,6 +44,8 @@ export class Profile implements OnInit {
         console.log(data);
 
         this.userData = data.data;
+
+        this.commonService.setProfileUserData(this.userData);
       },
       error: (error: any) => {
         console.log(error);
