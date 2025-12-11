@@ -21,7 +21,7 @@ import { UpdateUser } from '../interfaces/user-interface';
 export class ApiService {
   constructor(private http: HttpClient) {}
 
-  private url: string = env.localUrl;
+  private url: string = env.publicUrl;
 
   signin(
     signinBody: SignInRequest
