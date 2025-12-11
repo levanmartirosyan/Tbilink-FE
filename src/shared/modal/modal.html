@@ -1,0 +1,32 @@
+@if (isOpen) {
+<app-overlay [event]="toggleModal"></app-overlay>
+
+<div class="modal-container">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>{{ title }}</h3>
+      <button type="button" class="close-btn" (click)="closeModal()">
+        <lucide-icon name="x" [size]="20"></lucide-icon>
+      </button>
+    </div>
+
+    <div class="modal-content">
+      <ng-content></ng-content>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" (click)="closeModal()" class="cancel-btn">
+        Cancel
+      </button>
+      <button
+        type="button"
+        (click)="handleSubmit()"
+        [disabled]="isLoading || submitDisabled"
+        class="submit-btn"
+      >
+        {{ isLoading ? 'Saving...' : submitButtonText }}
+      </button>
+    </div>
+  </div>
+</div>
+}

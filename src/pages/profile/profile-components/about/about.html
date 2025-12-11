@@ -1,7 +1,7 @@
 <div class="wrapper">
   @if (userData?.isPublicProfile && userData != null) {
   <div class="item">
-    <h3>Contact Information</h3>
+    <h4>Contact and Basic Information</h4>
     @if (userData?.country !== null || userData?.city !== null) {
     <div class="info-row">
       <lucide-icon name="map-pin" [size]="20"></lucide-icon>
@@ -24,13 +24,18 @@
     </div>
   </div>
   <div class="item">
-    <h3>Bio</h3>
+    <h4>Bio</h4>
     <div class="info-row">
-      <span> {{userData?.description}}</span>
+      <span> {{userData?.description || 'No Description.'}}</span>
     </div>
   </div>
   } @else if (!userData?.isPublicProfile && userData != null) {
-  <h3>Profile is private</h3>
+  <div class="isPrivate">
+    <div class="info-row">
+      <lucide-icon name="lock" [size]="17"></lucide-icon>
+      <span>Profile is private</span>
+    </div>
+  </div>
   } @else {
   <app-spinner-loader></app-spinner-loader>
   }

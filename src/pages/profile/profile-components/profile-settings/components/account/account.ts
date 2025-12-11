@@ -1,11 +1,348 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormGroup,
+  FormControl,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
+import { LucideAngularModule } from 'lucide-angular';
+import { CommonService } from '../../../../../../core/services/common-service';
+import { ApiService } from '../../../../../../core/services/api-service';
+import { ToastService } from '../../../../../../core/services/toast-service';
+import { UserService } from '../../../../../../core/services/user-service';
+import { first } from 'rxjs';
+import { CodeType } from '../../../../../../core/enums/code-types';
+import { ModalComponent } from '../../../../../../shared/modal/modal';
 
 @Component({
   selector: 'app-account',
-  imports: [],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    LucideAngularModule,
+    ModalComponent,
+  ],
   templateUrl: './account.html',
   styleUrl: './account.scss',
 })
-export class Account {
+export class Account implements OnInit {
+  userData: any;
+  isEditingEmail = false;
+  isEditingUsername = false;
+  isEditingPhone = false;
+  isVerifying = false;
+  verificationCodeSent = false;
+  isSaving = false;
 
+  currentEmail = '';
+  currentUsername = '';
+  currentPhone = '';
+  newEmail = '';
+  newUsername = '';
+  newPhone = '';
+  verificationCode = '';
+  otp: string[] = ['', '', '', '', '', ''];
+  otpDigits = Array(6).fill(0);
+
+  emailForm = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]),
+  });
+
+  verifyForm = new FormGroup({
+    code: new FormControl('', [
+      Validators.required,
+      Validators.minLength(6),
+      Validators.maxLength(6),
+    ]),
+  });
+
+  usernameForm = new FormGroup({
+    username: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(30),
+    ]),
+  });
+
+  phoneForm = new FormGroup({
+    phone: new FormControl('', [
+      Validators.required,
+      Validators.minLength(10),
+      Validators.maxLength(20),
+    ]),
+  });
+
+  constructor(
+    private commonService: CommonService,
+    private api: ApiService,
+    private toastService: ToastService,
+    private userService: UserService
+  ) {}
+
+  ngOnInit(): void {
+    this.loadUserData();
+  }
+
+  loadUserData(): void {
+    this.commonService.getProfileUserData().subscribe((data: any) => {
+      if (data) {
+        this.userData = data;
+        this.currentEmail = data.email || '';
+        this.currentUsername = data.userName || '';
+        this.currentPhone = data.phoneNumber || '';
+      }
+    });
+  }
+
+  openChangeEmailModal(): void {
+    this.isEditingEmail = true;
+    this.newEmail = '';
+    this.verificationCode = '';
+    this.verificationCodeSent = false;
+    this.otp = ['', '', '', '', '', ''];
+    this.emailForm.reset();
+    this.verifyForm.reset();
+  }
+
+  closeEmailModal(): void {
+    this.isEditingEmail = false;
+    this.verificationCodeSent = false;
+    this.newEmail = '';
+    this.verificationCode = '';
+    this.otp = ['', '', '', '', '', ''];
+    this.emailForm.reset();
+    this.verifyForm.reset();
+  }
+
+  openChangeUsernameModal(): void {
+    this.isEditingUsername = true;
+    this.newUsername = this.currentUsername;
+    this.usernameForm.patchValue({ username: this.currentUsername });
+  }
+
+  closeUsernameModal(): void {
+    this.isEditingUsername = false;
+    this.newUsername = '';
+    this.usernameForm.reset();
+  }
+
+  toggleUsernameModal = (): void => {
+    this.closeUsernameModal();
+  };
+
+  saveUsername(): void {
+    if (!this.usernameForm.valid) {
+      this.toastService.error(
+        'Please enter a valid username (3-30 characters)'
+      );
+      return;
+    }
+
+    const newUsername = this.usernameForm.value.username || '';
+
+    this.isSaving = true;
+    const updateData = {
+      UserName: newUsername,
+    };
+
+    this.api.updateUser(this.userData.id, updateData).subscribe({
+      next: (response: any) => {
+        this.isSaving = false;
+        this.toastService.success('Username updated successfully');
+        this.currentUsername = newUsername;
+        this.closeUsernameModal();
+        this.getUserData();
+      },
+      error: (error: any) => {
+        this.isSaving = false;
+        this.toastService.error(
+          error.error?.message || 'Failed to update username'
+        );
+        console.error('Error updating username:', error);
+      },
+    });
+  }
+
+  sendVerificationCode(): void {
+    if (!this.emailForm.valid) {
+      this.toastService.error('Please enter a valid email');
+      return;
+    }
+
+    this.isVerifying = true;
+    const newEmail = this.emailForm.value.email || '';
+    const sendCodeForm = {
+      email: newEmail,
+      codeType: CodeType.EmailChange,
+      currentUserId: this.userData.id,
+    };
+
+    this.api.sendVerificationCode(sendCodeForm).subscribe({
+      next: (response: any) => {
+        this.isVerifying = false;
+        this.verificationCodeSent = true;
+        this.newEmail = newEmail;
+        this.toastService.success('Verification code sent to your email');
+      },
+      error: (error: any) => {
+        this.isVerifying = false;
+        this.toastService.error(
+          error.error?.message || 'Failed to send verification code'
+        );
+        console.error('Error sending verification code:', error);
+      },
+    });
+  }
+
+  onOtpInput(event: any, index: number): void {
+    const value = event.target.value;
+    if (value && /^\d+$/.test(value)) {
+      this.otp[index] = value;
+      if (index < 5) {
+        const nextInput = document.querySelector(
+          `.otp-input:nth-child(${index + 2})`
+        ) as HTMLInputElement;
+        if (nextInput) nextInput.focus();
+      }
+    } else if (value === '') {
+      this.otp[index] = '';
+    } else {
+      event.target.value = '';
+    }
+    this.updateCodeFormControl();
+  }
+
+  onOtpKeyDown(event: KeyboardEvent, index: number): void {
+    if (event.key === 'Backspace' && !this.otp[index] && index > 0) {
+      const prevInput = document.querySelector(
+        `.otp-input:nth-child(${index})`
+      ) as HTMLInputElement;
+      if (prevInput) prevInput.focus();
+    }
+  }
+
+  onOtpPaste(event: ClipboardEvent): void {
+    event.preventDefault();
+    const pastedData = event.clipboardData?.getData('text') || '';
+    const digits = pastedData.replace(/\D/g, '').split('');
+    digits.slice(0, 6).forEach((digit, index) => {
+      this.otp[index] = digit;
+    });
+    this.updateCodeFormControl();
+  }
+
+  private updateCodeFormControl(): void {
+    this.verifyForm.patchValue({ code: this.otp.join('') });
+  }
+
+  verifyEmailCode(): void {
+    if (!this.verifyForm.valid) {
+      this.toastService.error('Please enter the verification code');
+      return;
+    }
+
+    this.isSaving = true;
+    const verifyData = {
+      email: this.newEmail,
+      code: this.otp.join(''),
+    };
+
+    this.api.verifyEmail(verifyData).subscribe({
+      next: (response: any) => {
+        this.isSaving = false;
+        this.toastService.success('Email verified and updated successfully');
+        this.currentEmail = this.newEmail;
+        this.closeEmailModal();
+        this.getUserData();
+      },
+      error: (error: any) => {
+        this.isSaving = false;
+        this.toastService.error(
+          error.error?.message || 'Failed to verify email'
+        );
+        console.error('Error verifying email:', error);
+      },
+    });
+  }
+
+  getUserData(): void {
+    this.api
+      .getUserData()
+      .pipe(first())
+      .subscribe({
+        next: (data: any) => {
+          const userData = data.data || data;
+          this.userData = userData;
+          this.commonService.setProfileUserData(userData);
+          this.userService.updateUserData({
+            email: userData.email,
+            userName: userData.userName,
+          });
+          this.loadUserData();
+        },
+        error: (error: any) => {
+          console.log(error);
+        },
+      });
+  }
+
+  deleteAccount(): void {
+    if (
+      confirm(
+        'Are you sure you want to delete your account? This action cannot be undone.'
+      )
+    ) {
+      this.toastService.info('Delete account feature coming soon');
+    }
+  }
+
+  openChangePhoneModal(): void {
+    this.isEditingPhone = true;
+    this.newPhone = this.currentPhone;
+    this.phoneForm.patchValue({ phone: this.currentPhone });
+  }
+
+  closePhoneModal(): void {
+    this.isEditingPhone = false;
+    this.newPhone = '';
+    this.phoneForm.reset();
+  }
+
+  savePhone(): void {
+    if (!this.phoneForm.valid) {
+      this.toastService.error(
+        'Please enter a valid phone number (10-20 characters)'
+      );
+      return;
+    }
+
+    const newPhone = this.phoneForm.value.phone || '';
+
+    this.isSaving = true;
+    const updateData = {
+      PhoneNumber: newPhone,
+    };
+
+    this.api.updateUser(this.userData.id, updateData).subscribe({
+      next: (response: any) => {
+        this.isSaving = false;
+        this.toastService.success('Phone number updated successfully');
+        this.currentPhone = newPhone;
+        this.closePhoneModal();
+        this.getUserData();
+      },
+      error: (error: any) => {
+        this.isSaving = false;
+        this.toastService.error(
+          error.error?.message || 'Failed to update phone number'
+        );
+        console.error('Error updating phone number:', error);
+      },
+    });
+  }
 }

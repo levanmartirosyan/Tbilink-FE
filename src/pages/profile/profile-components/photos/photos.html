@@ -1,9 +1,21 @@
 <div class="wrapper">
-  @for (photo of data; track $index) { @if (photo.imageUrl) {
+  @if (isLoading) {
+  <app-spinner-loader></app-spinner-loader>
+  } @else { @if (!userData?.isPublicProfile) {
+  <div class="isPrivate">
+    <div class="info-row">
+      <lucide-icon name="lock" [size]="17"></lucide-icon>
+      <span>Profile is private</span>
+    </div>
+  </div>
+  } @else { @for (photo of data; track $index) { @if (photo.imageUrl) {
   <div class="container">
     <img [src]="env.storageUrl + photo.imageUrl" alt="photo" />
   </div>
   } } @empty {
-  <app-spinner-loader></app-spinner-loader>
-  }
+  <div class="empty-state">
+    <lucide-icon name="image-off" [size]="28"></lucide-icon>
+    <p>No photos found</p>
+  </div>
+  } } }
 </div>

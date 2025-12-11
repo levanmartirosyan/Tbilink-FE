@@ -34,7 +34,11 @@
       </div>
       <p>Messenger</p>
     </div>
-    <div class="item" routerLink="/profile" routerLinkActive="active">
+    <div
+      class="item"
+      [routerLink]="['/profile', userData?.data?.userName]"
+      routerLinkActive="active"
+    >
       <lucide-icon name="user" [size]="24"></lucide-icon>
       <p>Profile</p>
     </div>

@@ -9,8 +9,8 @@
       (openCommentModal)="toggleCommentModal($event)"
     ></app-post-card>
 
-    }@empty {
-    <app-post-skeleton></app-post-skeleton>
+    } @if (isLoading) {
+    <app-spinner-loader></app-spinner-loader>
     }
   </div>
 </section>

@@ -13,7 +13,7 @@
   <div class="modal-content">
     <div class="post-section">
       <div class="post-header">
-        <div class="user">
+        <div class="user" (click)="goToUserProfile()">
           <div class="profile-avatar">
             <div class="avatar">
               <img
@@ -46,24 +46,38 @@
     <div class="comments-section">
       <h4>Comments</h4>
       @if (isLoadingComments) {
-      <p class="no-comments">Loading comments...</p>
+      <app-spinner-loader></app-spinner-loader>
       } @else if (comments && comments.length > 0) {
       <div class="comments-list">
         @for (comment of comments; track $index) {
         <div class="comment-item">
-          <img
-            [src]="(comment.avatar ? env.storageUrl + comment.avatar : 'assets/icons/profile.png')"
-            alt="Avatar"
-            class="avatar"
-          />
           <div class="comment-content">
             <div class="comment-header">
-              <strong>{{ comment.firstName }} {{ comment.lastName }}</strong>
+              <div class="user" (click)="goToUserProfile()">
+                <div class="profile-avatar">
+                  <div class="avatar">
+                    <img
+                      [src]="(comment.avatar ? env.storageUrl + comment.avatar : 'assets/icons/profile.png')"
+                      alt="Avatar"
+                      class="avatar"
+                    />
+                    <div
+                      class="statusIndicator"
+                      [class.active]="signalRService.isUserOnline(postData?.userId)"
+                    ></div>
+                  </div>
+                </div>
+                <div class="user-info">
+                  <h3 class="username">
+                    {{ comment.firstName }} {{ comment.lastName }}
+                  </h3>
+                </div>
+              </div>
               <span class="time"
                 >{{ comment.createdAt | relativeTimePipe: 'chat'}}</span
               >
             </div>
-            <p>{{ comment.content }}</p>
+            <p class="cont">{{ comment.content }}</p>
             <div class="comment-actions">
               <div class="like-section">
                 @if (comment.isLikedByCurrentUser) {

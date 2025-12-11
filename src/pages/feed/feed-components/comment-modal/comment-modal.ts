@@ -14,6 +14,8 @@ import { ToastService } from '../../../../core/services/toast-service';
 import { UserService } from '../../../../core/services/user-service';
 import { SignalRService } from '../../../../core/services/signal-r-service';
 import { RelativeTimePipe } from '../../../../core/pipes/relative-time-pipe-pipe';
+import { Router } from '@angular/router';
+import { SpinnerLoader } from '../../../../shared/loadings/spinner-loader/spinner-loader';
 
 @Component({
   selector: 'app-comment-modal',
@@ -23,6 +25,7 @@ import { RelativeTimePipe } from '../../../../core/pipes/relative-time-pipe-pipe
     ReactiveFormsModule,
     CommonModule,
     RelativeTimePipe,
+    SpinnerLoader,
   ],
   templateUrl: './comment-modal.html',
   styleUrl: './comment-modal.scss',
@@ -46,7 +49,8 @@ export class CommentModal implements OnInit {
     private apiService: ApiService,
     private toastService: ToastService,
     public userService: UserService,
-    public signalRService: SignalRService
+    public signalRService: SignalRService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -80,7 +84,7 @@ export class CommentModal implements OnInit {
       next: (response: any) => {
         this.toastService.success('Comment added successfully.');
         this.commentForm.reset();
-        this.loadComments(); // Reload comments to show the new one
+        this.loadComments();
       },
       error: (err: any) => {
         console.log('Error adding comment:', err);
@@ -112,5 +116,18 @@ export class CommentModal implements OnInit {
         this.toastService.error('Failed to delete comment.');
       },
     });
+  }
+
+  goToUserProfile() {
+    console.log(this.postData.username);
+
+    if (
+      !this.postData?.username ||
+      !this.postData?.username == null ||
+      this.postData?.username == undefined
+    )
+      return;
+
+    this.router.navigate([`/profile/${this.postData?.username}`]);
   }
 }

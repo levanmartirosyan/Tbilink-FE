@@ -55,7 +55,7 @@ export const routes: Routes = [
         children: [],
       },
       {
-        path: 'profile',
+        path: 'profile/:username',
         component: Profile,
         children: [
           {

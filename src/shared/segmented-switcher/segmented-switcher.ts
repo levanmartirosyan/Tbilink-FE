@@ -4,9 +4,11 @@ import {
   Input,
   OnChanges,
   OnInit,
+  SimpleChanges,
 } from '@angular/core';
 import { CommonService } from '../../core/services/common-service';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-segmented-switcher',
@@ -23,25 +25,37 @@ export class SegmentedSwitcher implements OnInit, OnChanges {
 
   public ngOnInit(): void {
     this.sync();
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.sync();
+      });
   }
 
-  public ngOnChanges(): void {
+  public ngOnChanges(changes: SimpleChanges): void {
     if (!this.selectedOption && this.options.length) {
       this.selectedOption = this.options[0];
     }
-
+    if (changes['route']) {
+      this.sync();
+    }
     console.log(this.router.url);
   }
 
   public selectOption(option: string): void {
     this.selectedOption = option.toLowerCase();
-    this.router.navigate([`/${this.route}/${this.selectedOption}`]);
+    if (Array.isArray(this.route)) {
+      this.router.navigate([...this.route, this.selectedOption]);
+    } else {
+      this.router.navigate([this.route, this.selectedOption]);
+    }
     console.log(option);
   }
 
   private sync(): void {
     const url = this.router.url;
-    const child = url.replace(`/${this.route}/`, '');
+    const parts = url.split('/');
+    const child = parts[parts.length - 1];
 
     const formattedOptions = this.options.map((option) => option.toLowerCase());
 

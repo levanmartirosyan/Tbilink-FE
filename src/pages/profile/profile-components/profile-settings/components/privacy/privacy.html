@@ -1,4 +1,80 @@
 <div class="content">
-  <h3>Privacy Settings</h3>
-  <p>Manage your privacy preferences and settings.</p>
+  <div class="head">
+    <lucide-icon name="shield" [size]="22"></lucide-icon>
+    <h3>Privacy Settings</h3>
+  </div>
+
+  <div class="privacy-content">
+    <div class="privacy-item">
+      <div class="item-info">
+        <label class="item-title">Public Profile</label>
+        <p class="item-description">Make your profile visible to everyone</p>
+      </div>
+      <div class="toggle-switch">
+        <input
+          type="checkbox"
+          id="isPublicProfile"
+          [(ngModel)]="privacySettings.isPublicProfile"
+          (change)="onToggleChange()"
+          [disabled]="isSaving"
+          class="toggle-input"
+        />
+        <label for="isPublicProfile" class="toggle-label"></label>
+      </div>
+    </div>
+
+    <div class="privacy-item">
+      <div class="item-info">
+        <label class="item-title">Show Email</label>
+        <p class="item-description">Display email on your profile</p>
+      </div>
+      <div class="toggle-switch">
+        <input
+          type="checkbox"
+          id="showEmail"
+          [(ngModel)]="privacySettings.showEmail"
+          (change)="onToggleChange()"
+          [disabled]="isSaving"
+          class="toggle-input"
+        />
+        <label for="showEmail" class="toggle-label"></label>
+      </div>
+    </div>
+
+    <div class="privacy-item">
+      <div class="item-info">
+        <label class="item-title">Show Phone</label>
+        <p class="item-description">Display phone number on your profile</p>
+      </div>
+      <div class="toggle-switch">
+        <input
+          type="checkbox"
+          id="showPhone"
+          [(ngModel)]="privacySettings.showPhone"
+          (change)="onToggleChange()"
+          [disabled]="isSaving"
+          class="toggle-input"
+        />
+        <label for="showPhone" class="toggle-label"></label>
+      </div>
+    </div>
+
+    <div class="privacy-item">
+      <div class="item-info">
+        <label class="item-title">Allow Tagging</label>
+        <p class="item-description">Let others tag you in posts</p>
+      </div>
+      <div class="toggle-switch">
+        <input
+          type="checkbox"
+          id="allowTagging"
+          [(ngModel)]="privacySettings.allowTagging"
+          (change)="onToggleChange()"
+          [disabled]="isSaving"
+          class="toggle-input"
+        />
+        <label for="allowTagging" class="toggle-label"></label>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,0 +1,43 @@
+<div class="custom-select-container">
+  <div class="select-header" (click)="toggleDropdown()" [class.open]="isOpen">
+    <span class="select-value">{{ getDisplayValue() }}</span>
+    <lucide-icon
+      name="chevron-down"
+      [size]="20"
+      [class.rotate]="isOpen"
+    ></lucide-icon>
+  </div>
+
+  @if (isOpen) {
+  <div class="select-dropdown">
+    <div class="search-container">
+      <input
+        type="text"
+        class="search-input"
+        [placeholder]="'Search ' + placeholder.toLowerCase()"
+        [value]="searchText"
+        (input)="onSearchChange($event.target.value)"
+        (click)="$event.stopPropagation()"
+      />
+      <lucide-icon name="search" [size]="16" class="search-icon"></lucide-icon>
+    </div>
+
+    <div class="options-list">
+      @for (option of filteredOptions; track option) {
+      <div
+        class="option-item"
+        (click)="selectOption(option)"
+        [class.selected]="option === selectedValue"
+      >
+        <span>{{ option }}</span>
+        @if (option === selectedValue) {
+        <lucide-icon name="check" [size]="18" class="check-icon"></lucide-icon>
+        }
+      </div>
+      } @if (filteredOptions.length === 0) {
+      <div class="no-options">No options found</div>
+      }
+    </div>
+  </div>
+  }
+</div>

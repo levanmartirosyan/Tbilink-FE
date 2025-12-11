@@ -4,7 +4,7 @@
       <lucide-icon
         name="arrow-left"
         [size]="24"
-        routerLink="/profile"
+        [routerLink]="[`/profile/${userService.getUser()?.data?.userName}`]"
       ></lucide-icon>
       <h2>Settings</h2>
     </div>
@@ -14,7 +14,13 @@
     ></app-segmented-switcher>
 
     <div class="settings-content">
+      @if (isLoading) {
+      <div class="loading">
+        <app-spinner-loader></app-spinner-loader>
+      </div>
+      } @else {
       <router-outlet></router-outlet>
+      }
     </div>
   </div>
 </div>

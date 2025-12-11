@@ -36,7 +36,10 @@
         </div>
 
         <div class="profile-menu user-select-none" [class.active]="profileMenu">
-          <div class="menu-item" routerLink="/profile">
+          <div
+            class="menu-item"
+            [routerLink]="['/profile', userData?.data?.userName]"
+          >
             <lucide-icon name="user" [size]="17"></lucide-icon>
             <p>Profile</p>
           </div>

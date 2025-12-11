@@ -43,6 +43,8 @@ export class AddPost implements OnInit, OnDestroy {
 
   public env: any = env;
 
+  public isLoading: boolean = false;
+
   public filePreview: any = null;
 
   ngOnInit(): void {
@@ -90,14 +92,17 @@ export class AddPost implements OnInit, OnDestroy {
   }
 
   uploadImage(): void {
+    this.isLoading = true;
     if (this.selectedFile === null) {
       this.addPostForm.patchValue({
         userId: this.userData?.data?.id,
       });
+      this.isLoading = false;
       return this.createPost();
     } else {
       if (this.addPostForm.value.content === '') {
         this.toastService.error('Content cannot be empty.');
+        this.isLoading = false;
         return;
       }
 
@@ -120,12 +125,14 @@ export class AddPost implements OnInit, OnDestroy {
         error: (err: any) => {
           console.log('File upload failed:', err);
           this.toastService.error('File upload failed. Please try again.');
+          this.isLoading = false;
         },
       });
     }
   }
 
   createPost(): void {
+    this.isLoading = true;
     if (!this.addPostForm.valid) {
       return this.toastService.error('Please fill in all required fields.');
     }
@@ -138,11 +145,13 @@ export class AddPost implements OnInit, OnDestroy {
         this.addPostForm.reset();
         this.selectedFile = null;
         this.filePreview = null;
+        this.isLoading = false;
         this.getAllPosts();
       },
       error: (err: any) => {
         console.log('Post creation failed:', err);
         this.toastService.error('Post creation failed. Please try again.');
+        this.isLoading = false;
       },
     });
   }

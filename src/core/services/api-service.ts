@@ -13,6 +13,7 @@ import { ServiceResponse } from '../interfaces/Response';
 import { SendMessageRequest } from '../interfaces/message-interface';
 import { IPost } from '../interfaces/IPost';
 import { env } from '../../enviroment/enviroment';
+import { UpdateUser } from '../interfaces/user-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,7 @@ import { env } from '../../enviroment/enviroment';
 export class ApiService {
   constructor(private http: HttpClient) {}
 
-  private url: string = env.publicUrl;
+  private url: string = env.localUrl;
 
   signin(
     signinBody: SignInRequest
@@ -52,6 +53,10 @@ export class ApiService {
 
   getUserData() {
     return this.http.get(this.url + 'user/me');
+  }
+
+  updateUser(targetUserId: string, userBody: UpdateUser) {
+    return this.http.put(this.url + `user/update/${targetUserId}`, userBody);
   }
 
   uploadPublicFile(formData: FormData, folder: string) {
@@ -100,14 +105,6 @@ export class ApiService {
     return this.http.post(this.url + `post/${postId}/like`, {});
   }
 
-  hasUserLikedPost(postId: string) {
-    return this.http.get(this.url + `post/${postId}/liked`);
-  }
-
-  postLikesCount(postId: string) {
-    return this.http.get(this.url + `post/${postId}/likes/count`);
-  }
-
   sendMessage(messageBody: SendMessageRequest) {
     return this.http.post(this.url + 'message/send', messageBody);
   }
@@ -147,5 +144,9 @@ export class ApiService {
 
   likeComment(commentId: string) {
     return this.http.post(this.url + `post/comments/${commentId}/like`, {});
+  }
+
+  getUserByUsername(username: string) {
+    return this.http.get(this.url + `user/${username}`);
   }
 }

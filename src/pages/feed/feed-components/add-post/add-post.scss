@@ -97,9 +97,8 @@
         }
       }
       .btn {
-        width: 50px;
         button {
-          width: 100%;
+          padding: 0 10px;
           height: 36px;
           border-radius: 8px;
           background: var(--auth-form-button);

@@ -48,6 +48,27 @@ export class UserService {
     }
   }
 
+  public updateUserData(newData: Partial<User['data']>): void {
+    const currentUser = this.user.value;
+    if (!currentUser) return;
+
+    const updatedUser: User = {
+      ...currentUser,
+      data: {
+        ...currentUser.data,
+        ...newData,
+      },
+    };
+
+    this.user.next(updatedUser);
+    this.cookies.set(this.USER_COOKIE_KEY, JSON.stringify(updatedUser), {
+      expires: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
+      secure: true,
+      sameSite: 'Strict',
+      path: '/',
+    });
+  }
+
   private fetchInitialUnreadCounts(): void {
     this.http.get<any>(env.publicUrl + 'message/chats').subscribe({
       next: (response: any) => {
@@ -82,7 +103,6 @@ export class UserService {
     this.user.next(null);
     this.cookies.delete(this.USER_COOKIE_KEY, '/');
 
-    // Clear unread counts from localStorage on logout
     localStorage.removeItem('TB-UnreadCounts');
 
     this.signalRService.stopHubConnection();

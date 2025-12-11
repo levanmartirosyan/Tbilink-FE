@@ -6,7 +6,7 @@ import { Title } from '@angular/platform-browser';
 import { EditPostModal } from './feed-components/edit-post-modal/edit-post-modal';
 import { CommentModal } from './feed-components/comment-modal/comment-modal';
 import { CommonModule } from '@angular/common';
-import { PostSkeleton } from '../../shared/loadings/skeletons/post-skeleton/post-skeleton';
+import { SpinnerLoader } from '../../shared/loadings/spinner-loader/spinner-loader';
 
 @Component({
   selector: 'app-feed',
@@ -16,7 +16,7 @@ import { PostSkeleton } from '../../shared/loadings/skeletons/post-skeleton/post
     EditPostModal,
     CommentModal,
     CommonModule,
-    PostSkeleton,
+    SpinnerLoader,
   ],
   templateUrl: './feed.html',
   styleUrl: './feed.scss',

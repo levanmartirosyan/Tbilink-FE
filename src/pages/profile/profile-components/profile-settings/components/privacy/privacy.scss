@@ -1,12 +1,129 @@
 :host {
   width: 100%;
+
   .content {
     width: 100%;
     border: 1px solid var(--auth-input-border);
     border-radius: 6px;
-    overflow: hidden;
+    overflow: visible;
     padding: 20px;
     background-color: var(--auth-form-background);
     margin-top: 20px;
+    color: var(--text-color);
+
+    @media screen and (max-width: 768px) {
+      padding: 16px;
+    }
+
+    @media screen and (max-width: 480px) {
+      padding: 12px;
+    }
+
+    .head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+
+      lucide-icon {
+        width: 22px;
+        height: 22px;
+      }
+
+      h3 {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0;
+      }
+    }
+
+    .privacy-content {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+
+      .privacy-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px;
+        background: rgba(117, 114, 255, 0.05);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: rgba(117, 114, 255, 0.08);
+        }
+
+        .item-info {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          flex: 1;
+
+          .item-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            letter-spacing: 0.5px;
+            margin: 0;
+          }
+
+          .item-description {
+            font-size: 13px;
+            color: var(--text-unfocused);
+            margin: 0;
+          }
+        }
+
+        .toggle-switch {
+          margin-left: 20px;
+          display: flex;
+          align-items: center;
+
+          .toggle-input {
+            appearance: none;
+            width: 50px;
+            height: 28px;
+            background: #555;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border: none;
+            padding: 0;
+
+            &:checked {
+              background: var(--primary);
+            }
+
+            &:disabled {
+              opacity: 0.5;
+              cursor: not-allowed;
+            }
+
+            &::before {
+              content: "";
+              position: absolute;
+              width: 24px;
+              height: 24px;
+              border-radius: 50%;
+              background: white;
+              top: 2px;
+              left: 2px;
+              transition: all 0.3s ease;
+            }
+
+            &:checked::before {
+              left: 24px;
+            }
+          }
+
+          .toggle-label {
+            display: none;
+          }
+        }
+      }
+    }
   }
 }

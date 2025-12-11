@@ -16,6 +16,7 @@ import { ApiService } from '../../../../core/services/api-service';
 import { ToastService } from '../../../../core/services/toast-service';
 import { UserService } from '../../../../core/services/user-service';
 import { env } from '../../../../enviroment/enviroment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-post-card',
@@ -33,7 +34,8 @@ export class PostCard {
     public signalRService: SignalRService,
     private apiService: ApiService,
     private toastService: ToastService,
-    public userService: UserService
+    public userService: UserService,
+    private router: Router
   ) {}
 
   @Input() postData: any;
@@ -106,7 +108,18 @@ export class PostCard {
     });
   }
 
-  goToUserProfile() {}
+  goToUserProfile() {
+    console.log(this.postData.username);
+
+    if (
+      !this.postData?.username ||
+      !this.postData?.username == null ||
+      this.postData?.username == undefined
+    )
+      return;
+
+    this.router.navigate([`/profile/${this.postData?.username}`]);
+  }
 
   reportPost() {
     this.toastService.info('Report post feature coming soon.');

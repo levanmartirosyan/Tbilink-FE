@@ -1,5 +1,14 @@
 <div class="wrapper">
-  @for (posts of data; track $index) { @if (posts.imageUrl) {
+  @if (isLoading) {
+  <app-spinner-loader></app-spinner-loader>
+  } @else { @if (!userData?.isPublicProfile) {
+  <div class="isPrivate">
+    <div class="info-row">
+      <lucide-icon name="lock" [size]="17"></lucide-icon>
+      <span>Profile is private</span>
+    </div>
+  </div>
+  } @else { @for (posts of data; track $index) { @if (posts.imageUrl) {
   <div class="container">
     <img [src]="env.storageUrl + posts.imageUrl" alt="photo" />
     <div class="like-comment-count">
@@ -13,7 +22,10 @@
       </div>
     </div>
   </div>
-  } }@empty {
-  <app-spinner-loader></app-spinner-loader>
-  }
+  } } @empty {
+  <div class="empty-state">
+    <lucide-icon name="image-off" [size]="28"></lucide-icon>
+    <p>No posts found</p>
+  </div>
+  } } }
 </div>

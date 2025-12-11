@@ -1,4 +1,80 @@
 <div class="content">
-  <h3>Notification Settings</h3>
-  <p>Manage your notification preferences and settings.</p>
+  <div class="head">
+    <lucide-icon name="bell" [size]="22"></lucide-icon>
+    <h3>Notification Preferences</h3>
+  </div>
+
+  <div class="notifications-content">
+    <div class="notification-item">
+      <div class="item-info">
+        <label class="item-title">Email Notifications</label>
+        <p class="item-description">Receive notifications via email</p>
+      </div>
+      <div class="toggle-switch">
+        <input
+          type="checkbox"
+          id="emailNotifications"
+          [(ngModel)]="notificationSettings.emailNotifications"
+          (change)="onToggleChange()"
+          [disabled]="isSaving"
+          class="toggle-input"
+        />
+        <label for="emailNotifications" class="toggle-label"></label>
+      </div>
+    </div>
+
+    <div class="notification-item">
+      <div class="item-info">
+        <label class="item-title">Push Notifications</label>
+        <p class="item-description">Receive push notifications</p>
+      </div>
+      <div class="toggle-switch">
+        <input
+          type="checkbox"
+          id="pushNotifications"
+          [(ngModel)]="notificationSettings.pushNotifications"
+          (change)="onToggleChange()"
+          [disabled]="isSaving"
+          class="toggle-input"
+        />
+        <label for="pushNotifications" class="toggle-label"></label>
+      </div>
+    </div>
+
+    <div class="notification-item">
+      <div class="item-info">
+        <label class="item-title">SMS Notifications</label>
+        <p class="item-description">Receive notifications via SMS</p>
+      </div>
+      <div class="toggle-switch">
+        <input
+          type="checkbox"
+          id="smsNotifications"
+          [(ngModel)]="notificationSettings.smsNotifications"
+          (change)="onToggleChange()"
+          [disabled]="isSaving"
+          class="toggle-input"
+        />
+        <label for="smsNotifications" class="toggle-label"></label>
+      </div>
+    </div>
+
+    <div class="notification-item">
+      <div class="item-info">
+        <label class="item-title">Marketing Emails</label>
+        <p class="item-description">Receive promotional emails</p>
+      </div>
+      <div class="toggle-switch">
+        <input
+          type="checkbox"
+          id="marketingEmails"
+          [(ngModel)]="notificationSettings.marketingEmails"
+          (change)="onToggleChange()"
+          [disabled]="isSaving"
+          class="toggle-input"
+        />
+        <label for="marketingEmails" class="toggle-label"></label>
+      </div>
+    </div>
+  </div>
 </div>

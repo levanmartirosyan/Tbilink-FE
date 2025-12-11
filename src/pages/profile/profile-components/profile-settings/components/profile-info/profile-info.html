@@ -1,4 +1,97 @@
 <div class="content">
-  <h3>Profile Information</h3>
-  <p>Manage your personal information and details.</p>
+  <div class="head">
+    <lucide-icon name="user" [size]="22"></lucide-icon>
+    <h3>Profile Information</h3>
+  </div>
+
+  <form
+    [formGroup]="profileForm"
+    class="form-content"
+    (ngSubmit)="saveChanges()"
+  >
+    <div class="avatar-section">
+      <div class="avatar-container">
+        <img [src]="previewUrl" alt="Avatar" class="avatar-image" />
+      </div>
+      <label class="change-avatar-btn">
+        <lucide-icon name="camera" [size]="16"></lucide-icon>
+        Change Avatar
+        <input
+          type="file"
+          accept="image/*"
+          (change)="onAvatarChange($event)"
+          hidden
+        />
+      </label>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">First Name</label>
+        <input
+          type="text"
+          formControlName="firstName"
+          class="form-input"
+          placeholder="Enter your first name"
+        />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Last Name</label>
+        <input
+          type="text"
+          formControlName="lastName"
+          class="form-input"
+          placeholder="Enter your last name"
+        />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Country</label>
+        <app-custom-select
+          [options]="countries"
+          [selectedValue]="profileForm.get('country')?.value || ''"
+          placeholder="Select a country"
+          (selectionChanged)="onCountryChange($event)"
+        ></app-custom-select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">City</label>
+        <input
+          type="text"
+          formControlName="city"
+          class="form-input"
+          placeholder="e.g., Tbilisi"
+        />
+      </div>
+    </div>
+
+    <div class="form-group full-width">
+      <label class="form-label">Bio</label>
+      <textarea
+        formControlName="description"
+        class="form-textarea"
+        placeholder="Tell us about yourself..."
+        rows="4"
+      ></textarea>
+      <div class="bio-info">
+        <span class="char-count">
+          {{ profileForm.get('description')?.value?.length || 0 }}/250
+        </span>
+        @if (profileForm.get('description')?.hasError('maxlength') &&
+        profileForm.get('description')?.touched) {
+        <span class="error"> Bio cannot exceed 250 characters </span>
+        }
+      </div>
+    </div>
+
+    <button
+      type="submit"
+      [disabled]="profileForm.invalid || isSaving"
+      class="save-btn"
+    >
+      {{ isSaving ? 'Saving...' : 'Save Changes' }}
+    </button>
+  </form>
 </div>

@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../../../core/services/api-service';
-import { UserService } from '../../../../core/services/user-service';
 import { env } from '../../../../enviroment/enviroment';
 import { IPost } from '../../../../core/interfaces/IPost';
-import { map, switchMap, take } from 'rxjs';
+import { switchMap } from 'rxjs';
 import { LucideAngularModule } from 'lucide-angular';
 import { SpinnerLoader } from '../../../../shared/loadings/spinner-loader/spinner-loader';
+import { ActivatedRoute } from '@angular/router';
+import { CommonService } from '../../../../core/services/common-service';
 
 @Component({
   selector: 'app-posts',
@@ -15,16 +16,39 @@ import { SpinnerLoader } from '../../../../shared/loadings/spinner-loader/spinne
 })
 export class Posts implements OnInit {
   public data: IPost[] = [];
-  constructor(private apiService: ApiService, private user: UserService) {}
+  public isLoading = true;
+  constructor(
+    private apiService: ApiService,
+    private activatedRoute: ActivatedRoute,
+    public commonService: CommonService
+  ) {}
 
   public env: any = env;
+  public userData: any;
 
   public ngOnInit(): void {
-    this.apiService
-      .getPostsByUserId(this.user.getUser()?.data?.id)
-      .subscribe((posts) => {
-        this.data = posts.data;
-        console.log(this.data);
+    this.activatedRoute.parent?.params
+      .pipe(
+        switchMap((params) => {
+          return this.apiService.getUserByUsername(params['username']).pipe(
+            switchMap((response: any) => {
+              this.userData = response.data;
+              const userId = response.data.id;
+              return this.apiService.getPostsByUserId(userId);
+            })
+          );
+        })
+      )
+      .subscribe({
+        next: (posts: any) => {
+          this.data = posts.data;
+          this.isLoading = false;
+          console.log(this.data);
+        },
+        error: (err: any) => {
+          console.error('Error loading posts:', err);
+          this.isLoading = false;
+        },
       });
   }
 }

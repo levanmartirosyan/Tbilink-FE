@@ -73,6 +73,46 @@
     }
   }
 
+  .isPrivate {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--auth-input-border);
+    border-radius: 8px;
+    padding: 20px;
+    gap: 8px;
+    .info-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-unfocused);
+      lucide-icon {
+        width: 20px;
+        height: 20px;
+        color: var(--secondary-text-color);
+      }
+    }
+  }
+
+  .empty-state {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+    margin: 0 auto;
+    color: var(--text-unfocused);
+    lucide-icon {
+      width: 28px;
+      height: 28px;
+    }
+    p {
+      font-size: 16px;
+    }
+  }
+
   app-spinner-loader {
     grid-column: 1 / -1;
     display: flex;

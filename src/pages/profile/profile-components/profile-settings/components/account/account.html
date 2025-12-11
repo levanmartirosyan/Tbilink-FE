@@ -1,4 +1,200 @@
 <div class="content">
-  <h3>Account Settings</h3>
-  <p>Manage your account preferences and settings.</p>
+  <div class="head">
+    <lucide-icon name="lock" [size]="22"></lucide-icon>
+    <h3>Account Settings</h3>
+  </div>
+
+  <div class="account-content">
+    <div class="form-group">
+      <label class="form-label">Username</label>
+      <div class="email-input-wrapper">
+        <input
+          type="text"
+          [(ngModel)]="currentUsername"
+          disabled
+          class="form-input"
+        />
+        <button
+          type="button"
+          (click)="openChangeUsernameModal()"
+          class="change-btn"
+        >
+          Change Username
+        </button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Email Address</label>
+      <div class="email-input-wrapper">
+        <input
+          type="email"
+          [(ngModel)]="currentEmail"
+          disabled
+          class="form-input"
+        />
+        <button
+          type="button"
+          (click)="openChangeEmailModal()"
+          class="change-btn"
+        >
+          Change Email
+        </button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Phone Number</label>
+      <div class="email-input-wrapper">
+        <input
+          type="tel"
+          [(ngModel)]="currentPhone"
+          disabled
+          class="form-input"
+        />
+        <button
+          type="button"
+          (click)="openChangePhoneModal()"
+          class="change-btn"
+        >
+          Change Phone
+        </button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <button type="button" class="change-password-btn">Change Password</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="danger-zone">
+      <h4>Danger Zone</h4>
+      <button type="button" (click)="deleteAccount()" class="delete-btn">
+        <lucide-icon name="trash-2" [size]="18"></lucide-icon>
+        Delete Account
+      </button>
+    </div>
+  </div>
 </div>
+
+<app-modal
+  [title]="'Change Email Address'"
+  [isOpen]="isEditingEmail"
+  [isLoading]="isSaving || isVerifying"
+  [submitButtonText]="verificationCodeSent ? 'Verify & Change Email' : 'Send Verification Code'"
+  (onClose)="closeEmailModal()"
+  (onSubmit)="verificationCodeSent ? verifyEmailCode() : sendVerificationCode()"
+>
+  <form [formGroup]="emailForm">
+    @if (!verificationCodeSent) {
+    <div class="form-group">
+      <label class="form-label">New Email Address</label>
+      <input
+        type="email"
+        formControlName="email"
+        class="form-input"
+        placeholder="Enter your new email address"
+      />
+      @if (emailForm.get('email')?.hasError('required') &&
+      emailForm.get('email')?.touched) {
+      <span class="error">Email is required</span>
+      } @if (emailForm.get('email')?.hasError('email') &&
+      emailForm.get('email')?.touched) {
+      <span class="error">Please enter a valid email</span>
+      }
+    </div>
+    } @if (verificationCodeSent) {
+    <div class="verification-info">
+      <p>Verification code has been sent to <strong>{{ newEmail }}</strong></p>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Verification Code</label>
+      <div class="otp-wrapper">
+        @for (digit of otpDigits; track $index; let i = $index) {
+        <input
+          type="text"
+          maxlength="1"
+          class="otp-input"
+          [(ngModel)]="otp[i]"
+          [ngModelOptions]="{ standalone: true }"
+          (input)="onOtpInput($event, i)"
+          (keydown)="onOtpKeyDown($event, i)"
+          (paste)="onOtpPaste($event)"
+        />
+        }
+      </div>
+      @if (verifyForm.get('code')?.hasError('required') &&
+      verifyForm.get('code')?.touched) {
+      <span class="error">Please enter the verification code</span>
+      }
+    </div>
+    }
+  </form>
+</app-modal>
+
+<app-modal
+  [title]="'Change Username'"
+  [isOpen]="isEditingUsername"
+  [isLoading]="isSaving"
+  [submitDisabled]="usernameForm.get('username')?.value === currentUsername || !usernameForm.valid"
+  submitButtonText="Save Username"
+  (onClose)="closeUsernameModal()"
+  (onSubmit)="saveUsername()"
+>
+  <form [formGroup]="usernameForm">
+    <div class="form-group">
+      <label class="form-label">New Username</label>
+      <input
+        type="text"
+        formControlName="username"
+        class="form-input"
+        placeholder="Enter your new username"
+      />
+      @if (usernameForm.get('username')?.hasError('required') &&
+      usernameForm.get('username')?.touched) {
+      <span class="error">Username is required</span>
+      } @if (usernameForm.get('username')?.hasError('minlength') &&
+      usernameForm.get('username')?.touched) {
+      <span class="error">Username must be at least 3 characters</span>
+      } @if (usernameForm.get('username')?.hasError('maxlength') &&
+      usernameForm.get('username')?.touched) {
+      <span class="error">Username cannot exceed 30 characters</span>
+      }
+    </div>
+  </form>
+</app-modal>
+
+<app-modal
+  [title]="'Change Phone Number'"
+  [isOpen]="isEditingPhone"
+  [isLoading]="isSaving"
+  [submitDisabled]="phoneForm.get('phone')?.value === currentPhone || !phoneForm.valid"
+  submitButtonText="Save Phone"
+  (onClose)="closePhoneModal()"
+  (onSubmit)="savePhone()"
+>
+  <form [formGroup]="phoneForm">
+    <div class="form-group">
+      <label class="form-label">New Phone Number</label>
+      <input
+        type="tel"
+        formControlName="phone"
+        class="form-input"
+        placeholder="Enter your phone number"
+      />
+      @if (phoneForm.get('phone')?.hasError('required') &&
+      phoneForm.get('phone')?.touched) {
+      <span class="error">Phone number is required</span>
+      } @if (phoneForm.get('phone')?.hasError('minlength') &&
+      phoneForm.get('phone')?.touched) {
+      <span class="error">Phone number must be at least 10 characters</span>
+      } @if (phoneForm.get('phone')?.hasError('maxlength') &&
+      phoneForm.get('phone')?.touched) {
+      <span class="error">Phone number cannot exceed 20 characters</span>
+      }
+    </div>
+  </form>
+</app-modal>
