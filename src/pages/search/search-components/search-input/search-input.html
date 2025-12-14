@@ -1,0 +1,12 @@
+<div class="search">
+  <div class="input">
+    <input type="text" name="q" placeholder="Search..." [(ngModel)]="keyword" />
+    <button (click)="onSearch()">Search</button>
+    @if (keyword !== '') {
+    <button class="clear-btn" (click)="clearSearch()" title="Clear search">
+      <lucide-icon name="x" [size]="20"></lucide-icon>
+    </button>
+    }
+  </div>
+  <p>@if (keyword !== '') { Showing results for {{ keyword }} }</p>
+</div>

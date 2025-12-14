@@ -2,7 +2,7 @@
   <div class="left">
     <div class="avatar">
       <img
-        [src]=" chatData.participants[0].profilePhotoUrl || 'assets/icons/profile.png'"
+        [src]="(chatData.participants[0].profilePhotoUrl ? env.storageUrl + chatData.participants[0].profilePhotoUrl : 'assets/icons/profile.png')"
         alt="Avatar"
       />
       <div

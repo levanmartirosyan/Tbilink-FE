@@ -1,0 +1,31 @@
+<div class="posts">
+  @if (isLoading) {
+  <app-spinner-loader></app-spinner-loader>
+  } @else { @if (searchData?.posts && searchData.posts.length > 0) { @for (post
+  of searchData.posts; track post.id) {
+  <app-post-card
+    [postData]="post"
+    (deletePostNewData)="onPostDeleted($event)"
+    (openEditPostModal)="toggleEditPostModal($event)"
+    (openCommentModal)="toggleCommentModal($event)"
+  ></app-post-card>
+  } } @else {
+  <div class="no-results">
+    <p>No results found</p>
+  </div>
+  } }
+</div>
+
+@if (commentModal && selectedCommentPost) {
+<app-overlay [event]="closeCommentModal.bind(this)"></app-overlay>
+<app-comment-modal
+  [postData]="selectedCommentPost"
+  [toggleCommentModal]="closeCommentModal.bind(this)"
+></app-comment-modal>
+} @if (editPostModal && selectedEditPost) {
+<app-edit-post-modal
+  [postData]="selectedEditPost"
+  [toggleEditPostModal]="closeEditPostModal.bind(this)"
+  (postUpdated)="onPostUpdated()"
+></app-edit-post-modal>
+}

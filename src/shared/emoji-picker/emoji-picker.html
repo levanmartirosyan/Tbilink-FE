@@ -1,0 +1,17 @@
+@if (isOpen) {
+<div class="emoji-picker-overlay" (click)="onOverlayClick()"></div>
+<div class="emoji-picker-container" (click)="onContainerClick($event)">
+  <emoji-mart
+    set="apple"
+    [darkMode]="isDarkMode"
+    [perLine]="9"
+    [emojiSize]="24"
+    [showPreview]="true"
+    [enableSearch]="true"
+    [hideRecent]="false"
+    (emojiSelect)="onEmojiSelect($event)"
+    title="Pick your emoji…"
+    emoji="point_up"
+  ></emoji-mart>
+</div>
+}

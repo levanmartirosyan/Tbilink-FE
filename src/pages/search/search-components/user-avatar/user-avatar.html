@@ -1,0 +1,25 @@
+<div class="user-avatar-container" (click)="goToProfile()">
+  <div class="avatar-wrapper">
+    @if (userData?.avatar) {
+    <img
+      [src]="env.storageUrl + userData.avatar"
+      [alt]="userData.firstName"
+      class="avatar"
+    />
+    } @else {
+    <div class="avatar-placeholder">{{ userData?.firstName?.charAt(0) }}</div>
+    }
+    <div class="user-info-hover">
+      <p class="name">{{ userData?.firstName }} {{ userData?.lastName }}</p>
+      <p class="username">@{{ userData?.username }}</p>
+      <p class="followers">{{ userData?.followersCount || 0 }} followers</p>
+      <button
+        class="follow-btn"
+        [class.following]="userData?.isFollowedByCurrentUser"
+        (click)="toggleFollow($event)"
+      >
+        {{ userData?.isFollowedByCurrentUser ? 'Following' : 'Follow' }}
+      </button>
+    </div>
+  </div>
+</div>

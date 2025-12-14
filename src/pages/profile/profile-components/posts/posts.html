@@ -1,7 +1,7 @@
 <div class="wrapper">
   @if (isLoading) {
   <app-spinner-loader></app-spinner-loader>
-  } @else { @if (!userData?.isPublicProfile) {
+  } @else { @if (!userData?.isPublicProfile && userData?.id !== currentUserId) {
   <div class="isPrivate">
     <div class="info-row">
       <lucide-icon name="lock" [size]="17"></lucide-icon>

@@ -67,4 +67,37 @@ export class CommonService {
   getProfileUserData() {
     return this.profileUserData.asObservable();
   }
+
+  private userPostData = new BehaviorSubject<any>(null);
+  userPostData$ = this.userPostData.asObservable();
+
+  setUserPostData(userData: any) {
+    this.userPostData.next(userData);
+  }
+
+  getUserPostData() {
+    return this.userPostData.asObservable();
+  }
+
+  private searchData = new BehaviorSubject<any>(null);
+  searchData$ = this.searchData.asObservable();
+
+  setSearchData(data: any) {
+    this.searchData.next(data);
+  }
+
+  getSearchData() {
+    return this.searchData.asObservable();
+  }
+
+  private searchKeyword = new BehaviorSubject<string>('');
+  searchKeyword$ = this.searchKeyword.asObservable();
+
+  setSearchKeyword(keyword: string) {
+    this.searchKeyword.next(keyword);
+  }
+
+  getSearchKeyword() {
+    return this.searchKeyword.asObservable();
+  }
 }

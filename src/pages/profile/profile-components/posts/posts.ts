@@ -7,6 +7,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { SpinnerLoader } from '../../../../shared/loadings/spinner-loader/spinner-loader';
 import { ActivatedRoute } from '@angular/router';
 import { CommonService } from '../../../../core/services/common-service';
+import { UserService } from '../../../../core/services/user-service';
 
 @Component({
   selector: 'app-posts',
@@ -20,11 +21,16 @@ export class Posts implements OnInit {
   constructor(
     private apiService: ApiService,
     private activatedRoute: ActivatedRoute,
-    public commonService: CommonService
-  ) {}
+    public commonService: CommonService,
+    private userService: UserService
+  ) {
+    this.currentUserId = this.userService.getUser()?.data.id;
+  }
 
   public env: any = env;
   public userData: any;
+
+  public currentUserId?: string;
 
   public ngOnInit(): void {
     this.activatedRoute.parent?.params

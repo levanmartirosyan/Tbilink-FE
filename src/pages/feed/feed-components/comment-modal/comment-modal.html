@@ -63,7 +63,7 @@
                     />
                     <div
                       class="statusIndicator"
-                      [class.active]="signalRService.isUserOnline(postData?.userId)"
+                      [class.active]="signalRService.isUserOnline(comment?.userId)"
                     ></div>
                   </div>
                 </div>
@@ -110,7 +110,8 @@
                 }
                 <span>{{ comment.likeCount || 0 }}</span>
               </div>
-              @if (comment.userId === userService.getUser()?.data?.id) {
+              @if (comment.userId === userService.getUser()?.data?.id ||
+              userService.isAdmin()) {
               <span class="delete" (click)="deleteComment(comment.id, $index)"
                 ><lucide-icon name="trash-2" [size]="18"></lucide-icon
               ></span>

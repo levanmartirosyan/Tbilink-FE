@@ -13,7 +13,7 @@
         <textarea
           placeholder="What's on your mind?"
           formControlName="content"
-        ></textarea>
+        >{{ postData?.content }}</textarea>
       </div>
       @if (postData?.imageUrl && selectedFile == null) {
       <div class="current-image">

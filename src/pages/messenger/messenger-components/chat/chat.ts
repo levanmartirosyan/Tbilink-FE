@@ -3,6 +3,7 @@ import { RelativeTimePipe } from '../../../../core/pipes/relative-time-pipe-pipe
 import { UserService } from '../../../../core/services/user-service';
 import { SignalRService } from '../../../../core/services/signal-r-service';
 import { CommonModule } from '@angular/common';
+import { env } from '../../../../enviroment/enviroment';
 
 @Component({
   selector: 'app-chat',
@@ -17,6 +18,8 @@ export class Chat {
   ) {}
 
   @Input() chatData: any;
+
+  public env = env;
 
   getUnreadCount(): number {
     // First check if there's a stored unread count in the signal

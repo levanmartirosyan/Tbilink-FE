@@ -26,6 +26,9 @@ import { Posts } from '../pages/profile/profile-components/posts/posts';
 import { Photos } from '../pages/profile/profile-components/photos/photos';
 import { Reposts } from '../pages/profile/profile-components/reposts/reposts';
 import { About } from '../pages/profile/profile-components/about/about';
+import { People } from '../pages/search/people/people';
+import { SearchPosts } from '../pages/search/search-posts/search-posts';
+import { All } from '../pages/search/all/all';
 
 export const routes: Routes = [
   {
@@ -47,7 +50,25 @@ export const routes: Routes = [
       {
         path: 'search',
         component: Search,
-        children: [],
+        children: [
+          {
+            path: '',
+            redirectTo: 'all',
+            pathMatch: 'full',
+          },
+          {
+            path: 'all',
+            component: All,
+          },
+          {
+            path: 'people',
+            component: People,
+          },
+          {
+            path: 'posts',
+            component: SearchPosts,
+          },
+        ],
       },
       {
         path: 'messenger',

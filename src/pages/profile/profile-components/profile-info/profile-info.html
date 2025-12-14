@@ -28,11 +28,19 @@
     </div>
   </div>
   <div class="btns">
-    @if (userData?.id !== currentUserId) {
-    <div class="follow btn">
-      <lucide-icon name="user-plus" [size]="16"></lucide-icon>
-      <p>Follow</p>
+    @if (userData?.id !== currentUserId && followStats) {
+    <div
+      class="follow btn"
+      [class.following]="followStats?.isFollowing"
+      (click)="followUser()"
+    >
+      <lucide-icon
+        [name]="followStats?.isFollowing ? 'user-check' : 'user-plus'"
+        [size]="16"
+      ></lucide-icon>
+      <p>{{followStats?.isFollowing ? 'Following' : 'Follow'}}</p>
     </div>
+
     <div class="message btn">
       <lucide-icon name="message-circle" [size]="16"></lucide-icon>
       <p>Message</p>

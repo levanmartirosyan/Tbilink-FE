@@ -1,0 +1,13 @@
+<div class="people">
+  @if (searchData?.users && searchData.users.length > 0) { @for (user of
+  searchData.users; track user.id) {
+  <app-user-card
+    [userData]="user"
+    (followToggled)="onFollowToggled($event)"
+  ></app-user-card>
+  } } @else {
+  <div class="no-results">
+    <p>No results found</p>
+  </div>
+  }
+</div>

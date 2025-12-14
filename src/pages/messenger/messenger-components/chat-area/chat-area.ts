@@ -21,6 +21,10 @@ import { CommonModule } from '@angular/common';
 import { ChatParticipantDto } from '../../../../core/interfaces/message-interface';
 import { HubConnectionState } from '@microsoft/signalr';
 import { DotLoader } from '../../../../shared/loadings/dot-loader/dot-loader';
+import { EmojiPickerComponent } from '../../../../shared/emoji-picker/emoji-picker';
+import { ApiService } from '../../../../core/services/api-service';
+import { ToastService } from '../../../../core/services/toast-service';
+import { env } from '../../../../enviroment/enviroment';
 
 @Component({
   selector: 'app-chat-area',
@@ -31,6 +35,7 @@ import { DotLoader } from '../../../../shared/loadings/dot-loader/dot-loader';
     FormsModule,
     CommonModule,
     DotLoader,
+    EmojiPickerComponent,
   ],
   templateUrl: './chat-area.html',
   styleUrl: './chat-area.scss',
@@ -46,6 +51,14 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
   private lastMessageCount = 0;
   private shouldScroll = true;
 
+  // Emoji picker
+  showEmojiPicker = false;
+
+  public env = env;
+
+  // File attachment
+  isUploading = false;
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
 
   // Expose typingUsers signal directly for template reactivity
@@ -54,7 +67,9 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
   constructor(
     public signalRService: SignalRService,
     public userService: UserService,
-    public commonService: CommonService
+    public commonService: CommonService,
+    private apiService: ApiService,
+    private toastService: ToastService
   ) {
     this.chatMessages = this.signalRService.messages;
     this.typingUsers = this.signalRService.typingUsers;
@@ -165,6 +180,100 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
     const content = this.messageInput.value?.trim();
     if (!content) return;
 
+    this.sendMessageToUser(content);
+    this.messageInput.reset();
+  }
+
+  onEmojiSelect(emoji: string): void {
+    const currentValue = this.messageInput.value || '';
+    this.messageInput.setValue(currentValue + emoji);
+    this.showEmojiPicker = false;
+  }
+
+  // Emoji picker methods
+  toggleEmojiPicker(): void {
+    this.showEmojiPicker = !this.showEmojiPicker;
+  }
+
+  closeEmojiPicker(): void {
+    this.showEmojiPicker = false;
+  }
+
+  onAttachmentClick(): void {
+    this.fileInput.nativeElement.click();
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const files = input.files;
+
+    if (!files || files.length === 0) return;
+
+    const file = files[0];
+    this.uploadAttachment(file);
+
+    // Reset input
+    input.value = '';
+  }
+
+  private uploadAttachment(file: File): void {
+    const otherUser = this.otherUserId[0];
+    if (!otherUser?.id) return;
+
+    this.isUploading = true;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // Upload to private folder with user ID for organization
+    const folder = `messages/${this.userService.getUser()?.data?.id}`;
+
+    this.apiService.uploadPublicFile(formData, folder).subscribe({
+      next: (response: any) => {
+        // Get the file path from response
+        const filePath =
+          response?.data?.path || response?.path || response?.fileName;
+        const fileType = this.getFileType(file.type);
+
+        // Get signed URL from backend
+        this.apiService.getSignedUrl(filePath).subscribe({
+          next: (signedResponse: any) => {
+            this.isUploading = false;
+            const signedUrl =
+              signedResponse?.data?.signedUrl ||
+              signedResponse?.signedUrl ||
+              filePath;
+
+            // Send as message with attachment metadata
+            const message = `[${fileType.toUpperCase()}]${signedUrl}`;
+            this.sendMessageToUser(message);
+          },
+          error: (error) => {
+            this.isUploading = false;
+            console.error('Error getting signed URL:', error);
+            // Fallback: send regular path
+            const message = `[${fileType.toUpperCase()}]${filePath}`;
+            this.sendMessageToUser(message);
+          },
+        });
+      },
+      error: (error) => {
+        this.isUploading = false;
+        this.toastService.error('Failed to upload file');
+        console.error('Upload error:', error);
+      },
+    });
+  }
+
+  private getFileType(mimeType: string): string {
+    if (mimeType.startsWith('image/')) return 'image';
+    if (mimeType.startsWith('video/')) return 'video';
+    return 'file';
+  }
+
+  private sendMessageToUser(content: string): void {
+    if (!content.trim()) return;
+
     const otherUser = this.otherUserId[0];
     if (!otherUser?.id) return;
 
@@ -175,7 +284,6 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
     this.shouldScroll = true;
 
     this.signalRService.sendMessage(otherUser.id, content);
-    this.messageInput.reset();
 
     setTimeout(() => this.scrollToBottom(), 50);
   }
@@ -305,5 +413,49 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
       return 'Seen';
     }
     return 'Delivered';
+  }
+
+  // Extract attachment URL from message content
+  getAttachmentUrl(content: string): string {
+    const index = content.indexOf(']');
+    if (index !== -1) {
+      return content.substring(index + 1);
+    }
+    return content;
+  }
+
+  // Check if message is an image attachment
+  isImageAttachment(content: string): boolean {
+    return content.startsWith('[IMAGE]');
+  }
+
+  // Check if message is a video attachment
+  isVideoAttachment(content: string): boolean {
+    return content.startsWith('[VIDEO]');
+  }
+
+  // Check if message is a file attachment
+  isFileAttachment(content: string): boolean {
+    return content.startsWith('[FILE]');
+  }
+
+  // Check if message is any type of attachment
+  isAttachment(content: string): boolean {
+    return (
+      this.isImageAttachment(content) ||
+      this.isVideoAttachment(content) ||
+      this.isFileAttachment(content)
+    );
+  }
+
+  // Download file from signed URL
+  downloadAttachment(url: string, fileName: string = 'file'): void {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    link.target = '_blank';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 }

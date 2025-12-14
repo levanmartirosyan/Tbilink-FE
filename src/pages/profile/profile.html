@@ -52,4 +52,56 @@
       </div>
     </div>
   </div>
+
+  <!-- Upload Cover Image Modal
+  <app-modal
+    title="Upload Cover Image"
+    [isOpen]="isUploadCoverModalOpen"
+    [isLoading]="isUploading"
+    submitButtonText="Upload"
+    (onClose)="closeUploadCoverModal()"
+    (onSubmit)="uploadCoverImage()"
+  >
+    <div class="upload-modal-content">
+      <div class="file-input-wrapper">
+        <input
+          #fileInput
+          type="file"
+          accept="image/*"
+          (change)="onFileSelected($event)"
+          hidden
+        />
+        <button type="button" class="upload-button" (click)="fileInput.click()">
+          <lucide-icon name="upload-cloud" [size]="32"></lucide-icon>
+          <p>Click to select image or drag and drop</p>
+          <small>Maximum file size: 5MB</small>
+        </button>
+      </div>
+
+      @if (previewUrl) {
+      <div class="preview-container">
+        <img [src]="previewUrl" alt="Preview" />
+        <button
+          type="button"
+          class="remove-preview-btn"
+          (click)="fileInput.click()"
+        >
+          <lucide-icon name="edit-2" [size]="16"></lucide-icon>
+        </button>
+      </div>
+      } @if (userData?.coverPhotoUrl) {
+      <div class="delete-section">
+        <button
+          type="button"
+          class="delete-button"
+          (click)="deleteCoverImage()"
+          [disabled]="isUploading"
+        >
+          <lucide-icon name="trash-2" [size]="16"></lucide-icon>
+          <span>Remove Current Cover</span>
+        </button>
+      </div>
+      }
+    </div>
+  </app-modal> -->
 </section>

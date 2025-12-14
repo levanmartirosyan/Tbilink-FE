@@ -131,6 +131,11 @@ export class PostCard {
 
   likePost() {
     if (!this.postData?.id) return;
+
+    // Optimistic update
+    this.postData.isLikedByCurrentUser = !this.postData.isLikedByCurrentUser;
+    this.postData.likeCount += this.postData.isLikedByCurrentUser ? 1 : -1;
+
     this.apiService.likePost(this.postData.id).subscribe({
       next: (data: any) => {
         console.log(data);
@@ -138,6 +143,10 @@ export class PostCard {
       },
       error: (err: any) => {
         console.log(err);
+        // Revert on error
+        this.postData.isLikedByCurrentUser =
+          !this.postData.isLikedByCurrentUser;
+        this.postData.likeCount += this.postData.isLikedByCurrentUser ? 1 : -1;
       },
     });
   }

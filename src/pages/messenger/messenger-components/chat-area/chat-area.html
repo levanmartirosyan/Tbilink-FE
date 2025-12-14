@@ -66,7 +66,39 @@
           [class.sent]="isSent(message)"
           [class.received]="!isSent(message)"
         >
+          @if (isAttachment(message.content)) { @if
+          (isImageAttachment(message.content)) {
+          <img
+            [src]="env.storageUrl + getAttachmentUrl(message.content)"
+            alt="Attachment"
+            class="attachment-image"
+          />
+          } @else if (isVideoAttachment(message.content)) {
+          <div class="attachment-video-wrapper">
+            <video class="attachment-video" controls>
+              <source
+                [src]="env.storageUrl + getAttachmentUrl(message.content)"
+              />
+            </video>
+            <button
+              class="download-btn"
+              (click)="downloadAttachment(getAttachmentUrl(message.content), 'video.mp4')"
+              title="Download video"
+            >
+              <lucide-icon name="download" [size]="16"></lucide-icon>
+            </button>
+          </div>
+          } @else if (isFileAttachment(message.content)) {
+          <button
+            class="attachment-file"
+            (click)="downloadAttachment(getAttachmentUrl(message.content), 'file')"
+          >
+            <lucide-icon name="download" [size]="20"></lucide-icon>
+            <span>Download File</span>
+          </button>
+          } } @else {
           <p>{{ message.content }}</p>
+          }
         </div>
         @if (isSent(message) && isLastSentMessage(message, $index)) {
         <span class="read-status">{{ getReadStatus(message) }}</span>
@@ -82,8 +114,34 @@
     </div>
     <div class="chat-input">
       <div class="actions">
-        <lucide-icon name="paperclip" [size]="22"></lucide-icon>
-        <lucide-icon name="smile-plus" [size]="22"></lucide-icon>
+        <button
+          type="button"
+          class="attachment-btn"
+          (click)="onAttachmentClick()"
+          [disabled]="isUploading"
+        >
+          <lucide-icon name="paperclip" [size]="22"></lucide-icon>
+        </button>
+        <input
+          #fileInput
+          type="file"
+          accept="image/*,video/*,.pdf,.doc,.docx,.txt"
+          (change)="onFileSelected($event)"
+          style="display: none"
+        />
+        <button
+          type="button"
+          class="emoji-btn"
+          (click)="toggleEmojiPicker(); $event.stopPropagation()"
+          [class.active]="showEmojiPicker"
+        >
+          <lucide-icon name="smile-plus" [size]="22"></lucide-icon>
+        </button>
+        <app-emoji-picker
+          [isOpen]="showEmojiPicker"
+          (emojiSelected)="onEmojiSelect($event)"
+          (close)="closeEmojiPicker()"
+        ></app-emoji-picker>
       </div>
       <input
         type="text"
@@ -92,6 +150,7 @@
         (keyup.enter)="sendMessage()"
         (input)="onTyping()"
         (blur)="onInputBlur()"
+        (click)="closeEmojiPicker()"
       />
       <button (click)="sendMessage()">
         <lucide-icon name="send" [size]="18"></lucide-icon>

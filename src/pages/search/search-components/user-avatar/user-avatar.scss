@@ -1,0 +1,118 @@
+.user-avatar-container {
+  display: inline-block;
+  cursor: pointer;
+
+  .avatar-wrapper {
+    position: relative;
+    display: inline-block;
+
+    .avatar,
+    .avatar-placeholder {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #e0e0e0;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.4rem;
+    }
+
+    .avatar {
+      border: 2px solid #e0e0e0;
+    }
+
+    .avatar-placeholder {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    &:hover .avatar,
+    &:hover .avatar-placeholder {
+      border-color: #667eea;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      transform: scale(1.05);
+    }
+
+    .user-info-hover {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 1rem;
+      min-width: 200px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      margin-bottom: 0.5rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 10;
+      text-align: center;
+      display: none;
+    }
+
+    &:hover .user-info-hover {
+      opacity: 1;
+      visibility: visible;
+      display: block;
+    }
+
+    .user-info-hover {
+      p {
+        margin: 0.5rem 0;
+        color: #1a1a1a;
+
+        &.name {
+          font-weight: 600;
+          font-size: 0.95rem;
+        }
+
+        &.username {
+          color: #a0a0a0;
+          font-size: 0.85rem;
+        }
+
+        &.followers {
+          color: #a0a0a0;
+          font-size: 0.8rem;
+        }
+      }
+
+      .follow-btn {
+        margin-top: 0.75rem;
+        padding: 0.4rem 1rem;
+        border: 1px solid #667eea;
+        background: white;
+        color: #667eea;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.8rem;
+        transition: all 0.2s ease;
+        width: 100%;
+
+        &:hover {
+          background: #667eea;
+          color: white;
+        }
+
+        &.following {
+          background: #667eea;
+          color: white;
+
+          &:hover {
+            background: #5568d3;
+          }
+        }
+      }
+    }
+  }
+}

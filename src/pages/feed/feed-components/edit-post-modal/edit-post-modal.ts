@@ -1,6 +1,7 @@
 import {
   Component,
   Input,
+  OnInit,
   OnChanges,
   SimpleChanges,
   Output,
@@ -8,7 +9,6 @@ import {
 } from '@angular/core';
 import { Overlay } from '../../../../shared/overlay/overlay';
 import { LucideAngularModule } from 'lucide-angular';
-import { User } from '../../../../core/types/user';
 import { env } from '../../../../enviroment/enviroment';
 import {
   FormControl,
@@ -19,14 +19,15 @@ import {
 import { ApiService } from '../../../../core/services/api-service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ToastService } from '../../../../core/services/toast-service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-edit-post-modal',
-  imports: [Overlay, LucideAngularModule, ReactiveFormsModule],
+  imports: [Overlay, LucideAngularModule, ReactiveFormsModule, CommonModule],
   templateUrl: './edit-post-modal.html',
   styleUrl: './edit-post-modal.scss',
 })
-export class EditPostModal implements OnChanges {
+export class EditPostModal implements OnInit, OnChanges {
   constructor(
     private sanitizer: DomSanitizer,
     private toastService: ToastService,
@@ -49,12 +50,22 @@ export class EditPostModal implements OnChanges {
 
   selectedFile: File | null = null;
 
+  ngOnInit(): void {
+    this.initializeForm();
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['postData'] && this.postData) {
+      this.initializeForm();
+    }
+  }
+
+  private initializeForm(): void {
+    if (this.postData) {
       this.editPostForm.patchValue({
-        id: this.postData?.id,
-        userId: this.postData?.userId,
-        content: this.postData?.content,
+        id: this.postData.id,
+        userId: this.postData.userId,
+        content: this.postData.content,
       });
       this.selectedFile = null;
       this.filePreview = null;
@@ -80,45 +91,44 @@ export class EditPostModal implements OnChanges {
   }
 
   uploadImage(): void {
-    if (this.selectedFile === null) {
-      this.editPostForm.patchValue({
-        imageUrl: '',
-      });
+    if (!this.selectedFile) {
       return this.updatePost();
-    } else {
-      const formData = new FormData();
-      formData.append('file', this.selectedFile);
-
-      this.apiService.uploadPublicFile(formData, 'posts').subscribe({
-        next: (data: any) => {
-          console.log('File uploaded successfully:', data.data.fileUrl);
-          this.editPostForm.patchValue({
-            imageUrl: data.data.path,
-          });
-
-          console.log(this.editPostForm.value);
-
-          this.updatePost();
-        },
-        error: (err: any) => {
-          console.log('File upload failed:', err);
-          this.toastService.error('File upload failed. Please try again.');
-        },
-      });
     }
+
+    const formData = new FormData();
+    formData.append('file', this.selectedFile);
+
+    this.apiService.uploadPublicFile(formData, 'posts').subscribe({
+      next: (data: any) => {
+        this.editPostForm.patchValue({
+          imageUrl: data.data.path,
+        });
+        this.updatePost();
+      },
+      error: (err: any) => {
+        console.error('File upload failed:', err);
+        this.toastService.error('File upload failed. Please try again.');
+      },
+    });
   }
 
-  updatePost() {
-    console.log(this.postData);
-
+  private updatePost(): void {
     if (this.editPostForm.invalid) {
       this.toastService.error('Please fill in all required fields.');
       return;
     }
 
-    this.apiService.updatePost(this.editPostForm.value).subscribe({
+    const updateData: any = {
+      id: this.editPostForm.value.id,
+      content: this.editPostForm.value.content,
+    };
+
+    if (this.selectedFile || this.editPostForm.value.imageUrl) {
+      updateData.imageUrl = this.editPostForm.value.imageUrl;
+    }
+
+    this.apiService.updatePost(updateData).subscribe({
       next: (postData: any) => {
-        console.log(postData);
         this.toastService.success('Post updated successfully.');
         this.postUpdated.emit();
         if (this.toggleEditPostModal) {
@@ -126,8 +136,8 @@ export class EditPostModal implements OnChanges {
         }
       },
       error: (err: any) => {
-        console.log(err);
-        this.toastService.error(err.error.message || 'Failed to update post.');
+        console.error('Update error:', err);
+        this.toastService.error(err.error?.message || 'Failed to update post.');
       },
     });
   }

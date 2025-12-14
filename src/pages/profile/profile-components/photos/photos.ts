@@ -6,6 +6,7 @@ import { env } from '../../../../enviroment/enviroment';
 import { SpinnerLoader } from '../../../../shared/loadings/spinner-loader/spinner-loader';
 import { LucideAngularModule } from 'lucide-angular';
 import { ActivatedRoute } from '@angular/router';
+import { UserService } from '../../../../core/services/user-service';
 
 @Component({
   selector: 'app-photos',
@@ -18,11 +19,16 @@ export class Photos implements OnInit {
   public isLoading = true;
   constructor(
     private apiService: ApiService,
-    private activatedRoute: ActivatedRoute
-  ) {}
+    private activatedRoute: ActivatedRoute,
+    private userService: UserService
+  ) {
+    this.currentUserId = this.userService.getUser()?.data.id;
+  }
 
   public env: any = env;
   public userData: any;
+
+  public currentUserId?: string;
 
   public ngOnInit(): void {
     this.activatedRoute.parent?.params

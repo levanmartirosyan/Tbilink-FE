@@ -1,5 +1,6 @@
 <div class="wrapper">
-  @if (userData?.isPublicProfile && userData != null) {
+  @if (userData?.isPublicProfile && userData != null || userData?.id ==
+  currentUserId) {
   <div class="item">
     <h4>Contact and Basic Information</h4>
     @if (userData?.country !== null || userData?.city !== null) {
@@ -29,7 +30,8 @@
       <span> {{userData?.description || 'No Description.'}}</span>
     </div>
   </div>
-  } @else if (!userData?.isPublicProfile && userData != null) {
+  } @else if (!userData?.isPublicProfile && userData !== null && userData?.id
+  !== currentUserId) {
   <div class="isPrivate">
     <div class="info-row">
       <lucide-icon name="lock" [size]="17"></lucide-icon>

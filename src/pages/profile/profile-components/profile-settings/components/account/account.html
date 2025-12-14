@@ -140,7 +140,7 @@
   [isOpen]="isEditingUsername"
   [isLoading]="isSaving"
   [submitDisabled]="usernameForm.get('username')?.value === currentUsername || !usernameForm.valid"
-  submitButtonText="Save Username"
+  submitButtonText="Save"
   (onClose)="closeUsernameModal()"
   (onSubmit)="saveUsername()"
 >
@@ -172,7 +172,7 @@
   [isOpen]="isEditingPhone"
   [isLoading]="isSaving"
   [submitDisabled]="phoneForm.get('phone')?.value === currentPhone || !phoneForm.valid"
-  submitButtonText="Save Phone"
+  submitButtonText="Save"
   (onClose)="closePhoneModal()"
   (onSubmit)="savePhone()"
 >

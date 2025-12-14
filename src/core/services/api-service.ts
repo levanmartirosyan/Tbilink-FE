@@ -65,6 +65,23 @@ export class ApiService {
     return this.http.post(this.url + 'storage/upload/public', formData);
   }
 
+  uploadPrivateFile(formData: FormData, folder: string) {
+    formData.append('Folder', folder);
+
+    return this.http.post(this.url + 'storage/upload/private', formData);
+  }
+
+  deleteFileFromPublic(filePath: string) {
+    return this.http.post(this.url + 'storage/delete', {
+      bucket: 'Tbilink-Public',
+      filePath,
+    });
+  }
+
+  getSignedUrl(filePath: string) {
+    return this.http.post(this.url + 'storage/get-signed-url', { filePath });
+  }
+
   getAllPosts() {
     return this.http.get<ServiceResponse<IPost[]>>(this.url + 'post/all');
   }
@@ -148,5 +165,41 @@ export class ApiService {
 
   getUserByUsername(username: string) {
     return this.http.get(this.url + `user/${username}`);
+  }
+
+  toggleFollowUser(targetUserId: string) {
+    return this.http.post(this.url + `user/follow/${targetUserId}`, {});
+  }
+
+  getUserFollowers(targetUserId: string) {
+    return this.http.get(this.url + `user/${targetUserId}/followers`);
+  }
+
+  getUserFollowing(targetUserId: string) {
+    return this.http.get(this.url + `user/${targetUserId}/following`);
+  }
+
+  getMutualFollowers() {
+    return this.http.get(this.url + `user/mutual-followers`);
+  }
+
+  getFollowStats(targetUserId: string) {
+    return this.http.get(this.url + `user/${targetUserId}/follow-stats`);
+  }
+
+  search(
+    keyword: string,
+    category: string = 'all',
+    page: number = 1,
+    pageSize: number = 10
+  ) {
+    const keywordParam = encodeURIComponent(keyword.trim().toLowerCase());
+    const categoryParam = encodeURIComponent(category.trim().toLowerCase());
+    return this.http.get(
+      this.url +
+        `search?${
+          keywordParam !== '' ? `keyword=${keywordParam}&` : ''
+        }category=${categoryParam}&page=${page}&pageSize=${pageSize}`
+    );
   }
 }

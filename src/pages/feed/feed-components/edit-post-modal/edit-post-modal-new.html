@@ -1,0 +1,52 @@
+<div class="modal">
+  <div class="head">
+    <h3>Edit Post</h3>
+    <lucide-icon
+      name="x"
+      [size]="20"
+      (click)="toggleEditPostModal?.()"
+    ></lucide-icon>
+  </div>
+  <div class="modal-content">
+    <form [formGroup]="editPostForm" (ngSubmit)="uploadImage()">
+      <div class="input">
+        <textarea placeholder="What's on your mind?" formControlName="content">
+{{ postData?.content }}</textarea
+        >
+      </div>
+      @if (postData?.imageUrl && selectedFile == null) {
+      <div class="current-image">
+        <img
+          [src]="env.storageUrl + postData?.imageUrl"
+          alt="Current Post Image"
+        />
+      </div>
+      }
+      <div class="bottom">
+        <div class="photos" (click)="fileInput.click()">
+          <lucide-icon name="image" [size]="20"></lucide-icon>
+          <span>Photo</span>
+
+          @if (selectedFile != null) {
+          <div class="filePreviewWrapper">
+            <p>|</p>
+            <img [src]="filePreview" alt="Selected" class="file-preview" />
+          </div>
+          }
+        </div>
+        <input
+          #fileInput
+          type="file"
+          accept="image/*,video/*"
+          (change)="onFileSelected($event)"
+          style="display: none"
+        />
+        <div class="btn">
+          <button type="submit">Save</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<app-overlay [event]="toggleEditPostModal"></app-overlay>

@@ -1,0 +1,28 @@
+<div class="user-card" (click)="goToProfile()">
+  <div class="avatar">
+    @if (userData?.profilePhotoUrl !== null) {
+    <img
+      [src]="env.storageUrl + userData.profilePhotoUrl"
+      [alt]="userData.firstName"
+    />
+    } @else {
+    <div class="avatar-placeholder">{{ userData?.firstName?.charAt(0) }}</div>
+    }
+  </div>
+  <div class="user-info">
+    <h3>{{ userData?.firstName }} {{ userData?.lastName }}</h3>
+    <p class="username">@{{ userData?.userName }}</p>
+    <p class="followers">{{ userData?.followersCount || 0 }} followers</p>
+  </div>
+  <div
+    class="follow btn"
+    [class.following]="userData?.isFollowedByCurrentUser"
+    (click)="toggleFollow($event)"
+  >
+    <lucide-icon
+      [name]="userData?.isFollowedByCurrentUser ? 'user-check' : 'user-plus'"
+      [size]="16"
+    ></lucide-icon>
+    <p>{{ userData?.isFollowedByCurrentUser ? 'Following' : 'Follow' }}</p>
+  </div>
+</div>

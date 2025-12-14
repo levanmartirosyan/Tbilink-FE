@@ -107,4 +107,11 @@ export class UserService {
 
     this.signalRService.stopHubConnection();
   }
+
+  public isAdmin(): boolean {
+    const currentUser = this.user.value;
+    return (
+      currentUser?.data?.role === 'Admin' || currentUser?.data?.role === 'Owner'
+    );
+  }
 }
