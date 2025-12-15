@@ -59,6 +59,10 @@ export class ApiService {
     return this.http.put(this.url + `user/update/${targetUserId}`, userBody);
   }
 
+  removeUser(userId: string) {
+    return this.http.delete(this.url + `user/remove/${userId}`);
+  }
+
   uploadPublicFile(formData: FormData, folder: string) {
     formData.append('Folder', folder);
 
@@ -200,6 +204,13 @@ export class ApiService {
         `search?${
           keywordParam !== '' ? `keyword=${keywordParam}&` : ''
         }category=${categoryParam}&page=${page}&pageSize=${pageSize}`
+    );
+  }
+
+  changePassword(changePasswordBody: any) {
+    return this.http.post(
+      this.url + 'user/change-password',
+      changePasswordBody
     );
   }
 }

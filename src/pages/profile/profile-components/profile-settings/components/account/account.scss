@@ -131,7 +131,8 @@
         }
 
         .change-password-btn {
-          padding: 12px 20px;
+          height: 42px;
+          padding: 0 20px;
           background: var(--auth-form-button);
           color: white;
           border: 0;
@@ -180,7 +181,8 @@
 
         .delete-btn {
           width: 100%;
-          padding: 12px 20px;
+          height: 42px;
+          padding: 0 20px;
           background: var(--auth-form-button);
           color: white;
           border: 0;

@@ -14,7 +14,14 @@
     pointer-events: auto;
   }
 }
-
+.loader-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .loader {
+    height: 18px;
+  }
+}
 .modal {
   background: var(--auth-form-background);
   border-radius: 12px;

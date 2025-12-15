@@ -24,7 +24,11 @@
         [disabled]="isLoading || submitDisabled"
         class="submit-btn"
       >
-        {{ isLoading ? 'Saving...' : submitButtonText }}
+        @if (isLoading) {
+        <div class="loader-bar">
+          <app-bar-loader></app-bar-loader>
+        </div>
+        } @else { {{submitButtonText}} }
       </button>
     </div>
   </div>

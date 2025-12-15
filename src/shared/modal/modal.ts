@@ -8,10 +8,11 @@ import {
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { Overlay } from '../overlay/overlay';
+import { BarLoader } from '../loadings/bar-loader/bar-loader';
 
 @Component({
   selector: 'app-modal',
-  imports: [CommonModule, LucideAngularModule, Overlay],
+  imports: [CommonModule, LucideAngularModule, Overlay, BarLoader],
   templateUrl: './modal.html',
   styleUrl: './modal.scss',
   encapsulation: ViewEncapsulation.None,
