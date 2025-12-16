@@ -15,7 +15,7 @@
         <div class="avatar">
           <img
             [src]="
-            otherUserId[0]?.profilePhotoUrl || 'assets/icons/profile.png'
+            env.storageUrl + otherUserId[0]?.profilePhotoUrl || 'assets/icons/profile.png'
           "
             alt="Avatar"
           />
