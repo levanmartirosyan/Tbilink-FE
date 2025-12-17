@@ -93,9 +93,19 @@ Update the API URL in your Angular environment file:
 
 ```TypeScript
 // src/environments/environment.ts
-export const environment = {
-  production: false,
-  apiUrl: 'https://your-backend-api.com/api'
+export const env = {
+  localUrl: 'https://localhost:****/api/',
+  publicUrl: 'https://example.com/api/',
+
+  hubUrlLocal: 'https://localhost:****/',
+
+  hubUrlPublic: 'https://example.com/',
+
+  supabaseUrl: 'https://example.com/',
+  supabaseAnonKey: 'Key',
+
+  storageUrl:
+    'https://example.com/,
 };
 ```
 
