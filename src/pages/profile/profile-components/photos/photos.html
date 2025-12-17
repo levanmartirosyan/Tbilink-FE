@@ -8,11 +8,17 @@
       <span>Profile is private</span>
     </div>
   </div>
-  } @else { @for (photo of data; track $index) { @if (photo.imageUrl) {
+  } @else { @for (photo of data; track $index) { @if (photo.imageUrl !== null &&
+  photo.imageUrl !== '') {
   <div class="container">
     <img [src]="env.storageUrl + photo.imageUrl" alt="photo" />
   </div>
-  } } @empty {
+  } @else {
+  <div class="empty-state">
+    <lucide-icon name="image-off" [size]="28"></lucide-icon>
+    <p>No photos found</p>
+  </div>
+  }} @empty {
   <div class="empty-state">
     <lucide-icon name="image-off" [size]="28"></lucide-icon>
     <p>No photos found</p>

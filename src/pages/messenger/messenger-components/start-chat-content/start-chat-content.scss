@@ -1,11 +1,30 @@
 .search-input {
+  margin-bottom: 20px;
   width: 100%;
-  padding: 12px 14px;
+  height: 48px;
   border-radius: 8px;
-  border: 1px solid #34404f;
-  background: transparent;
-  color: #e8eef8;
-  margin-bottom: 12px;
+  outline: none;
+  border: 2px solid var(--auth-input-border);
+  padding: 0 12px;
+  background-color: var(--auth-input-background);
+  color: var(--text-color);
+  font-size: 15px;
+  &:focus {
+    border: 2px solid var(--auth-input-focus);
+  }
+  &::placeholder {
+    color: var(--text-unfocused);
+  }
+  &:-webkit-autofill {
+    -webkit-text-fill-color: var(--text-color) !important;
+    -webkit-box-shadow: 0 0 0 1000px var(--auth-input-background) inset !important;
+    box-shadow: 0 0 0 1000px var(--auth-input-background) inset !important;
+  }
+
+  &:-moz-autofill {
+    -moz-text-fill-color: var(--text-color) !important;
+    box-shadow: 0 0 0 1000px var(--auth-input-background) inset !important;
+  }
 }
 .user-list {
   max-height: 400px;

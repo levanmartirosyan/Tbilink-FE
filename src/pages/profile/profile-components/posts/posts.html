@@ -8,7 +8,8 @@
       <span>Profile is private</span>
     </div>
   </div>
-  } @else { @for (posts of data; track $index) { @if (posts.imageUrl) {
+  } @else { @for (posts of data; track $index) { @if (posts.imageUrl !== null &&
+  posts.imageUrl !== '') {
   <div class="container">
     <img [src]="env.storageUrl + posts.imageUrl" alt="photo" />
     <div class="like-comment-count">
@@ -22,7 +23,12 @@
       </div>
     </div>
   </div>
-  } } @empty {
+  } @else {
+  <div class="empty-state">
+    <lucide-icon name="image-off" [size]="28"></lucide-icon>
+    <p>No posts with images found</p>
+  </div>
+  }} @empty {
   <div class="empty-state">
     <lucide-icon name="image-off" [size]="28"></lucide-icon>
     <p>No posts found</p>

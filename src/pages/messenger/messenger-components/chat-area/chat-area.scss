@@ -286,6 +286,41 @@
               cursor: pointer;
             }
 
+            .attachment-image-wrapper {
+              position: relative;
+              display: inline-block;
+
+              .attachment-image {
+                display: block;
+              }
+
+              .download-btn {
+                position: absolute;
+                top: 8px;
+                right: 8px;
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                background-color: rgba(0, 0, 0, 0.6);
+                border: none;
+                color: white;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background-color 0.2s ease;
+
+                &:hover {
+                  background-color: rgba(0, 0, 0, 0.8);
+                }
+
+                lucide-icon {
+                  width: 16px;
+                  height: 16px;
+                }
+              }
+            }
+
             .attachment-video-wrapper {
               position: relative;
               display: inline-block;

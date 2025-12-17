@@ -2,7 +2,7 @@
   <div class="container" [class.chat-open]="isChatSelected">
     <div class="side-bar">
       <div class="head">
-        <div class="name">
+        <div class="name" (click)="onBackToList()">
           <lucide-icon name="message-circle" [size]="24"></lucide-icon>
           <h2>Chats</h2>
         </div>
@@ -40,7 +40,7 @@
       [hideFooter]="true"
     >
       <app-start-chat-content
-        (start)="handleStartUser($event)"
+        (startChat)="handleStartUser($event)"
       ></app-start-chat-content>
     </app-modal>
   </div>

@@ -10,6 +10,7 @@ import { CommonService } from '../../core/services/common-service';
 import { ChatParticipantDto } from '../../core/interfaces/message-interface';
 import { SpinnerLoader } from '../../shared/loadings/spinner-loader/spinner-loader';
 import { NgIf } from '@angular/common';
+import { UserService } from '../../core/services/user-service';
 
 @Component({
   selector: 'app-messenger',
@@ -37,15 +38,12 @@ export class Messenger implements OnInit, OnDestroy {
 
     this.selectChat([user as any]);
     this.closeStartChatModal();
-    const currentUser = this.getUserFromCookie();
-    if (currentUser) {
-      this.signalRService.connectToMessageHubSilent(currentUser, user.id);
-    }
   }
   constructor(
     public signalRService: SignalRService,
     private apiService: ApiService,
-    private commonService: CommonService
+    private commonService: CommonService,
+    private userService: UserService
   ) {
     effect(() => {
       const newMsg = this.signalRService.newMessageReceived();
@@ -141,7 +139,7 @@ export class Messenger implements OnInit, OnDestroy {
 
           if (firstChatPartner?.id) {
             setTimeout(() => {
-              const user = this.getUserFromCookie();
+              const user = this.userService.getUser();
               if (user) {
                 console.log(
                   'Auto-connecting to first chat (silent):',
@@ -162,21 +160,6 @@ export class Messenger implements OnInit, OnDestroy {
         this.isLoading = false;
       },
     });
-  }
-
-  private getUserFromCookie() {
-    const userCookie = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('TB-UserData='));
-
-    if (userCookie) {
-      try {
-        return JSON.parse(decodeURIComponent(userCookie.split('=')[1]));
-      } catch {
-        return null;
-      }
-    }
-    return null;
   }
 
   ngOnDestroy(): void {
@@ -222,6 +205,7 @@ export class Messenger implements OnInit, OnDestroy {
 
   onBackToList(): void {
     this.isChatSelected = false;
+    this.commonService.setChatSelectOption(false);
   }
 
   private updateChatWithNewMessage(message: any): void {

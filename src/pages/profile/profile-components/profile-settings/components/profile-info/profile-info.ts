@@ -14,6 +14,7 @@ import { ToastService } from '../../../../../../core/services/toast-service';
 import { COUNTRIES } from '../../../../../../core/constants/countries';
 import { CustomSelectComponent } from './custom-select/custom-select';
 import { count, first } from 'rxjs';
+import { UserService } from '../../../../../../core/services/user-service';
 
 @Component({
   selector: 'app-profile-info',
@@ -39,7 +40,8 @@ export class ProfileInfo implements OnInit {
   constructor(
     public commonService: CommonService,
     private api: ApiService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -71,7 +73,12 @@ export class ProfileInfo implements OnInit {
           description: data.description || '',
           profilePhotoUrl: data.profilePhotoUrl || '',
         });
-        // Store initial form value for change detection
+        this.userService.updateUserData({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          profilePhotoUrl: data.profilePhotoUrl,
+        });
+
         this.initialFormValue = this.profileForm.value;
       }
     });
@@ -122,7 +129,6 @@ export class ProfileInfo implements OnInit {
       return;
     }
 
-    // Check if form has changed or avatar file was uploaded
     const formChanged =
       JSON.stringify(this.profileForm.value) !==
       JSON.stringify(this.initialFormValue);

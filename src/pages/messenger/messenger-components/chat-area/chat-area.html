@@ -5,7 +5,7 @@
     <h2>Select a chat to start messaging</h2>
     <p>Choose a conversation from the list</p>
   </div>
-  } @else if (commonService.ChatSelectOption$ | async) {
+  } @if (commonService.ChatSelectOption$ | async) {
   <div class="chat">
     <div class="head">
       <div class="user-info">
@@ -68,17 +68,24 @@
         >
           @if (isAttachment(message.content)) { @if
           (isImageAttachment(message.content)) {
-          <img
-            [src]="env.storageUrl + getAttachmentUrl(message.content)"
-            alt="Attachment"
-            class="attachment-image"
-          />
+          <div class="attachment-image-wrapper">
+            <img
+              [src]="getAttachmentUrl(message.content)"
+              alt="Attachment"
+              class="attachment-image"
+            />
+            <button
+              class="download-btn"
+              (click)="downloadAttachment(getAttachmentUrl(message.content))"
+              title="Download image"
+            >
+              <lucide-icon name="download" [size]="16"></lucide-icon>
+            </button>
+          </div>
           } @else if (isVideoAttachment(message.content)) {
           <div class="attachment-video-wrapper">
             <video class="attachment-video" controls>
-              <source
-                [src]="env.storageUrl + getAttachmentUrl(message.content)"
-              />
+              <source [src]="getAttachmentUrl(message.content)" />
             </video>
             <button
               class="download-btn"

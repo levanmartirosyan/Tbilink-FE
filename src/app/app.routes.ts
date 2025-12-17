@@ -29,6 +29,8 @@ import { About } from '../pages/profile/profile-components/about/about';
 import { People } from '../pages/search/people/people';
 import { SearchPosts } from '../pages/search/search-posts/search-posts';
 import { All } from '../pages/search/all/all';
+import { Admin } from '../pages/admin/admin';
+import { authAdminGuard } from '../core/guards/auth-admin-guard';
 
 export const routes: Routes = [
   {
@@ -132,6 +134,11 @@ export const routes: Routes = [
             component: Language,
           },
         ],
+      },
+      {
+        path: 'admin',
+        component: Admin,
+        canActivate: [authAdminGuard],
       },
     ],
   },

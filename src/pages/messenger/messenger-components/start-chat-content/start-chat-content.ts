@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
   styleUrl: './start-chat-content.scss',
 })
 export class StartChatContent implements OnInit {
-  @Output() start = new EventEmitter<any>();
+  @Output() startChat = new EventEmitter<any>();
 
   followers: any[] = [];
   filteredFollowers: any[] = [];
@@ -64,7 +64,7 @@ export class StartChatContent implements OnInit {
   onStart(user: any) {
     console.log(user);
 
-    this.start.emit(user);
+    this.startChat.emit(user);
   }
 
   goToUserProfile(username: string) {

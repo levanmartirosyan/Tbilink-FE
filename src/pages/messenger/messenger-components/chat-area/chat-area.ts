@@ -51,17 +51,14 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
   private lastMessageCount = 0;
   private shouldScroll = true;
 
-  // Emoji picker
   showEmojiPicker = false;
 
   public env = env;
 
-  // File attachment
   isUploading = false;
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
 
-  // Expose typingUsers signal directly for template reactivity
   typingUsers;
 
   constructor(
@@ -74,11 +71,9 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
     this.chatMessages = this.signalRService.messages;
     this.typingUsers = this.signalRService.typingUsers;
 
-    // Auto-scroll when new messages arrive (if user is at bottom)
     effect(() => {
       const messages = this.chatMessages();
       if (messages && messages.length > 0) {
-        // Only scroll if new messages were added and user is at bottom
         if (messages.length > this.lastMessageCount) {
           this.lastMessageCount = messages.length;
           if (this.shouldScroll) {
@@ -88,7 +83,6 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
       }
     });
 
-    // Auto-scroll when typing indicator appears (if user is at bottom)
     effect(() => {
       const typing = this.typingUsers();
       const other = this.otherUserId?.[0];
@@ -140,10 +134,9 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
 
       if (otherUser?.id && currentUser) {
         this.signalRService.disconnectFromMessageHub();
-        // Always use connectToMessageHub - it will mark messages as read
+
         this.signalRService.connectToMessageHub(currentUser, otherUser.id);
 
-        // Reset message count and scroll to top on new chat
         this.lastMessageCount = 0;
         this.shouldScroll = true;
         setTimeout(() => this.scrollToBottom(), 100);
@@ -153,7 +146,6 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
 
   ngOnDestroy(): void {
     if (this.typingTimeout) clearTimeout(this.typingTimeout);
-    // optional: notify stop for safety
     const other = this.otherUserId?.[0];
     if (other?.id) this.signalRService.stopTyping(other.id);
 
@@ -169,7 +161,6 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
     } catch (err) {}
   }
 
-  // Check if user is near bottom - update shouldScroll flag
   onScroll(): void {
     const el = this.messagesContainer.nativeElement;
     // If user is within 100px of bottom, auto-scroll is enabled
@@ -190,7 +181,6 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
     this.showEmojiPicker = false;
   }
 
-  // Emoji picker methods
   toggleEmojiPicker(): void {
     this.showEmojiPicker = !this.showEmojiPicker;
   }
@@ -212,7 +202,6 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
     const file = files[0];
     this.uploadAttachment(file);
 
-    // Reset input
     input.value = '';
   }
 
@@ -225,37 +214,28 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
     const formData = new FormData();
     formData.append('file', file);
 
-    // Upload to private folder with user ID for organization
     const folder = `messages/${this.userService.getUser()?.data?.id}`;
 
     this.apiService.uploadPublicFile(formData, folder).subscribe({
       next: (response: any) => {
-        // Get the file path from response
         const filePath =
           response?.data?.path || response?.path || response?.fileName;
         const fileType = this.getFileType(file.type);
 
-        // Get signed URL from backend
-        this.apiService.getSignedUrl(filePath).subscribe({
-          next: (signedResponse: any) => {
-            this.isUploading = false;
-            const signedUrl =
-              signedResponse?.data?.signedUrl ||
-              signedResponse?.signedUrl ||
-              filePath;
+        try {
+          this.isUploading = false;
+          const base = (this.env?.storageUrl || '').replace(/\/+$/g, '');
+          const path = (filePath || '').replace(/^\/+/, '');
+          const publicUrl = base ? `${base}/${path}` : filePath;
 
-            // Send as message with attachment metadata
-            const message = `[${fileType.toUpperCase()}]${signedUrl}`;
-            this.sendMessageToUser(message);
-          },
-          error: (error) => {
-            this.isUploading = false;
-            console.error('Error getting signed URL:', error);
-            // Fallback: send regular path
-            const message = `[${fileType.toUpperCase()}]${filePath}`;
-            this.sendMessageToUser(message);
-          },
-        });
+          const message = `[${fileType.toUpperCase()}]${publicUrl}`;
+          this.sendMessageToUser(message);
+        } catch (error) {
+          this.isUploading = false;
+          console.error('Error building attachment URL:', error);
+          const message = `[${fileType.toUpperCase()}]${filePath}`;
+          this.sendMessageToUser(message);
+        }
       },
       error: (error) => {
         this.isUploading = false;
