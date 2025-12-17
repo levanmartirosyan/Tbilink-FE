@@ -1,5 +1,6 @@
 import { Component, Input, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-auth-input',
@@ -12,12 +13,16 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
       multi: true,
     },
   ],
+  imports: [LucideAngularModule],
 })
 export class AuthInput implements ControlValueAccessor {
   @Input() type = 'text';
   @Input() placeholder = '';
   @Input() className?: string;
   @Input() autocomplete?: string;
+  @Input() showToggle = true;
+
+  showPassword = false;
 
   value = '';
   disabled = false;
@@ -27,6 +32,13 @@ export class AuthInput implements ControlValueAccessor {
 
   writeValue(value: any): void {
     this.value = value ?? '';
+  }
+
+  get inputType() {
+    if (this.type === 'password') {
+      return this.showPassword ? 'text' : 'password';
+    }
+    return this.type;
   }
 
   registerOnChange(fn: any): void {
@@ -49,5 +61,9 @@ export class AuthInput implements ControlValueAccessor {
 
   handleBlur() {
     this.onTouched();
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 }

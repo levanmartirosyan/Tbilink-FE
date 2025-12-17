@@ -39,12 +39,14 @@ export class Account implements OnInit {
   isVerifying = false;
   verificationCodeSent = false;
   isSaving = false;
-  // delete flow state
+
   isDeleteConfirmOpen = false;
   isDeleteVerificationOpen = false;
   isVerifyingDelete = false;
   deleteVerificationSent = false;
   isDeleting = false;
+
+  showPassword = false;
 
   currentEmail = '';
   currentUsername = '';
@@ -85,7 +87,6 @@ export class Account implements OnInit {
     ]),
   });
 
-  // change password state and form
   isChangePasswordOpen = false;
   isChangingPassword = false;
   changePasswordForm = new FormGroup({
@@ -112,6 +113,10 @@ export class Account implements OnInit {
     this.changePasswordForm.setValidators(
       this.passwordsMatchValidator.bind(this)
     );
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 
   loadUserData(): void {

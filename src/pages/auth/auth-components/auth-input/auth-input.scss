@@ -1,5 +1,13 @@
 :host {
   width: 100%;
+  position: relative;
+  lucide-icon {
+    position: absolute;
+    top: 14px;
+    right: 12px;
+    color: var(--text-unfocused);
+    cursor: pointer;
+  }
   input {
     width: 100%;
     height: 48px;

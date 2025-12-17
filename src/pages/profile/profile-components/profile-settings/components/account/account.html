@@ -171,7 +171,8 @@
     <input type="email" class="form-input" [value]="userData?.email" disabled />
   </div>
 
-  <div *ngIf="deleteVerificationSent" class="form-group">
+  @if (deleteVerificationSent) {
+  <div class="form-group">
     <label class="form-label">Verification Code</label>
     <div class="otp-wrapper">
       @for (digit of otpDigits; track $index; let i = $index) {
@@ -188,6 +189,7 @@
       }
     </div>
   </div>
+  }
 </app-modal>
 
 <app-modal
@@ -222,6 +224,7 @@
         class="form-input"
         placeholder="New password"
       />
+
       @if (changePasswordForm.get('newPassword')?.touched &&
       changePasswordForm.get('newPassword')?.hasError('pattern')) {
       <span class="error"

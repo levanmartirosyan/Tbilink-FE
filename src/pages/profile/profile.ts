@@ -14,7 +14,6 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FollowersCounter } from './profile-components/followers-counter/followers-counter';
 import { ProfileInfo } from './profile-components/profile-info/profile-info';
 import { SegmentedSwitcher } from '../../shared/segmented-switcher/segmented-switcher';
-import { ModalComponent } from '../../shared/modal/modal';
 import { env } from '../../enviroment/enviroment';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -30,7 +29,6 @@ import { CommonModule } from '@angular/common';
     FollowersCounter,
     ProfileInfo,
     SegmentedSwitcher,
-    ModalComponent,
     CommonModule,
   ],
   templateUrl: './profile.html',
