@@ -6,8 +6,8 @@ export interface UpdateUser {
   Country?: string;
   City?: string;
   PhoneNumber?: string;
-  ProfilePhotoUrl?: string;
-  CoverPhotoUrl?: string;
+  ProfilePhotoUrl?: string | null;
+  CoverPhotoUrl?: string | null;
   Description?: string;
 
   IsPublicProfile?: boolean;

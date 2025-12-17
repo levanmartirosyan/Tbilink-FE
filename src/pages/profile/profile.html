@@ -8,7 +8,7 @@
         />
         @if (userData?.id == currentUserId) {
         <div class="settings-mobile">
-          <div class="edit-cover">
+          <div class="edit-cover" (click)="openUploadCoverModal()">
             <lucide-icon name="camera" [size]="16"></lucide-icon>
             <p>Edit Cover</p>
           </div>
@@ -53,7 +53,6 @@
     </div>
   </div>
 
-  <!-- Upload Cover Image Modal
   <app-modal
     title="Upload Cover Image"
     [isOpen]="isUploadCoverModalOpen"
@@ -72,8 +71,8 @@
           hidden
         />
         <button type="button" class="upload-button" (click)="fileInput.click()">
-          <lucide-icon name="upload-cloud" [size]="32"></lucide-icon>
-          <p>Click to select image or drag and drop</p>
+          <lucide-icon name="upload" [size]="32"></lucide-icon>
+          <p>Click to select image</p>
           <small>Maximum file size: 5MB</small>
         </button>
       </div>
@@ -86,10 +85,11 @@
           class="remove-preview-btn"
           (click)="fileInput.click()"
         >
-          <lucide-icon name="edit-2" [size]="16"></lucide-icon>
+          <lucide-icon name="pencil" [size]="16"></lucide-icon>
         </button>
       </div>
       } @if (userData?.coverPhotoUrl) {
+
       <div class="delete-section">
         <button
           type="button"
@@ -101,7 +101,17 @@
           <span>Remove Current Cover</span>
         </button>
       </div>
+      <div class="preview-container">
+        <img [src]="env.storageUrl + userData?.coverPhotoUrl" alt="Preview" />
+        <button
+          type="button"
+          class="remove-preview-btn"
+          (click)="fileInput.click()"
+        >
+          <lucide-icon name="pencil" [size]="16"></lucide-icon>
+        </button>
+      </div>
       }
     </div>
-  </app-modal> -->
+  </app-modal>
 </section>

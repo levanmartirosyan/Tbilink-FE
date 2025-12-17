@@ -76,10 +76,9 @@ export class ApiService {
   }
 
   deleteFileFromPublic(filePath: string) {
-    return this.http.post(this.url + 'storage/delete', {
-      bucket: 'Tbilink-Public',
-      filePath,
-    });
+    return this.http.delete(
+      this.url + `storage/object?bucket=Tbilink-Public&path=${filePath}`
+    );
   }
 
   getSignedUrl(filePath: string) {
