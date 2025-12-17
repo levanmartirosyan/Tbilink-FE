@@ -23,6 +23,7 @@ export class ModalComponent {
   @Input() isLoading: boolean = false;
   @Input() submitButtonText: string = 'Save';
   @Input() submitDisabled: boolean = false;
+  @Input() hideFooter: boolean = false;
   @Output() onClose = new EventEmitter<void>();
   @Output() onSubmit = new EventEmitter<void>();
 

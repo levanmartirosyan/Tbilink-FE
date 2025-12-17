@@ -213,9 +213,7 @@ export class Profile implements OnInit, OnDestroy {
         .deleteFileFromPublic(filePath)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
-          next: () => {
-            // File deleted from storage
-          },
+          next: () => {},
           error: (error: any) => {
             this.toastService.error(
               error?.error?.message ||

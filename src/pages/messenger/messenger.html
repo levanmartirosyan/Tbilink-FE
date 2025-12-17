@@ -7,17 +7,25 @@
           <h2>Chats</h2>
         </div>
         <div class="create-chat">
-          <div class="action">
+          <div class="action" (click)="openStartChatModal()">
             <lucide-icon name="message-circle-plus" [size]="20"></lucide-icon>
           </div>
         </div>
       </div>
       <div class="chat-list">
-        @for (chat of allChats; track $index) {
+        @if (!isLoading) { @for (chat of allChats; track $index) {
         <app-chat
           [chatData]="chat"
           (click)="selectChat(chat.participants)"
         ></app-chat>
+        } @empty {
+        <div class="no-chats">
+          <p>No chats available. Start a new conversation!</p>
+        </div>
+        } } @else if (isLoading) {
+        <div class="loader-wrapper">
+          <app-spinner-loader></app-spinner-loader>
+        </div>
         }
       </div>
     </div>
@@ -25,5 +33,15 @@
       [otherUserId]="selectedChatParticipants"
       (backToList)="onBackToList()"
     ></app-chat-area>
+    <app-modal
+      [isOpen]="isStartChatModalOpen"
+      title="Start a chat"
+      (onClose)="closeStartChatModal()"
+      [hideFooter]="true"
+    >
+      <app-start-chat-content
+        (start)="handleStartUser($event)"
+      ></app-start-chat-content>
+    </app-modal>
   </div>
 </div>

@@ -2,18 +2,46 @@ import { Component, OnDestroy, OnInit, effect } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { Chat } from './messenger-components/chat/chat';
 import { ChatArea } from './messenger-components/chat-area/chat-area';
+import { ModalComponent } from '../../shared/modal/modal';
+import { StartChatContent } from './messenger-components/start-chat-content/start-chat-content';
 import { SignalRService } from '../../core/services/signal-r-service';
 import { ApiService } from '../../core/services/api-service';
 import { CommonService } from '../../core/services/common-service';
 import { ChatParticipantDto } from '../../core/interfaces/message-interface';
+import { SpinnerLoader } from '../../shared/loadings/spinner-loader/spinner-loader';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-messenger',
-  imports: [LucideAngularModule, Chat, ChatArea],
+  imports: [
+    LucideAngularModule,
+    Chat,
+    ChatArea,
+    SpinnerLoader,
+    ModalComponent,
+    StartChatContent,
+  ],
   templateUrl: './messenger.html',
   styleUrl: './messenger.scss',
 })
 export class Messenger implements OnInit, OnDestroy {
+  public isStartChatModalOpen = false;
+  openStartChatModal() {
+    this.isStartChatModalOpen = true;
+  }
+  closeStartChatModal() {
+    this.isStartChatModalOpen = false;
+  }
+  handleStartUser(user: any) {
+    if (!user) return;
+
+    this.selectChat([user as any]);
+    this.closeStartChatModal();
+    const currentUser = this.getUserFromCookie();
+    if (currentUser) {
+      this.signalRService.connectToMessageHubSilent(currentUser, user.id);
+    }
+  }
   constructor(
     public signalRService: SignalRService,
     private apiService: ApiService,
@@ -90,7 +118,10 @@ export class Messenger implements OnInit, OnDestroy {
     this.getAllChats();
   }
 
+  public isLoading: boolean = false;
+
   private getAllChats() {
+    this.isLoading = true;
     this.apiService.getAllChats().subscribe({
       next: (data: any) => {
         this.allChats = data.data;
@@ -124,9 +155,11 @@ export class Messenger implements OnInit, OnDestroy {
             }, 500);
           }
         }
+        this.isLoading = false;
       },
       error: (error: any) => {
         console.log('Error fetching chats:', error);
+        this.isLoading = false;
       },
     });
   }

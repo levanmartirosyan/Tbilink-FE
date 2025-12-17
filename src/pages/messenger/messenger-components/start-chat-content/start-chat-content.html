@@ -1,0 +1,41 @@
+<div class="start-chat-inner">
+  <input
+    type="text"
+    class="search-input"
+    placeholder="Search..."
+    [value]="search"
+    (input)="onSearchInput($event)"
+  />
+
+  @if (isLoading) {
+  <div class="loader-wrapper">
+    <app-spinner-loader></app-spinner-loader>
+  </div>
+  } @else {
+
+  <div class="user-list">
+    @for (user of filteredFollowers; track $index) {
+    <div class="user-row">
+      <div class="user" (click)="goToUserProfile(user.userName)">
+        <div class="avatar">
+          @if (user.profilePhotoUrl) {
+          <img [src]="env.storageUrl + user.profilePhotoUrl" />
+          } @if (!user.profilePhotoUrl) {
+          <div class="avatar-fallback">{{ getInitials(user.firstName) }}</div>
+          }
+        </div>
+        <div class="user-info">
+          <div class="name">{{ user.firstName }} {{ user.lastName }}</div>
+          <div class="username">@{{ user.userName }}</div>
+        </div>
+      </div>
+      <button class="start-chat-btn" (click)="onStart(user)">
+        <lucide-icon name="send" [size]="20"></lucide-icon>
+      </button>
+    </div>
+    } @empty {
+    <div class="no-results">No friends found.</div>
+    }
+  </div>
+  }
+</div>

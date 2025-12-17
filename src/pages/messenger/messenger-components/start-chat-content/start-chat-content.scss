@@ -1,0 +1,151 @@
+.search-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #34404f;
+  background: transparent;
+  color: #e8eef8;
+  margin-bottom: 12px;
+}
+.user-list {
+  max-height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.user-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #2f3646;
+}
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffe066;
+  font-weight: 700;
+}
+.user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.name {
+  color: #ffe066;
+  font-weight: 700;
+  color: var(--text-color);
+  font-size: 16px;
+}
+.username {
+  color: var(--text-unfocused);
+  font-size: 14px;
+}
+.start-chat-btn {
+  background: var(--auth-form-button);
+  border: none;
+  border-radius: 10px;
+  width: 42px;
+  height: 42px;
+  cursor: pointer;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s ease;
+  &:hover {
+    opacity: 0.8;
+  }
+  lucide-icon {
+    color: #fff;
+    width: 20px;
+    height: 20px;
+  }
+}
+.start-chat-btn .icon-small svg,
+.start-chat-btn lucide-icon.icon-small {
+  width: 20px;
+  height: 20px;
+}
+.no-results {
+  text-align: center;
+  color: #cbd5e1;
+  margin-top: 12px;
+}
+.modal-loader {
+  color: #cbd5e1;
+  text-align: center;
+  padding: 18px 0;
+}
+
+@media screen and (max-width: 768px) {
+  .start-chat-inner {
+    padding: 8px;
+  }
+  .search-input {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+  .user-row {
+    gap: 12px;
+    padding: 6px 0;
+  }
+  .avatar {
+    width: 40px;
+    height: 40px;
+  }
+  .name {
+    font-size: 15px;
+  }
+  .username {
+    font-size: 13px;
+  }
+  .start-chat-btn {
+    width: 38px;
+    height: 38px;
+    padding: 6px 8px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .search-input {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+  .user-row {
+    gap: 10px;
+  }
+  .avatar {
+    width: 36px;
+    height: 36px;
+  }
+  .name {
+    font-size: 14px;
+  }
+  .username {
+    font-size: 12px;
+  }
+  .start-chat-btn {
+    width: 36px;
+    height: 36px;
+  }
+}

@@ -22,12 +22,10 @@ export class Chat {
   public env = env;
 
   getUnreadCount(): number {
-    // First check if there's a stored unread count in the signal
     if (!this.chatData?.participants?.[0]) return 0;
     const partnerId = this.chatData.participants[0].id;
     const signalCount = this.signalRService.chatUnreadCounts()?.[partnerId];
 
-    // If signal has a count, use it; otherwise fall back to chatData.unreadCount
     if (signalCount !== undefined && signalCount !== null) {
       return signalCount;
     }

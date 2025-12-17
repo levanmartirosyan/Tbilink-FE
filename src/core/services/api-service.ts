@@ -183,7 +183,7 @@ export class ApiService {
   }
 
   getMutualFollowers() {
-    return this.http.get(this.url + `user/mutual-followers`);
+    return this.http.get(this.url + 'user/mutual-follows');
   }
 
   getFollowStats(targetUserId: string) {
