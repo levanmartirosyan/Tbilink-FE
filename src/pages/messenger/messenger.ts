@@ -11,6 +11,7 @@ import { ChatParticipantDto } from '../../core/interfaces/message-interface';
 import { SpinnerLoader } from '../../shared/loadings/spinner-loader/spinner-loader';
 import { NgIf } from '@angular/common';
 import { UserService } from '../../core/services/user-service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-messenger',
@@ -114,6 +115,7 @@ export class Messenger implements OnInit, OnDestroy {
     }, 3000);
 
     this.getAllChats();
+    this.getUserForChat();
   }
 
   public isLoading: boolean = false;
@@ -140,16 +142,25 @@ export class Messenger implements OnInit, OnDestroy {
           if (firstChatPartner?.id) {
             setTimeout(() => {
               const user = this.userService.getUser();
-              if (user) {
-                console.log(
-                  'Auto-connecting to first chat (silent):',
-                  firstChatPartner.id
-                );
-                this.signalRService.connectToMessageHubSilent(
-                  user,
-                  firstChatPartner.id
-                );
-              }
+              this.commonService
+                .getChatRecipientId()
+                .pipe(take(1))
+                .subscribe((recipient) => {
+                  if (!recipient) {
+                    if (user) {
+                      console.log(
+                        'Auto-connecting to first chat (silent):',
+                        firstChatPartner.id
+                      );
+                      this.signalRService.connectToMessageHubSilent(
+                        user,
+                        firstChatPartner.id
+                      );
+                    }
+                  } else {
+                    this.selectChat([recipient]);
+                  }
+                });
             }, 500);
           }
         }
@@ -164,6 +175,7 @@ export class Messenger implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.commonService.setChatSelectOption(false);
+    this.commonService.setChatRecipientId(null);
   }
 
   isUserOnline(userId: string): boolean {
@@ -177,8 +189,7 @@ export class Messenger implements OnInit, OnDestroy {
 
   selectChat(chat: ChatParticipantDto[]) {
     console.log(chat);
-
-    const currentUserId = this.signalRService.currentThread;
+    const currentUserId = this.userService.getUser()?.data?.id;
 
     if (!chat || !Array.isArray(chat)) {
       this.selectedChatParticipants = [];
@@ -203,6 +214,14 @@ export class Messenger implements OnInit, OnDestroy {
     console.log(this.selectedChatParticipants);
   }
 
+  private getUserForChat() {
+    this.commonService.getChatRecipientId().subscribe((user) => {
+      if (user !== null) {
+        this.selectChat([user]);
+      }
+    });
+  }
+
   onBackToList(): void {
     this.isChatSelected = false;
     this.commonService.setChatSelectOption(false);
@@ -219,9 +238,8 @@ export class Messenger implements OnInit, OnDestroy {
       this.allChats[chatIndex].lastMessage = message;
       this.allChats[chatIndex].lastActivity = message.messageSent;
 
-      const currentUserId = this.signalRService.currentThread;
+      const currentUserId = this.userService.getUser()?.data?.id;
       const messageSenderId = message.senderId;
-
       if (
         message.senderId !== currentUserId &&
         messageSenderId !== this.currentOpenChatPartnerId

@@ -1,0 +1,19 @@
+<div class="follow-action">
+  <div
+    class="follow btn"
+    [class.following]="followStats?.isFollowing"
+    [class.disabled]="followStats?.isProcessing"
+    (click)="followStats?.isProcessing ? null : toggleFollow()"
+  >
+    <lucide-icon
+      [name]="followStats?.isFollowing ? 'user-check' : 'user-plus'"
+      [size]="16"
+    ></lucide-icon>
+    <p>{{ followStats?.isFollowing ? 'Following' : 'Follow' }}</p>
+  </div>
+
+  <div class="message btn" (click)="onMessage()">
+    <lucide-icon name="message-circle" [size]="16"></lucide-icon>
+    <p>Message</p>
+  </div>
+</div>

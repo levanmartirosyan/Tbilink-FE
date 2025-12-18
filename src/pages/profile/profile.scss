@@ -226,9 +226,14 @@
           margin: 0;
         }
 
-        small {
-          font-size: 12px;
-          color: color-mix(in srgb, var(--text-color) 60%, transparent);
+        .sizes {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+          small {
+            font-size: 12px;
+            color: color-mix(in srgb, var(--text-color) 60%, transparent);
+          }
         }
 
         &:hover {
@@ -275,7 +280,6 @@
         }
 
         &:hover {
-          background: color-mix(in srgb, var(--primary) 120%, transparent);
           transform: scale(1.1);
         }
       }

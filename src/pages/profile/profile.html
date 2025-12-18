@@ -37,8 +37,16 @@
         </div>
         }
       </div>
-      <app-profile-info [userData]="userData"></app-profile-info>
-      <app-followers-counter [userData]="userData"></app-followers-counter>
+      <app-profile-info
+        [userData]="userData"
+        [followStats]="followStats"
+        (followToggled)="onChildFollowToggled($event)"
+      ></app-profile-info>
+      <app-followers-counter
+        [userData]="userData"
+        [followStats]="followStats"
+        (followToggled)="onChildFollowToggled($event)"
+      ></app-followers-counter>
 
       <div class="meta">
         <app-segmented-switcher
@@ -73,7 +81,10 @@
         <button type="button" class="upload-button" (click)="fileInput.click()">
           <lucide-icon name="upload" [size]="32"></lucide-icon>
           <p>Click to select image</p>
-          <small>Maximum file size: 5MB</small>
+          <div class="sizes">
+            <small>Maximum image size: 5MB</small>
+            <small>Minimum size: 1000x300</small>
+          </div>
         </button>
       </div>
 

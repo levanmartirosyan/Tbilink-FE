@@ -74,7 +74,7 @@
         }
       }
       .follow {
-        background: linear-gradient(90deg, #7572ff 0%, #f1592a 100%);
+        background: var(--auth-form-button);
         transition: opacity 0.3s ease;
         &.following {
           background: var(--auth-input-background);

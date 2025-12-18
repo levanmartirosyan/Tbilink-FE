@@ -138,6 +138,13 @@ export class Feed implements OnInit {
     }
   }
 
+  commentAdded(event: any) {
+    const index = this.postData.findIndex((post) => post.id === event.postId);
+    if (index !== -1) {
+      this.postData[index].commentCount = event.commentCount;
+    }
+  }
+
   toggleEditPostModal(post: any) {
     this.editPostModal = !this.editPostModal;
     this.selectedPost = post;

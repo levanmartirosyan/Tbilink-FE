@@ -1,44 +1,45 @@
 <div class="wrapper">
-  @if (userData?.isPublicProfile && userData != null || userData?.id ==
-  currentUserId) {
+  @if (isLoading) {
+  <app-spinner-loader></app-spinner-loader>
+  } @else { @if (userData && (userData.isPublicProfile || userData.id ==
+  currentUserId)) {
   <div class="item">
     <h4>Contact and Basic Information</h4>
-    @if (userData?.country !== null || userData?.city !== null) {
+    @if (userData.country || userData.city) {
     <div class="info-row">
       <lucide-icon name="map-pin" [size]="20"></lucide-icon>
-      <span>{{userData?.country + ',' + ' '+ userData?.city}}</span>
+      <span>{{ userData.country }}, {{ userData.city }}</span>
     </div>
-    } @if (userData?.showEmail) {
+    } @if (userData.showEmail) {
     <div class="info-row">
       <lucide-icon name="mail" [size]="20"></lucide-icon>
-      <span class="value">{{ userData?.email || 'Not provided' }}</span>
+      <span class="value">{{ userData.email || 'Not provided' }}</span>
     </div>
-    } @if (userData?.showPhone) {
+    } @if (userData.showPhone) {
     <div class="info-row">
       <lucide-icon name="phone" [size]="20"></lucide-icon>
-      <span class="value">{{ userData?.phoneNumber || 'Not provided' }}</span>
+      <span class="value">{{ userData.phoneNumber || 'Not provided' }}</span>
     </div>
     }
     <div class="info-row">
       <lucide-icon name="calendar" [size]="17"></lucide-icon>
-      <span>Joined: {{userData?.registerDate | date: "MMMM yyyy"}}</span>
+      <span>Joined: {{ userData.registerDate | date: "MMMM yyyy" }}</span>
     </div>
   </div>
+
   <div class="item">
     <h4>Bio</h4>
     <div class="info-row">
-      <span> {{userData?.description || 'No Description.'}}</span>
+      <span>{{ userData.description || 'No Description.' }}</span>
     </div>
   </div>
-  } @else if (!userData?.isPublicProfile && userData !== null && userData?.id
-  !== currentUserId) {
+  } @else if (userData && userData.id != currentUserId &&
+  !userData.isPublicProfile) {
   <div class="isPrivate">
     <div class="info-row">
       <lucide-icon name="lock" [size]="17"></lucide-icon>
       <span>Profile is private</span>
     </div>
   </div>
-  } @else {
-  <app-spinner-loader></app-spinner-loader>
-  }
+  } }
 </div>

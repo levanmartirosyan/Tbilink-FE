@@ -41,13 +41,15 @@ export class PostCard {
   @Input() postData: any;
 
   @Output() deletePostNewData = new EventEmitter<void>();
-  @Output() openEditPostModal = new EventEmitter<boolean>();
+  @Output() openEditPostModal = new EventEmitter<any>();
   @Output() openCommentModal = new EventEmitter<any>();
 
   @ViewChild('settingsWrapper', { read: ElementRef })
   settingsWrapper!: ElementRef;
 
   public env: any = env;
+
+  public isLiking: boolean = false;
 
   get userHasLiked(): boolean {
     return this.postData?.isLikedByCurrentUser || false;
@@ -61,7 +63,8 @@ export class PostCard {
   public editPostModal: boolean = false;
   toggleEditPostModal() {
     this.editPostModal = !this.editPostModal;
-    this.openEditPostModal.emit(this.postSettingsMenu);
+    // emit the post data so parent components receive the item to edit
+    this.openEditPostModal.emit(this.postData);
   }
 
   @HostListener('document:click', ['$event'])
@@ -131,20 +134,34 @@ export class PostCard {
 
   likePost() {
     if (!this.postData?.id) return;
+    if (this.isLiking) return;
 
-    this.postData.isLikedByCurrentUser = !this.postData.isLikedByCurrentUser;
-    this.postData.likeCount += this.postData.isLikedByCurrentUser ? 1 : -1;
+    this.isLiking = true;
+
+    const prevLiked = !!this.postData.isLikedByCurrentUser;
+    const prevCount =
+      typeof this.postData.likeCount === 'number' ? this.postData.likeCount : 0;
+
+    this.postData.isLikedByCurrentUser = !prevLiked;
+    this.postData.likeCount =
+      prevCount + (this.postData.isLikedByCurrentUser ? 1 : -1);
 
     this.apiService.likePost(this.postData.id).subscribe({
       next: (data: any) => {
-        console.log(data);
-        this.getAllPosts();
+        if (data && data.data) {
+          this.postData.isLikedByCurrentUser = data.data.isLikedByCurrentUser;
+          this.postData.likeCount = data.data.likeCount;
+        } else if (data && typeof data.likeCount === 'number') {
+          this.postData.likeCount = data.likeCount;
+        }
+        this.isLiking = false;
       },
       error: (err: any) => {
         console.log(err);
-        this.postData.isLikedByCurrentUser =
-          !this.postData.isLikedByCurrentUser;
-        this.postData.likeCount += this.postData.isLikedByCurrentUser ? 1 : -1;
+        this.postData.isLikedByCurrentUser = prevLiked;
+        this.postData.likeCount = prevCount;
+        this.isLiking = false;
+        this.toastService.error(err?.error?.message || 'Failed to like post.');
       },
     });
   }

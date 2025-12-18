@@ -3,36 +3,14 @@
     <p>{{userData?.description || 'No Description.'}}</p>
   </div>
   <div class="btns">
-    @if (userData?.id !== currentUserId) {
-    <div class="follow btn">
-      <lucide-icon name="user-plus" [size]="16"></lucide-icon>
-      <p>Follow</p>
-    </div>
-    <div class="message btn">
-      <lucide-icon name="message-circle" [size]="16"></lucide-icon>
-      <p>Message</p>
-    </div>
+    @if (userData?.id !== currentUserId ) {
+    <app-follow-action
+      [userData]="userData"
+      [followStats]="followStats"
+      (followToggled)="onFollowToggled($event)"
+      (message)="onMessage($event)"
+    ></app-follow-action>
     }
-    <!-- @if (userData?.id == currentUserId) {
-    <div class="settings btn" #settingsWrapper (click)="toggleSettingsMenu()">
-      <lucide-icon name="cog" [size]="22"></lucide-icon>
-
-      <div class="settings-menu user-select-none" [class.active]="settingsMenu">
-        <div class="menu-item" routerLink="/settings">
-          <lucide-icon name="user-pen" [size]="17"></lucide-icon>
-          <p>Edit Profile</p>
-        </div>
-        <div class="menu-item">
-          <lucide-icon name="share-2" [size]="17"></lucide-icon>
-          <p>Share Profile</p>
-        </div>
-        <div class="menu-item" (click)="logout()">
-          <lucide-icon name="log-out" [size]="17"></lucide-icon>
-          <p>Log Out</p>
-        </div>
-      </div>
-    </div>
-    } -->
   </div>
   <div class="followers-counter">
     <div class="counter">
@@ -41,12 +19,18 @@
     </div>
     <div class="separator"></div>
     <div class="counter">
-      <span>{{userData?.followersCount | formatNumber}}</span>
+      <span
+        >{{ (followStats?.followersCount ?? userData?.followersCount) |
+        formatNumber }}</span
+      >
       <p>Followers</p>
     </div>
     <div class="separator"></div>
     <div class="counter">
-      <span>{{userData?.followingCount | formatNumber}}</span>
+      <span
+        >{{ (followStats?.followingCount ?? userData?.followingCount) |
+        formatNumber }}</span
+      >
       <p>Followings</p>
     </div>
   </div>

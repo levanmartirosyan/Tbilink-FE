@@ -163,7 +163,6 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
 
   onScroll(): void {
     const el = this.messagesContainer.nativeElement;
-    // If user is within 100px of bottom, auto-scroll is enabled
     this.shouldScroll = el.scrollHeight - el.scrollTop - el.clientHeight < 100;
   }
 
@@ -200,6 +199,14 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
     if (!files || files.length === 0) return;
 
     const file = files[0];
+    const MAX_FILE_SIZE = 10 * 1024 * 1024;
+    if (file.size > MAX_FILE_SIZE) {
+      this.toastService.error(
+        'File is too large. Maximum allowed size is 10 MB'
+      );
+      input.value = '';
+      return;
+    }
     this.uploadAttachment(file);
 
     input.value = '';
@@ -260,7 +267,6 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
     clearTimeout(this.typingTimeout);
     this.signalRService.stopTyping(otherUser.id);
 
-    // Enable scrolling when user sends a message
     this.shouldScroll = true;
 
     this.signalRService.sendMessage(otherUser.id, content);

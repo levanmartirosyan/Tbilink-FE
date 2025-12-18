@@ -40,10 +40,10 @@
   [postData]="selectedCommentPost"
   [toggleCommentModal]="closeCommentModal.bind(this)"
 ></app-comment-modal>
-} @if (editPostModal && selectedEditPost) {
+}@if (editPostModal && selectedEditPost) {
 <app-edit-post-modal
   [postData]="selectedEditPost"
   [toggleEditPostModal]="closeEditPostModal.bind(this)"
-  (postUpdated)="onPostUpdated()"
+  (postUpdated)="onPostUpdated($event)"
 ></app-edit-post-modal>
 }

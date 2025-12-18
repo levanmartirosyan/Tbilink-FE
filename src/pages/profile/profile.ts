@@ -50,6 +50,8 @@ export class Profile implements OnInit, OnDestroy {
 
   public currentUserId?: string;
   public userData?: FullUser;
+  public followStats?: any;
+  private pendingToggles: Record<string, boolean> = {};
   public profileRoute: any = '';
   public username: any;
   public env: any = env;
@@ -83,15 +85,79 @@ export class Profile implements OnInit, OnDestroy {
         next: (data: any) => {
           console.log(data);
           this.userData = data.data;
-          if (this.userData?.id === parseInt(this.currentUserId || '0')) {
-            this.commonService.setProfileUserData(this.userData);
-          }
+          // fetch shared follow stats for child components
+          if (this.userData?.id) this.getFollowStats();
+          const dataUser = {};
+          console.log(data.data);
         },
         error: (error: any) => {
           console.log(error);
           this.router.navigate(['/not-found']);
         },
       });
+  }
+
+  public getFollowStats(): void {
+    if (!this.userData?.id) return;
+    this.api
+      .getFollowStats(this.userData.id.toString())
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res: any) => {
+        this.followStats = res.data;
+        this.userData!.followersCount = res.data.followersCount;
+        this.userData!.followingCount = res.data.followingCount;
+        // clear pending flag for this user
+        if (this.userData?.id) {
+          this.pendingToggles[this.userData.id] = false;
+        }
+        if (this.followStats) this.followStats.isProcessing = false;
+      });
+  }
+
+  onChildFollowToggled(event: any) {
+    if (!event || !this.userData || this.userData.id !== event.userId) return;
+
+    const userId = event.userId;
+    this.followStats = this.followStats || {};
+
+    // If optimistic: treat as a toggle request. Centralize API call here and prevent duplicates.
+    if (event.optimistic === true) {
+      if (this.pendingToggles[userId]) return; // already processing
+      // compute optimistic count based on authoritative source
+      const baseCount =
+        this.followStats.followersCount ?? this.userData.followersCount ?? 0;
+      let optimisticFollowersCount =
+        typeof event.followersCount !== 'undefined'
+          ? event.followersCount
+          : baseCount + (event.isFollowing ? 1 : -1);
+      if (optimisticFollowersCount < 0) optimisticFollowersCount = 0;
+
+      this.followStats.isFollowing = event.isFollowing;
+      this.followStats.followersCount = optimisticFollowersCount;
+      this.userData.followersCount = optimisticFollowersCount;
+
+      this.pendingToggles[userId] = true;
+      this.followStats.isProcessing = true;
+
+      this.api
+        .toggleFollowUser(userId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: () => {
+            this.getFollowStats();
+          },
+          error: () => {
+            this.getFollowStats();
+          },
+        });
+
+      return;
+    }
+
+    // Authoritative/non-optimistic event: refresh authoritative stats
+    if (event.optimistic === false) {
+      this.getFollowStats();
+    }
   }
 
   @ViewChild('settingsWrapper', { read: ElementRef })

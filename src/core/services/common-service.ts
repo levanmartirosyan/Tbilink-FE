@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { ChatParticipantDto } from '../interfaces/message-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -99,5 +100,18 @@ export class CommonService {
 
   getSearchKeyword() {
     return this.searchKeyword.asObservable();
+  }
+
+  private chatRecipientId = new BehaviorSubject<ChatParticipantDto | null>(
+    null
+  );
+  chatRecipientId$ = this.chatRecipientId.asObservable();
+
+  setChatRecipientId(user: ChatParticipantDto | null) {
+    this.chatRecipientId.next(user);
+  }
+
+  getChatRecipientId() {
+    return this.chatRecipientId.asObservable();
   }
 }

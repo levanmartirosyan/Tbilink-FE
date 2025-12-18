@@ -18,6 +18,7 @@ import { Router } from '@angular/router';
 import { first } from 'rxjs';
 import { CodeType } from '../../../../../../core/enums/code-types';
 import { ModalComponent } from '../../../../../../shared/modal/modal';
+import { MaskEmailPipe } from '../../../../../../core/pipes/mask-email-pipe';
 
 @Component({
   selector: 'app-account',
@@ -27,6 +28,7 @@ import { ModalComponent } from '../../../../../../shared/modal/modal';
     ReactiveFormsModule,
     LucideAngularModule,
     ModalComponent,
+    MaskEmailPipe,
   ],
   templateUrl: './account.html',
   styleUrl: './account.scss',

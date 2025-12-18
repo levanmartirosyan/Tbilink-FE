@@ -114,11 +114,16 @@
     </div>
     } @if (verificationCodeSent) {
     <div class="verification-info">
-      <p>Verification code has been sent to <strong>{{ newEmail }}</strong></p>
+      <p style="text-align: center">
+        Verification code has been sent to -
+        <strong>{{ newEmail | maskEmail }}</strong>
+      </p>
     </div>
 
-    <div class="form-group">
-      <label class="form-label">Verification Code</label>
+    <div class="form-group" style="margin-top: 10px">
+      <label class="form-label" style="text-align: center"
+        >Verification Code</label
+      >
       <div class="otp-wrapper">
         @for (digit of otpDigits; track $index; let i = $index) {
         <input

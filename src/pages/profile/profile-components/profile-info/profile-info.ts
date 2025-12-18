@@ -1,10 +1,11 @@
 import {
   Component,
   ElementRef,
+  EventEmitter,
   HostListener,
   Input,
   OnChanges,
-  OnInit,
+  Output,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -12,16 +13,18 @@ import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../../../core/services/user-service';
 import { LucideAngularModule } from 'lucide-angular';
 import { CommonModule } from '@angular/common';
+import { FollowAction } from '../follow-action/follow-action';
 import { env } from '../../../../enviroment/enviroment';
 import { ApiService } from '../../../../core/services/api-service';
 
 @Component({
   selector: 'app-profile-info',
-  imports: [LucideAngularModule, CommonModule, RouterModule],
+  imports: [LucideAngularModule, CommonModule, RouterModule, FollowAction],
   templateUrl: './profile-info.html',
   styleUrl: './profile-info.scss',
 })
 export class ProfileInfo implements OnChanges {
+  @Output() followToggled = new EventEmitter<any>();
   constructor(
     private userService: UserService,
     private router: Router,
@@ -31,10 +34,8 @@ export class ProfileInfo implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['userData'].currentValue) {
+    if (changes['userData'] && changes['userData'].currentValue) {
       console.log(changes['userData'].currentValue);
-
-      this.getFollowStats();
     }
   }
 
@@ -43,6 +44,7 @@ export class ProfileInfo implements OnChanges {
   // }
 
   @Input() userData?: any;
+  @Input() followStats?: any;
   public currentUserId?: string;
 
   @ViewChild('settingsWrapper', { read: ElementRef })
@@ -77,18 +79,35 @@ export class ProfileInfo implements OnChanges {
   }
 
   followUser() {
-    this.api.toggleFollowUser(this.userData.id).subscribe((res: any) => {
-      this.getFollowStats();
+    // emit optimistic toggle request only; parent will perform API and authoritative sync
+    if (!this.userData) return;
+    const userId = this.userData.id;
+    const baseCount =
+      this.followStats?.followersCount ?? this.userData.followersCount ?? 0;
+    const optimisticIsFollowing = !this.followStats?.isFollowing;
+    let optimisticFollowersCount = baseCount + (optimisticIsFollowing ? 1 : -1);
+    if (optimisticFollowersCount < 0) optimisticFollowersCount = 0;
+
+    this.followToggled.emit({
+      userId,
+      isFollowing: optimisticIsFollowing,
+      followersCount: optimisticFollowersCount,
+      optimistic: true,
     });
   }
 
-  public followStats: any;
+  onFollowToggled(event: any) {
+    if (!event || !this.userData || this.userData.id !== event.userId) return;
+    // apply optimistic state immediately
+    this.followStats = this.followStats || {};
+    this.followStats.isFollowing = event.isFollowing;
+    this.userData.followersCount = event.followersCount;
 
-  getFollowStats() {
-    this.api.getFollowStats(this.userData.id).subscribe((res: any) => {
-      this.userData.followersCount = res.data.followersCount;
-      this.userData.followingCount = res.data.followingCount;
-      this.followStats = res.data;
-    });
+    // Re-emit the follow event upward so the parent can sync shared state
+    this.followToggled.emit(event);
+  }
+
+  onMessage(_: any) {
+    // placeholder for opening message UI
   }
 }

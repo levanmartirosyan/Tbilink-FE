@@ -26,6 +26,6 @@
 <app-edit-post-modal
   [postData]="selectedEditPost"
   [toggleEditPostModal]="closeEditPostModal.bind(this)"
-  (postUpdated)="onPostUpdated()"
+  (postUpdated)="onPostUpdated($event)"
 ></app-edit-post-modal>
 }

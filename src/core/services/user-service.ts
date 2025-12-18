@@ -5,6 +5,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { SignalRService } from './signal-r-service';
 import { HttpClient } from '@angular/common/http';
 import { env } from '../../enviroment/enviroment';
+import { ApiService } from './api-service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ export class UserService {
   constructor(
     private cookies: CookieService,
     private signalRService: SignalRService,
-    private http: HttpClient
+    private api: ApiService
   ) {
     const savedUser = cookies.get(this.USER_COOKIE_KEY);
     if (savedUser) {
@@ -70,7 +71,7 @@ export class UserService {
   }
 
   private fetchInitialUnreadCounts(): void {
-    this.http.get<any>(env.publicUrl + 'message/chats').subscribe({
+    this.api.getAllChats().subscribe({
       next: (response: any) => {
         if (response?.data) {
           const unreadCounts: Record<number, number> = {};

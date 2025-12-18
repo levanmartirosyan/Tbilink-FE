@@ -29,22 +29,11 @@
   </div>
   <div class="btns">
     @if (userData?.id !== currentUserId && followStats) {
-    <div
-      class="follow btn"
-      [class.following]="followStats?.isFollowing"
-      (click)="followUser()"
-    >
-      <lucide-icon
-        [name]="followStats?.isFollowing ? 'user-check' : 'user-plus'"
-        [size]="16"
-      ></lucide-icon>
-      <p>{{followStats?.isFollowing ? 'Following' : 'Follow'}}</p>
-    </div>
-
-    <div class="message btn">
-      <lucide-icon name="message-circle" [size]="16"></lucide-icon>
-      <p>Message</p>
-    </div>
+    <app-follow-action
+      [userData]="userData"
+      [followStats]="followStats"
+      (followToggled)="onFollowToggled($event)"
+    ></app-follow-action>
     } @if (userData?.id == currentUserId) {
     <div class="settings btn" #settingsWrapper (click)="toggleSettingsMenu()">
       <lucide-icon name="cog" [size]="22"></lucide-icon>

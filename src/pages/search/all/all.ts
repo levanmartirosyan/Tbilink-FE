@@ -111,12 +111,32 @@ export class All implements OnInit {
   }
 
   public onPostDeleted(refreshData: any): void {
-    // Reload search data instead of using getAllPosts data
-    this.loadDefaultData();
+    const postId = refreshData && refreshData.id ? refreshData.id : refreshData;
+    if (this.searchData?.posts) {
+      this.searchData.posts = this.searchData.posts.filter(
+        (post: any) => post.id !== postId
+      );
+    }
   }
 
-  public onPostUpdated(): void {
-    this.loadDefaultData();
+  public onPostUpdated(updatedPost: any): void {
+    if (!updatedPost) {
+      this.loadDefaultData();
+      this.closeEditPostModal();
+      return;
+    }
+
+    if (this.searchData?.posts) {
+      const idx = this.searchData.posts.findIndex(
+        (p: any) => p.id === updatedPost.id
+      );
+      if (idx !== -1) {
+        this.searchData.posts[idx] = updatedPost;
+      } else {
+        this.loadDefaultData();
+      }
+    }
+
     this.closeEditPostModal();
   }
 

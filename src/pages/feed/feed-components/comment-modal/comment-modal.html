@@ -77,7 +77,37 @@
                 >{{ comment.createdAt | relativeTimePipe: 'chat'}}</span
               >
             </div>
-            <p class="cont">{{ comment.content }}</p>
+            <div class="comment-body">
+              @if (editingCommentId !== comment.id) {
+              <div>
+                <p class="cont">{{ comment.content }}</p>
+              </div>
+              } @if (editingCommentId === comment.id) {
+              <div class="edit-wrapper">
+                <textarea
+                  [(ngModel)]="editingContent"
+                  class="edit-input"
+                ></textarea>
+                <div class="edit-actions">
+                  <button
+                    type="button"
+                    class="save-btn"
+                    (click)="saveEdit(comment.id, $index)"
+                    [disabled]="savingEdits[comment.id]"
+                  >
+                    Save
+                  </button>
+                  <button
+                    type="button"
+                    class="cancel-btn"
+                    (click)="cancelEdit()"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+              }
+            </div>
             <div class="comment-actions">
               <div class="like-section">
                 @if (comment.isLikedByCurrentUser) {
@@ -111,11 +141,19 @@
                 <span>{{ comment.likeCount || 0 }}</span>
               </div>
               @if (comment.userId === userService.getUser()?.data?.id ||
-              userService.isAdmin()) {
-              <span class="delete" (click)="deleteComment(comment.id, $index)"
-                ><lucide-icon name="trash-2" [size]="18"></lucide-icon
-              ></span>
-              }
+              userService.isAdmin()) { @if (editingCommentId !== comment.id) {
+              <div class="actionBtns">
+                <span class="edit" (click)="startEdit(comment.id, $index)">
+                  <lucide-icon name="pencil" [size]="18"></lucide-icon>
+                </span>
+                <span
+                  class="delete"
+                  (click)="deleteComment(comment.id, $index)"
+                >
+                  <lucide-icon name="trash-2" [size]="18"></lucide-icon>
+                </span>
+              </div>
+              } }
             </div>
           </div>
         </div>

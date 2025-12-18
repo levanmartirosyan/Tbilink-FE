@@ -2,10 +2,17 @@
   .description-followers {
     padding: 0 28px;
     margin-top: 30px;
+    overflow: hidden;
     .descr {
       p {
         font-size: 15px;
         color: var(--text-unfocused);
+        line-height: 22px;
+        text-align: left;
+        white-space: pre-wrap;
+        word-break: break-word;
+        max-height: 66px;
+        overflow-y: auto;
       }
     }
     .btns {
@@ -33,7 +40,7 @@
         }
       }
       .follow {
-        background: linear-gradient(90deg, #7572ff 0%, #f1592a 100%);
+        background: var(--auth-form-button);
         transition: opacity 0.3s ease;
         &.following {
           background: var(--auth-input-background);

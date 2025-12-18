@@ -125,6 +125,10 @@ export class ApiService {
     return this.http.post(this.url + `post/${postId}/like`, {});
   }
 
+  getPostCounts(postId: string) {
+    return this.http.get(this.url + `post/${postId}/counts`);
+  }
+
   sendMessage(messageBody: SendMessageRequest) {
     return this.http.post(this.url + 'message/send', messageBody);
   }
@@ -153,8 +157,9 @@ export class ApiService {
   }
 
   updateComment(commentId: string, content: string) {
-    return this.http.put(this.url + `post/comments/${commentId}/update`, {
-      content,
+    return this.http.put(this.url + `post/comments/update`, {
+      id: commentId,
+      content: content,
     });
   }
 

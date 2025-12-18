@@ -1,0 +1,41 @@
+.follow-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .btn {
+    padding: 0 20px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 12px;
+    cursor: pointer;
+    p {
+      font-size: 14px;
+      font-weight: bold;
+    }
+    lucide-icon {
+      width: 16px;
+      height: 16px;
+    }
+  }
+  .follow {
+    background: var(--auth-form-button);
+    transition: opacity 0.3s ease;
+    &.following {
+      background: var(--auth-input-background);
+    }
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+  .message {
+    background: var(--auth-input-background);
+    transition: 0.3s ease;
+    &:hover {
+      background-color: var(--auth-input-border);
+    }
+  }
+}
