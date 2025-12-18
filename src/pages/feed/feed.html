@@ -4,9 +4,10 @@
     @for (post of postData; track $index) {
     <app-post-card
       [postData]="post"
-      (deletePostNewData)="getNewPosts($event)"
+      (deletePostNewData)="deletePostNewData($event)"
       (openEditPostModal)="toggleEditPostModal(post)"
       (openCommentModal)="toggleCommentModal($event)"
+      (newPostCreated)="getNewPosts($event)"
     ></app-post-card>
 
     } @if (isLoading) {
@@ -19,7 +20,7 @@
 <app-edit-post-modal
   [postData]="selectedPost"
   [toggleEditPostModal]="closeEditPostModal"
-  (postUpdated)="getAllPosts()"
+  (postUpdated)="postUpdated($event)"
 ></app-edit-post-modal>
 } @if (commentModal && selectedCommentPost) {
 <app-comment-modal

@@ -87,7 +87,7 @@ export class PostCard {
         console.log(data);
         this.postSettingsMenu = false;
         this.toastService.success('Post deleted successfully.');
-        this.getAllPosts();
+        this.deletePostNewData.emit(this.postData.id);
       },
       error: (err: any) => {
         console.log(err);
@@ -132,7 +132,6 @@ export class PostCard {
   likePost() {
     if (!this.postData?.id) return;
 
-    // Optimistic update
     this.postData.isLikedByCurrentUser = !this.postData.isLikedByCurrentUser;
     this.postData.likeCount += this.postData.isLikedByCurrentUser ? 1 : -1;
 
@@ -143,7 +142,6 @@ export class PostCard {
       },
       error: (err: any) => {
         console.log(err);
-        // Revert on error
         this.postData.isLikedByCurrentUser =
           !this.postData.isLikedByCurrentUser;
         this.postData.likeCount += this.postData.isLikedByCurrentUser ? 1 : -1;

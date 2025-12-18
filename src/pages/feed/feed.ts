@@ -42,7 +42,7 @@ export class Feed implements OnInit {
   private hasMorePosts = true;
   private scrollTimeout: any = null;
 
-  getAllPosts() {
+  getAllPosts(currentPage?: number) {
     if (this.isLoading || !this.hasMorePosts) {
       console.log(
         'Load blocked - isLoading:',
@@ -51,6 +51,10 @@ export class Feed implements OnInit {
         this.hasMorePosts
       );
       return;
+    }
+    if (currentPage) {
+      this.currentPage = currentPage;
+      this.hasMorePosts = true;
     }
 
     this.isLoading = true;
@@ -65,7 +69,6 @@ export class Feed implements OnInit {
           'posts'
         );
 
-        // Access response.data.data for paginated posts
         const newPosts = response.data.data.sort(
           (a: any, b: any) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -107,9 +110,7 @@ export class Feed implements OnInit {
     const clientHeight = event.target.clientHeight;
     const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
 
-    // Load more when scrolled to 85% of page
     if (scrollPercentage > 0.85 && !this.isLoading && this.hasMorePosts) {
-      // Debounce the scroll event
       if (this.scrollTimeout) clearTimeout(this.scrollTimeout);
 
       this.scrollTimeout = setTimeout(() => {
@@ -123,10 +124,18 @@ export class Feed implements OnInit {
   }
 
   getNewPosts(event: any) {
-    this.postData = event.sort(
-      (a: any, b: any) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
+    this.postData = [event, ...this.postData];
+  }
+
+  deletePostNewData(event: any) {
+    this.postData = this.postData.filter((post) => post.id !== event);
+  }
+
+  postUpdated(event: any) {
+    const index = this.postData.findIndex((post) => post.id === event.id);
+    if (index !== -1) {
+      this.postData[index] = event;
+    }
   }
 
   toggleEditPostModal(post: any) {

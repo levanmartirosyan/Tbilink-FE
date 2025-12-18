@@ -84,7 +84,7 @@ export class CommentModal implements OnInit {
       next: (response: any) => {
         this.toastService.success('Comment added successfully.');
         this.commentForm.reset();
-        this.loadComments();
+        this.comments.unshift(response.data);
       },
       error: (err: any) => {
         console.log('Error adding comment:', err);

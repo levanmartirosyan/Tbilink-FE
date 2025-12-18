@@ -83,7 +83,9 @@ export class Profile implements OnInit, OnDestroy {
         next: (data: any) => {
           console.log(data);
           this.userData = data.data;
-          this.commonService.setProfileUserData(this.userData);
+          if (this.userData?.id === parseInt(this.currentUserId || '0')) {
+            this.commonService.setProfileUserData(this.userData);
+          }
         },
         error: (error: any) => {
           console.log(error);

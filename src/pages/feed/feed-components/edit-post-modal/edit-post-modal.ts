@@ -130,7 +130,7 @@ export class EditPostModal implements OnInit, OnChanges {
     this.apiService.updatePost(updateData).subscribe({
       next: (postData: any) => {
         this.toastService.success('Post updated successfully.');
-        this.postUpdated.emit();
+        this.postUpdated.emit(postData.data);
         if (this.toggleEditPostModal) {
           this.toggleEditPostModal();
         }

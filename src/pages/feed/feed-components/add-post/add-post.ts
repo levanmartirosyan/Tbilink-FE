@@ -146,7 +146,7 @@ export class AddPost implements OnInit, OnDestroy {
         this.selectedFile = null;
         this.filePreview = null;
         this.isLoading = false;
-        this.getAllPosts();
+        this.newPostCreated.emit(postData.data);
       },
       error: (err: any) => {
         console.log('Post creation failed:', err);
