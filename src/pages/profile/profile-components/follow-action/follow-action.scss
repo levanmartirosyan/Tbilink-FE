@@ -24,6 +24,7 @@
   .follow {
     background: var(--auth-form-button);
     transition: opacity 0.3s ease;
+    color: #fff;
     &.following {
       background: var(--auth-input-background);
     }

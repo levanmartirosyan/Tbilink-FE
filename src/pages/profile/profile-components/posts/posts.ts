@@ -5,19 +5,23 @@ import { IPost } from '../../../../core/interfaces/IPost';
 import { switchMap } from 'rxjs';
 import { LucideAngularModule } from 'lucide-angular';
 import { SpinnerLoader } from '../../../../shared/loadings/spinner-loader/spinner-loader';
+import { CommentModal } from '../../../feed/feed-components/comment-modal/comment-modal';
 import { ActivatedRoute } from '@angular/router';
 import { CommonService } from '../../../../core/services/common-service';
 import { UserService } from '../../../../core/services/user-service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-posts',
-  imports: [LucideAngularModule, SpinnerLoader],
+  imports: [LucideAngularModule, SpinnerLoader, CommentModal, CommonModule],
   templateUrl: './posts.html',
   styleUrl: './posts.scss',
 })
 export class Posts implements OnInit {
   public data: IPost[] = [];
   public isLoading = true;
+  public commentModal: boolean = false;
+  public selectedCommentPost: any = null;
   constructor(
     private apiService: ApiService,
     private activatedRoute: ActivatedRoute,
@@ -56,5 +60,21 @@ export class Posts implements OnInit {
           this.isLoading = false;
         },
       });
+  }
+
+  toggleCommentModal(post: any) {
+    this.commentModal = !this.commentModal;
+    this.selectedCommentPost = post;
+  }
+
+  closeCommentModal = () => {
+    this.commentModal = false;
+  };
+
+  commentAddedHandler(event: any) {
+    const index = this.data.findIndex((p) => p.id === event.postId);
+    if (index !== -1) {
+      this.data[index].commentCount = event.commentCount;
+    }
   }
 }

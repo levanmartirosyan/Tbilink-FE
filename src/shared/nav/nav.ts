@@ -31,13 +31,16 @@ export class Nav implements OnInit, OnDestroy {
 
   @ViewChild('profileWrapper', { read: ElementRef })
   profileWrapper!: ElementRef;
+  public currentUserId?: string;
 
   constructor(
     private router: Router,
     private el: ElementRef,
     public userService: UserService,
     public signalRService: SignalRService
-  ) {}
+  ) {
+    this.currentUserId = this.userService.getUser()?.data.id;
+  }
 
   public userData!: User | null;
   private destroy$ = new Subject<void>();

@@ -28,9 +28,9 @@
     <span class="timestamp"
       >{{chatData.lastActivity | relativeTimePipe: 'chat'}}</span
     >
-    @if (getUnreadCount() > 0) {
+    @if (unreadCount > 0) {
     <div class="unread-badge">
-      <span>{{getUnreadCount()}}</span>
+      <span>{{unreadCount}}</span>
     </div>
     }
   </div>

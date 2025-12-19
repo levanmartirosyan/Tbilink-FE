@@ -16,6 +16,7 @@ import { CommonModule } from '@angular/common';
 import { FollowAction } from '../follow-action/follow-action';
 import { env } from '../../../../enviroment/enviroment';
 import { ApiService } from '../../../../core/services/api-service';
+import { ToastService } from '../../../../core/services/toast-service';
 
 @Component({
   selector: 'app-profile-info',
@@ -28,7 +29,8 @@ export class ProfileInfo implements OnChanges {
   constructor(
     private userService: UserService,
     private router: Router,
-    private api: ApiService
+    private api: ApiService,
+    private toast: ToastService
   ) {
     this.currentUserId = this.userService.getUser()?.data.id;
   }
@@ -79,7 +81,6 @@ export class ProfileInfo implements OnChanges {
   }
 
   followUser() {
-    // emit optimistic toggle request only; parent will perform API and authoritative sync
     if (!this.userData) return;
     const userId = this.userData.id;
     const baseCount =
@@ -98,16 +99,17 @@ export class ProfileInfo implements OnChanges {
 
   onFollowToggled(event: any) {
     if (!event || !this.userData || this.userData.id !== event.userId) return;
-    // apply optimistic state immediately
     this.followStats = this.followStats || {};
     this.followStats.isFollowing = event.isFollowing;
     this.userData.followersCount = event.followersCount;
 
-    // Re-emit the follow event upward so the parent can sync shared state
     this.followToggled.emit(event);
   }
 
-  onMessage(_: any) {
-    // placeholder for opening message UI
+  shareProfile() {
+    const profileUrl = `${window.location.origin}/profile/${this.userData.userName}`;
+    navigator.clipboard.writeText(profileUrl).then(() => {
+      this.toast.info('Profile link copied to clipboard!');
+    });
   }
 }

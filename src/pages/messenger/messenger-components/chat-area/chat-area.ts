@@ -50,6 +50,7 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
   editContent: string = '';
   private lastMessageCount = 0;
   private shouldScroll = true;
+  loadingInitial: boolean = false;
 
   showEmojiPicker = false;
 
@@ -75,11 +76,24 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
       const messages = this.chatMessages();
       if (messages && messages.length > 0) {
         if (messages.length > this.lastMessageCount) {
+          const wasEmpty = this.lastMessageCount === 0;
           this.lastMessageCount = messages.length;
           if (this.shouldScroll) {
-            setTimeout(() => this.scrollToBottom(true), 50);
+            setTimeout(() => {
+              this.scrollToBottom(true);
+              if (wasEmpty && this.loadingInitial) {
+                setTimeout(() => (this.loadingInitial = false), 120);
+              }
+            }, 50);
           }
         }
+      } else if (
+        messages &&
+        messages.length === 0 &&
+        this.lastMessageCount === 0
+      ) {
+        // If server returned an empty thread, hide loader
+        this.loadingInitial = false;
       }
     });
 
@@ -121,6 +135,13 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
    * Go back to chat list (mobile)
    */
   goBack(): void {
+    // Ensure we disconnect from the message hub so this connection
+    // is removed from the chat group and messages are not marked as read.
+    try {
+      this.signalRService.disconnectFromMessageHub();
+    } catch (e) {
+      console.warn('Error disconnecting from message hub on goBack', e);
+    }
     this.backToList.emit();
   }
 
@@ -134,6 +155,7 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
 
       if (otherUser?.id && currentUser) {
         this.signalRService.disconnectFromMessageHub();
+        this.loadingInitial = true;
 
         this.signalRService.connectToMessageHub(currentUser, otherUser.id);
 
@@ -347,7 +369,6 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
     this.signalRService.stopTyping(other.id);
   }
 
-  // Check if the other user is typing - reads from signal for reactivity
   isOtherUserTyping(): boolean {
     const other = this.otherUserId?.[0];
     if (!other?.id) return false;
@@ -355,10 +376,9 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
     return !!typing?.[String(other.id)];
   }
 
-  // Check if this is the first message of a minute group
   isFirstMessageOfMinute(message: any, index: number): boolean {
     const messages = this.chatMessages();
-    if (index === 0) return true; // First message always shows timestamp
+    if (index === 0) return true;
 
     const currentMessageTime = new Date(message.messageSent);
     const currentMinute =
@@ -372,17 +392,14 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
     return currentMinute !== prevMinute;
   }
 
-  // Check if this is the very last sent message in the conversation
   isLastSentMessage(message: any, index: number): boolean {
     const messages = this.chatMessages();
     const currentUserId = +(this.userService.getUser()?.data?.id || 0);
 
-    // Only check for sent messages
     if (message?.senderId !== currentUserId) {
       return false;
     }
 
-    // Find the last message we sent in the entire conversation
     for (let i = messages.length - 1; i >= 0; i--) {
       if (messages[i].senderId === currentUserId) {
         return messages[i].id === message.id;
@@ -392,16 +409,6 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
     return false;
   }
 
-  // Get read status text
-  getReadStatus(message: any): string {
-    // If dateRead is null/undefined, message is delivered but not read
-    if (message?.dateRead) {
-      return 'Seen';
-    }
-    return 'Delivered';
-  }
-
-  // Extract attachment URL from message content
   getAttachmentUrl(content: string): string {
     const index = content.indexOf(']');
     if (index !== -1) {
@@ -410,22 +417,18 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
     return content;
   }
 
-  // Check if message is an image attachment
   isImageAttachment(content: string): boolean {
     return content.startsWith('[IMAGE]');
   }
 
-  // Check if message is a video attachment
   isVideoAttachment(content: string): boolean {
     return content.startsWith('[VIDEO]');
   }
 
-  // Check if message is a file attachment
   isFileAttachment(content: string): boolean {
     return content.startsWith('[FILE]');
   }
 
-  // Check if message is any type of attachment
   isAttachment(content: string): boolean {
     return (
       this.isImageAttachment(content) ||
@@ -434,7 +437,6 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
     );
   }
 
-  // Download file from signed URL
   downloadAttachment(url: string, fileName: string = 'file'): void {
     const link = document.createElement('a');
     link.href = url;

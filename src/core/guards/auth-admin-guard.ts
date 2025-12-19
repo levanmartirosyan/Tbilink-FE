@@ -1,16 +1,25 @@
 import { CanActivateFn, Router } from '@angular/router';
 import { UserService } from '../services/user-service';
 import { inject } from '@angular/core';
+import { ApiService } from '../services/api-service';
+import { catchError, map, of } from 'rxjs';
 
 export const authAdminGuard: CanActivateFn = (route, state) => {
-  const userService = inject(UserService);
+  const api = inject(ApiService);
   const router = inject(Router);
 
-  const currentUser = userService.getUser()?.data.role;
-  if (currentUser !== 'Admin' && currentUser !== 'Owner') {
-    router.navigate(['/']);
-    return false;
-  }
+  return api.isAdminUser().pipe(
+    map((isAdmin: any) => {
+      if (isAdmin.data) {
+        return true;
+      }
 
-  return true;
+      router.navigate(['/']);
+      return false;
+    }),
+    catchError(() => {
+      router.navigate(['/']);
+      return of(false);
+    })
+  );
 };

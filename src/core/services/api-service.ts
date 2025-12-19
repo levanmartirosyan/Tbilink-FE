@@ -137,6 +137,17 @@ export class ApiService {
     return this.http.get(this.url + `message/thread/${recipientId}`);
   }
 
+  getMessageThreadPaginated(
+    recipientId: number,
+    pageNumber: number = 1,
+    pageSize: number = 20
+  ) {
+    return this.http.get(
+      this.url +
+        `message/thread/${recipientId}/paginated?pageNumber=${pageNumber}&pageSize=${pageSize}`
+    );
+  }
+
   getAllChats() {
     return this.http.get(this.url + 'message/chats');
   }
@@ -216,5 +227,19 @@ export class ApiService {
       this.url + 'user/change-password',
       changePasswordBody
     );
+  }
+
+  // Notification endpoints
+  getNotifications(userId: number) {
+    return this.http.get(this.url + `notification/user/${userId}`);
+  }
+
+  // Admin endpoints
+  getAllUsersAdmin() {
+    return this.http.get(this.url + 'admin/users/all');
+  }
+
+  isAdminUser() {
+    return this.http.get(this.url + 'admin/is-admin');
   }
 }

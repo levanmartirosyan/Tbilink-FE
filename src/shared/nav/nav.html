@@ -35,7 +35,21 @@
           ></div>
         </div>
 
-        <div class="profile-menu user-select-none" [class.active]="profileMenu">
+        <div
+          class="profile-menu user-select-none"
+          [class.active]="profileMenu"
+          [style.width.px]="userData?.data?.id == currentUserId && userData?.data?.role ===
+          'Admin' || userData?.data?.id == currentUserId && userData?.data?.role
+          === 'Owner' ? 140 : 110"
+        >
+          @if (userData?.data?.id == currentUserId && userData?.data?.role ===
+          'Admin' || userData?.data?.id == currentUserId && userData?.data?.role
+          === 'Owner') {
+          <div class="menu-item" routerLink="/admin">
+            <lucide-icon name="shield-user" [size]="17"></lucide-icon>
+            <p>Admin Panel</p>
+          </div>
+          }
           <div
             class="menu-item"
             [routerLink]="['/profile', userData?.data?.userName]"

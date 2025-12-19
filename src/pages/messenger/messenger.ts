@@ -140,28 +140,18 @@ export class Messenger implements OnInit, OnDestroy {
           const firstChatPartner = this.allChats[0].participants[0];
 
           if (firstChatPartner?.id) {
-            setTimeout(() => {
-              const user = this.userService.getUser();
-              this.commonService
-                .getChatRecipientId()
-                .pipe(take(1))
-                .subscribe((recipient) => {
-                  if (!recipient) {
-                    if (user) {
-                      console.log(
-                        'Auto-connecting to first chat (silent):',
-                        firstChatPartner.id
-                      );
-                      this.signalRService.connectToMessageHubSilent(
-                        user,
-                        firstChatPartner.id
-                      );
-                    }
-                  } else {
-                    this.selectChat([recipient]);
-                  }
-                });
-            }, 500);
+            // Do NOT auto-connect to the message hub silently here.
+            // Silent auto-connections caused messages to be marked as read
+            // on the server in some deployments. Only connect when the
+            // user explicitly opens a chat (handled by ChatArea).
+            this.commonService
+              .getChatRecipientId()
+              .pipe(take(1))
+              .subscribe((recipient) => {
+                if (recipient) {
+                  this.selectChat([recipient]);
+                }
+              });
           }
         }
         this.isLoading = false;
@@ -176,6 +166,12 @@ export class Messenger implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.commonService.setChatSelectOption(false);
     this.commonService.setChatRecipientId(null);
+
+    try {
+      this.signalRService.disconnectFromMessageHub();
+    } catch (e) {
+      console.warn('Error disconnecting from message hub on goBack', e);
+    }
   }
 
   isUserOnline(userId: string): boolean {
@@ -225,6 +221,12 @@ export class Messenger implements OnInit, OnDestroy {
   onBackToList(): void {
     this.isChatSelected = false;
     this.commonService.setChatSelectOption(false);
+
+    try {
+      this.signalRService.disconnectFromMessageHub();
+    } catch (e) {
+      console.warn('Error disconnecting from message hub on goBack', e);
+    }
   }
 
   private updateChatWithNewMessage(message: any): void {

@@ -10,18 +10,26 @@
   </div>
   } @else { @for (photo of data; track $index) { @if (photo.imageUrl !== null &&
   photo.imageUrl !== '') {
-  <div class="container">
+  <div class="container" (click)="openImageModal(photo)">
     <img [src]="env.storageUrl + photo.imageUrl" alt="photo" />
   </div>
-  } @else {
-  <div class="empty-state">
-    <lucide-icon name="image-off" [size]="28"></lucide-icon>
-    <p>No photos found</p>
-  </div>
-  }} @empty {
+  } } @empty {
   <div class="empty-state">
     <lucide-icon name="image-off" [size]="28"></lucide-icon>
     <p>No photos found</p>
   </div>
   } } }
 </div>
+
+@if (imageModal && selectedImageUrl) {
+<app-modal
+  class="photo-modal"
+  [isOpen]="imageModal"
+  [hideFooter]="true"
+  (onClose)="closeImageModal()"
+>
+  <div class="photo-modal-content">
+    <img [src]="selectedImageUrl" alt="photo" />
+  </div>
+</app-modal>
+}

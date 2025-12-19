@@ -93,7 +93,7 @@ export class AddPost implements OnInit, OnDestroy {
 
   uploadImage(): void {
     this.isLoading = true;
-    if (this.selectedFile === null) {
+    if (this.selectedFile == null) {
       this.addPostForm.patchValue({
         userId: this.userData?.data?.id,
       });
@@ -134,6 +134,7 @@ export class AddPost implements OnInit, OnDestroy {
   createPost(): void {
     this.isLoading = true;
     if (!this.addPostForm.valid) {
+      this.isLoading = false;
       return this.toastService.error('Please fill in all required fields.');
     }
 

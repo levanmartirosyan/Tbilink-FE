@@ -108,7 +108,9 @@
           }
         </div>
         @if (isSent(message) && isLastSentMessage(message, $index)) {
-        <span class="read-status">{{ getReadStatus(message) }}</span>
+        <span class="read-status"
+          >{{ message.dateRead ? 'Seen' : 'Delivered' }}</span
+        >
         }
       </div>
       } @if (isOtherUserTyping()) {
@@ -165,6 +167,5 @@
       </button>
     </div>
   </div>
-
   }
 </div>

@@ -45,6 +45,12 @@
   }
 }
 
+/* Wider modal variant for photos */
+app-modal.photo-modal .modal {
+  max-width: min(1100px, 95vw);
+  width: auto;
+}
+
 .modal-header {
   display: flex;
   align-items: center;

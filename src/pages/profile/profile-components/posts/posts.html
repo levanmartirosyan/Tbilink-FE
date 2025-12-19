@@ -10,7 +10,7 @@
   </div>
   } @else { @for (posts of data; track $index) { @if (posts.imageUrl !== null &&
   posts.imageUrl !== '') {
-  <div class="container">
+  <div class="container" (click)="toggleCommentModal(posts)">
     <img [src]="env.storageUrl + posts.imageUrl" alt="photo" />
     <div class="like-comment-count">
       <div class="item">
@@ -24,14 +24,37 @@
     </div>
   </div>
   } @else {
-  <div class="empty-state">
-    <lucide-icon name="image-off" [size]="28"></lucide-icon>
-    <p>No posts with images found</p>
+  <div class="container placeholder" (click)="toggleCommentModal(posts)">
+    <div class="no-image">
+      <lucide-icon name="image-off" [size]="40"></lucide-icon>
+      <p>
+        {{ posts.content ? (posts.content | slice:0:120) : 'No preview
+        available' }}
+      </p>
+    </div>
+    <div class="like-comment-count">
+      <div class="item">
+        <lucide-icon name="heart" [size]="20"></lucide-icon>
+        <span>{{posts.likeCount}}</span>
+      </div>
+      <div class="item">
+        <lucide-icon name="message-circle" [size]="20"></lucide-icon>
+        <span>{{posts.commentCount}}</span>
+      </div>
+    </div>
   </div>
-  }} @empty {
+  } } @empty {
   <div class="empty-state">
     <lucide-icon name="image-off" [size]="28"></lucide-icon>
     <p>No posts found</p>
   </div>
   } } }
 </div>
+
+@if (commentModal && selectedCommentPost) {
+<app-comment-modal
+  [postData]="selectedCommentPost"
+  [toggleCommentModal]="closeCommentModal"
+  (commentAdded)="commentAddedHandler($event)"
+></app-comment-modal>
+}

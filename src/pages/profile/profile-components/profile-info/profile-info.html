@@ -39,11 +39,18 @@
       <lucide-icon name="cog" [size]="22"></lucide-icon>
 
       <div class="settings-menu user-select-none" [class.active]="settingsMenu">
+        @if (userData?.id == currentUserId && userData.role === 'Admin' ||
+        userData?.id == currentUserId && userData.role === 'Owner') {
+        <div class="menu-item" routerLink="/admin">
+          <lucide-icon name="shield-user" [size]="17"></lucide-icon>
+          <p>Admin Panel</p>
+        </div>
+        }
         <div class="menu-item" routerLink="/settings">
           <lucide-icon name="user-pen" [size]="17"></lucide-icon>
           <p>Edit Profile</p>
         </div>
-        <div class="menu-item">
+        <div class="menu-item" (click)="shareProfile()">
           <lucide-icon name="share-2" [size]="17"></lucide-icon>
           <p>Share Profile</p>
         </div>

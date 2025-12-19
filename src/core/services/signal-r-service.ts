@@ -322,7 +322,10 @@ export class SignalRService {
     this.currentOpenChatPartnerId.set(otherUserId);
 
     const url = `${this.hubUrl}hubs/messages?userId=${otherUserId}`;
-    console.log('Connecting to message hub (silent):', url);
+    console.log(
+      'Connecting to message hub (silent - will NOT mark as read):',
+      url
+    );
 
     this.messageHubConnection = new HubConnectionBuilder()
       .withUrl(url, { accessTokenFactory: () => user.tokens.accessToken })
@@ -355,8 +358,8 @@ export class SignalRService {
 
     this.clearUnreadCount(otherUserId);
 
-    const url = `${this.hubUrl}hubs/messages?userId=${otherUserId}`;
-    console.log('Connecting to message hub:', url);
+    const url = `${this.hubUrl}hubs/messages?userId=${otherUserId}&markAsRead=true`;
+    console.log('Connecting to message hub (active, will mark as read):', url);
 
     this.messageHubConnection = new HubConnectionBuilder()
       .withUrl(url, { accessTokenFactory: () => user.tokens.accessToken })
@@ -550,6 +553,25 @@ export class SignalRService {
       })
       .catch((err) => {
         console.error('Failed to edit message:', err);
+      });
+  }
+
+  deleteMessage(messageId: number): void {
+    if (
+      !this.messageHubConnection ||
+      this.messageHubConnection.state !== HubConnectionState.Connected
+    ) {
+      console.error('Message hub not connected');
+      return;
+    }
+
+    console.log('Deleting message:', { messageId });
+    this.messageHubConnection
+      .invoke('DeleteMessage', {
+        messageId: messageId,
+      })
+      .catch((err) => {
+        console.error('Failed to delete message:', err);
       });
   }
 

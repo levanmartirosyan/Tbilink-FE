@@ -71,6 +71,34 @@
         }
       }
     }
+
+    &.placeholder {
+      background: color-mix(in srgb, var(--auth-input-background) 85%, white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      .no-image {
+        text-align: center;
+        color: var(--text-unfocused);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        lucide-icon {
+          width: 40px;
+          height: 40px;
+          color: var(--text-unfocused);
+        }
+        p {
+          margin: 0;
+          font-size: 13px;
+          max-width: 180px;
+          color: var(--text-color);
+          word-break: break-word;
+        }
+      }
+    }
   }
 
   .isPrivate {

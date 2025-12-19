@@ -10,10 +10,9 @@
   <div class="modal-content">
     <form [formGroup]="editPostForm" (ngSubmit)="uploadImage()">
       <div class="input">
-        <textarea
-          placeholder="What's on your mind?"
-          formControlName="content"
-        >{{ postData?.content }}</textarea>
+        <textarea placeholder="What's on your mind?" formControlName="content">
+{{ postData?.content }}</textarea
+        >
       </div>
       @if (postData?.imageUrl && selectedFile == null) {
       <div class="current-image">
@@ -26,7 +25,7 @@
       <div class="bottom">
         <div class="photos" (click)="fileInput.click()">
           <lucide-icon name="image" [size]="20"></lucide-icon>
-          <span>Photo</span>
+          <span>New Photo</span>
 
           @if (selectedFile != null) {
           <div class="filePreviewWrapper">

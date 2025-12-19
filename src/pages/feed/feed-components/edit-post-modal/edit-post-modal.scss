@@ -93,6 +93,10 @@
             font-size: 14px;
             color: var(--text-color);
             transition: 0.3s ease;
+            lucide-icon {
+              width: 20px;
+              height: 20px;
+            }
             &:hover {
               color: var(--primary);
             }
