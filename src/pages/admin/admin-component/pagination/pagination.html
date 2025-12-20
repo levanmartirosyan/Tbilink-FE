@@ -1,0 +1,28 @@
+<div class="pagination-wrapper">
+  <button
+    class="pagination-btn"
+    [disabled]="pageNumber <= 1"
+    (click)="go(pageNumber - 1)"
+  >
+    <lucide-icon name="chevron-left" [size]="16"></lucide-icon>
+  </button>
+
+  @for (p of getPageItems(); track $index) {
+  <button
+    class="pagination-btn"
+    [class.active]="p === pageNumber"
+    (click)="go(p)"
+    [disabled]="p === '...'"
+  >
+    {{p}}
+  </button>
+  }
+
+  <button
+    class="pagination-btn"
+    [disabled]="pageNumber >= totalPages"
+    (click)="go(pageNumber + 1)"
+  >
+    <lucide-icon name="chevron-right" [size]="16"></lucide-icon>
+  </button>
+</div>

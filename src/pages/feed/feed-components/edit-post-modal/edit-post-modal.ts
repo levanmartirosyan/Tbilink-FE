@@ -40,6 +40,7 @@ export class EditPostModal implements OnInit, OnChanges {
   public env: any = env;
 
   public filePreview: any = null;
+  public filePreviewType: 'image' | 'video' | null = null;
 
   public editPostForm: FormGroup = new FormGroup({
     id: new FormControl('', [Validators.required]),
@@ -80,14 +81,47 @@ export class EditPostModal implements OnInit, OnChanges {
       this.selectedFile = files[0];
       console.log('File selected:', this.selectedFile.name);
 
-      const reader = new FileReader();
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        this.filePreview = this.sanitizer.bypassSecurityTrustUrl(
-          e.target?.result as string
-        );
-      };
-      reader.readAsDataURL(this.selectedFile);
+      const MAX_BYTES = 10 * 1024 * 1024;
+      if (this.selectedFile.size > MAX_BYTES) {
+        this.toastService.error('File size must be 10 MB or smaller.');
+        this.selectedFile = null;
+        this.filePreview = null;
+        this.filePreviewType = null;
+        input.value = '';
+        return;
+      }
+
+      const type = this.selectedFile.type || '';
+      const name = (this.selectedFile.name || '').toLowerCase();
+      const isHeic = name.endsWith('.heic') || name.endsWith('.heif');
+
+      if (type.startsWith('image') || isHeic) {
+        this.filePreviewType = 'image';
+        const reader = new FileReader();
+        reader.onload = (e: ProgressEvent<FileReader>) => {
+          this.filePreview = this.sanitizer.bypassSecurityTrustUrl(
+            e.target?.result as string
+          );
+        };
+        reader.readAsDataURL(this.selectedFile);
+      } else if (type.startsWith('video')) {
+        this.filePreviewType = 'video';
+        const url = URL.createObjectURL(this.selectedFile);
+        this.filePreview = this.sanitizer.bypassSecurityTrustUrl(url);
+      } else {
+        this.toastService.error('Unsupported file format.');
+        this.selectedFile = null;
+        this.filePreview = null;
+        this.filePreviewType = null;
+        input.value = '';
+      }
     }
+  }
+
+  isVideoUrl(path: string | undefined | null): boolean {
+    if (!path) return false;
+    const lower = path.toLowerCase();
+    return /\.(mp4|webm|ogg)$/i.test(lower);
   }
 
   uploadImage(): void {

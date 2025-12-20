@@ -1,0 +1,38 @@
+<div class="counter-list">
+  <div class="counter-card">
+    <div class="head">
+      <lucide-icon name="users" [size]="20"></lucide-icon>
+      <div class="title">Total Users</div>
+    </div>
+    <div class="content">
+      <p>{{ totalUsers }}</p>
+    </div>
+  </div>
+  <div class="counter-card">
+    <div class="head">
+      <lucide-icon name="newspaper" [size]="20"></lucide-icon>
+      <div class="title">Total Posts</div>
+    </div>
+    <div class="content">
+      <p>{{ totalPosts }}</p>
+    </div>
+  </div>
+  <div class="counter-card">
+    <div class="head">
+      <lucide-icon name="message-circle-more" [size]="20"></lucide-icon>
+      <div class="title">Total Comments</div>
+    </div>
+    <div class="content">
+      <p>{{ totalComments }}</p>
+    </div>
+  </div>
+  <div class="counter-card">
+    <div class="head">
+      <lucide-icon name="activity" [size]="20"></lucide-icon>
+      <div class="title">Active Users</div>
+    </div>
+    <div class="content">
+      <p>{{ signalRService.activeUsersCount() }}</p>
+    </div>
+  </div>
+</div>

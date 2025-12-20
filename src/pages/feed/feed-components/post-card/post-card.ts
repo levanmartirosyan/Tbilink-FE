@@ -165,4 +165,10 @@ export class PostCard {
       },
     });
   }
+
+  isVideoUrl(path: string | undefined | null): boolean {
+    if (!path) return false;
+    const lower = path.toLowerCase();
+    return /\.(mp4|webm|ogg)$/i.test(lower);
+  }
 }

@@ -1,0 +1,122 @@
+.panel {
+  background: var(--auth-form-background);
+  border-radius: 10px;
+  padding: 18px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  margin-top: 20px;
+  border: 1px solid var(--auth-input-border);
+
+  h2 {
+    margin: 0 0 6px 0;
+    color: var(--primary);
+  }
+  .hint {
+    margin: 0 0 12px 0;
+    color: var(--text-unfocused);
+    font-size: 13px;
+  }
+
+  .comments-table {
+    .table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      .table-head,
+      .table-body .table-row {
+        min-width: 760px;
+      }
+    }
+    .table-head {
+      display: grid;
+      grid-template-columns: 70px 2fr 2fr 1fr 1fr 1fr 80px;
+      gap: 12px;
+      padding: 12px 8px;
+      border-bottom: 1px solid var(--auth-input-border);
+      color: var(--text-unfocused);
+      font-weight: 600;
+    }
+
+    .table-body {
+      .loader-wrapper {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+      }
+      .table-row {
+        display: grid;
+        grid-template-columns: 70px 2fr 2fr 1fr 1fr 1fr 80px;
+        gap: 12px;
+        padding: 14px 8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        align-items: center;
+
+        .user-cell {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+          }
+          .user-info {
+            .name {
+              font-weight: 600;
+              color: var(--text-color);
+            }
+            .small {
+              color: var(--text-unfocused);
+              font-size: 13px;
+            }
+          }
+        }
+
+        .email {
+          color: var(--text-unfocused);
+        }
+
+        .role {
+          color: var(--primary);
+          font-weight: 600;
+        }
+
+        .joined {
+          color: var(--text-unfocused);
+        }
+
+        .status .badge {
+          background: var(--primary);
+          color: white;
+          padding: 6px 10px;
+          border-radius: 999px;
+          font-size: 12px;
+          text-transform: lowercase;
+        }
+
+        .actions {
+          display: flex;
+          gap: 8px;
+          justify-content: flex-start;
+          .icon-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 6px;
+            transition: 0.3s ease;
+            &:hover {
+              background: var(--auth-input-border);
+            }
+          }
+        }
+      }
+
+      .empty {
+        padding: 24px;
+        color: var(--text-unfocused);
+        text-align: center;
+      }
+    }
+  }
+}

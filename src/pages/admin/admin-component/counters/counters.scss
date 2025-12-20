@@ -1,0 +1,36 @@
+.counter-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  align-items: stretch;
+
+  .counter-card {
+    background: var(--auth-form-background);
+    border-radius: 10px;
+    padding: 16px;
+    border: 1px solid var(--auth-input-border);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      lucide-icon {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .content {
+      display: flex;
+      align-items: center;
+      p {
+        font-size: 20px;
+        font-weight: bold;
+        margin: 0;
+      }
+    }
+  }
+}

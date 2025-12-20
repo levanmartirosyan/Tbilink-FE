@@ -8,7 +8,6 @@ import { EnterCodeForm } from '../pages/auth/auth-components/enter-code-form/ent
 import { NewPasswordForm } from '../pages/auth/auth-components/new-password-form/new-password-form';
 import { createPasswordGuard } from '../core/guards/create-password-guard';
 import { verifyEmailGuard } from '../core/guards/verify-email-guard';
-import { verifyEmailDeactivateGuard } from '../core/guards/verify-email-deactivate-guard';
 import { authGuard } from '../core/guards/auth-guard';
 import { authCheckGuard } from '../core/guards/auth-check-guard';
 import { Messenger } from '../pages/messenger/messenger';
@@ -31,6 +30,10 @@ import { SearchPosts } from '../pages/search/search-posts/search-posts';
 import { All } from '../pages/search/all/all';
 import { Admin } from '../pages/admin/admin';
 import { authAdminGuard } from '../core/guards/auth-admin-guard';
+import { AdminUsers } from '../pages/admin/admin-component/admin-users/admin-users';
+import { AdminPosts } from '../pages/admin/admin-component/admin-posts/admin-posts';
+import { AdminComments } from '../pages/admin/admin-component/admin-comments/admin-comments';
+import { Bans } from '../pages/admin/admin-component/bans/bans';
 
 export const routes: Routes = [
   {
@@ -139,6 +142,29 @@ export const routes: Routes = [
         path: 'admin',
         component: Admin,
         canActivate: [authAdminGuard],
+        children: [
+          {
+            path: '',
+            redirectTo: 'users',
+            pathMatch: 'full',
+          },
+          {
+            path: 'users',
+            component: AdminUsers,
+          },
+          {
+            path: 'posts',
+            component: AdminPosts,
+          },
+          {
+            path: 'comments',
+            component: AdminComments,
+          },
+          {
+            path: 'bans',
+            component: Bans,
+          },
+        ],
       },
     ],
   },

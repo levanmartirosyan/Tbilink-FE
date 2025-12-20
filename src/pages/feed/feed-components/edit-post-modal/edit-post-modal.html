@@ -16,28 +16,40 @@
       </div>
       @if (postData?.imageUrl && selectedFile == null) {
       <div class="current-image">
+        @if (isVideoUrl(postData?.imageUrl)) {
+        <video class="current-video" controls>
+          <source [src]="env.storageUrl + postData?.imageUrl" />
+        </video>
+        } @else {
         <img
           [src]="env.storageUrl + postData?.imageUrl"
           alt="Current Post Image"
         />
+        }
       </div>
       }
       <div class="bottom">
         <div class="photos" (click)="fileInput.click()">
           <lucide-icon name="image" [size]="20"></lucide-icon>
-          <span>New Photo</span>
+          <span>New Photo | Video</span>
 
           @if (selectedFile != null) {
           <div class="filePreviewWrapper">
             <p>|</p>
+            @if (filePreviewType === 'image') {
             <img [src]="filePreview" alt="Selected" class="file-preview" />
+            } @else if (filePreviewType === 'video') {
+            <video class="file-preview-video" controls>
+              <source [src]="filePreview" />
+            </video>
+            }
           </div>
           }
         </div>
         <input
           #fileInput
           type="file"
-          accept="image/*,video/*"
+          accept="image/*,video/*,.heic,.heif"
           (change)="onFileSelected($event)"
           style="display: none"
         />

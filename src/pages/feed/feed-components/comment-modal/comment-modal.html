@@ -39,7 +39,35 @@
       </div>
       @if (postData?.imageUrl) {
       <div class="post-image">
-        <img [src]="env.storageUrl + postData?.imageUrl" alt="Post" />
+        @defer (on viewport) { @if (isVideoUrl(postData?.imageUrl)) {
+        <div
+          class="video-wrapper"
+          style="overflow: hidden; border-radius: 8px; max-height: 480px"
+        >
+          <video
+            class="post-video"
+            controls
+            style="
+              width: 100%;
+              height: auto;
+              max-height: 480px;
+              display: block;
+              object-fit: cover;
+            "
+          >
+            <source [src]="env.storageUrl + postData?.imageUrl" />
+          </video>
+        </div>
+        } @else {
+        <img
+          class="post-image"
+          [src]="env.storageUrl + postData?.imageUrl"
+          alt="Post"
+          loading="lazy"
+        />
+        } } @placeholder {
+        <div></div>
+        }
       </div>
       }
     </div>

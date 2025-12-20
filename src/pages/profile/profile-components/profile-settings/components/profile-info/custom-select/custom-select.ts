@@ -21,6 +21,7 @@ export class CustomSelectComponent implements OnInit {
   @Input() options: string[] = [];
   @Input() selectedValue: string = '';
   @Input() placeholder: string = 'Select an option';
+  @Input() disableSearch: boolean = false;
   @Output() selectionChanged = new EventEmitter<string>();
 
   isOpen = false;

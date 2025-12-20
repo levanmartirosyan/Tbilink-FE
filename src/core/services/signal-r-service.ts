@@ -13,14 +13,21 @@ import { env } from '../../enviroment/enviroment';
   providedIn: 'root',
 })
 export class SignalRService {
-  constructor(private audioNotification: AudioNotificationService) {}
+  constructor(private audioNotification: AudioNotificationService) {
+    if (!env.production) {
+      this.hubUrl = env.hubUrlLocal;
+    } else {
+      this.hubUrl = env.hubUrlPublic;
+    }
+  }
 
   /* ------------------ Presence hub ------------------ */
   hubConnection?: HubConnection;
   onlineUsers = signal<string[]>([]);
+  activeUsersCount = computed(() => this.onlineUsers().length);
   lastActiveUsers = signal<Record<string, Date>>({});
 
-  private hubUrl: string = env.hubUrlPublic;
+  private hubUrl: string = '';
 
   createHubConnection(user: User) {
     if (
@@ -196,14 +203,24 @@ export class SignalRService {
   }
 
   isUserOnline(userId: string): boolean {
-    return this.onlineUsers().includes(userId.toString());
+    if (userId === null || userId === undefined) return false;
+    try {
+      return this.onlineUsers().includes(userId.toString());
+    } catch (e) {
+      console.warn('SignalRService.isUserOnline error', e, userId);
+      return false;
+    }
   }
 
   getUserLastActive(userId: string): Date | null {
-    if (this.isUserOnline(userId)) {
+    if (!userId) return null;
+    if (this.isUserOnline(userId)) return null;
+    try {
+      return this.lastActiveUsers()[userId.toString()] || null;
+    } catch (e) {
+      console.warn('SignalRService.getUserLastActive error', e, userId);
       return null;
     }
-    return this.lastActiveUsers()[userId.toString()] || null;
   }
 
   /* ------------------ Message hub ------------------ */

@@ -30,7 +30,7 @@ import { SpinnerLoader } from '../../../../shared/loadings/spinner-loader/spinne
     SpinnerLoader,
   ],
   templateUrl: './comment-modal.html',
-  styleUrl: './comment-modal.scss',
+  styleUrls: ['./comment-modal.scss'],
 })
 export class CommentModal implements OnInit {
   @Input() postData: any;
@@ -187,7 +187,6 @@ export class CommentModal implements OnInit {
 
     this.apiService.updateComment(commentId, this.editingContent).subscribe({
       next: (response: any) => {
-        // prefer server-provided content
         if (response && response.data) {
           comment.content =
             response.data.content ||
@@ -199,12 +198,17 @@ export class CommentModal implements OnInit {
       },
       error: (err: any) => {
         console.log('Error updating comment:', err);
-        // revert
         comment.content = prevContent;
         this.savingEdits[commentId] = false;
         this.toastService.error('Failed to update comment.');
       },
     });
+  }
+
+  isVideoUrl(path: string | undefined | null): boolean {
+    if (!path) return false;
+    const lower = path.toLowerCase();
+    return /\.(mp4|webm|ogg)$/i.test(lower);
   }
 
   goToUserProfile() {

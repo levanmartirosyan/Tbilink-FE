@@ -1,1 +1,1 @@
-<div class="overlay" (click)="event()"></div>
+<div class="overlay" (click)="(typeof event === 'function') && event()"></div>

@@ -10,6 +10,7 @@
 
   @if (isOpen) {
   <div class="select-dropdown">
+    @if (!disableSearch) {
     <div class="search-container">
       <input
         type="text"
@@ -21,6 +22,7 @@
       />
       <lucide-icon name="search" [size]="16" class="search-icon"></lucide-icon>
     </div>
+    }
 
     <div class="options-list">
       @for (option of filteredOptions; track option) {

@@ -1,0 +1,213 @@
+<div class="panel">
+  <div class="panel-head">
+    <div class="title">
+      <h2>User Management</h2>
+      <p class="hint">View and manage all registered users</p>
+    </div>
+    <div class="dropdown-wrapper">
+      <app-custom-select
+        [options]="['All','Users','Admins']"
+        [selectedValue]="filterValue"
+        (selectionChanged)="onFilterSelect($event)"
+        [disableSearch]="true"
+      ></app-custom-select>
+    </div>
+  </div>
+
+  <div class="users-table">
+    <div class="table-scroll">
+      <div class="table-head">
+        <div>ID</div>
+        <div>User</div>
+        <div>Email</div>
+        <div>Role</div>
+        <div>Joined</div>
+        <div>Status</div>
+        <div>Actions</div>
+      </div>
+
+      <div class="table-body">
+        @if (isLoading) {
+        <div class="loader-wrapper">
+          <app-spinner-loader></app-spinner-loader>
+        </div>
+        } @else {@for (user of users; track $index) {
+        <div class="table-row">
+          <div class="user-cell">
+            <div class="id">{{user.id}}</div>
+          </div>
+          <div class="user-cell">
+            <div class="image">
+              <img
+                [src]="user.profilePhotoUrl ? env.storageUrl + user.profilePhotoUrl : 'assets/icons/profile.png'"
+                alt="avatar"
+              />
+            </div>
+
+            <div class="user-info">
+              <div class="name">{{user.firstName + ' ' + user.lastName}}</div>
+              <div class="small">@{{user.userName}}</div>
+            </div>
+          </div>
+          <div class="email">{{user.email}}</div>
+          <div class="role">{{user.role || 'User'}}</div>
+          <div class="joined">
+            {{user.registerDate | date : 'dd MMM y | HH:mm'}}
+          </div>
+          <div class="status">
+            <span class="badge">{{user.isBanned ? 'Banned' : 'Active'}}</span>
+          </div>
+          <div class="actions">
+            @if (!user.isBanned) {
+            <button class="icon-btn" (click)="openBanModal(user)">
+              <lucide-icon name="ban" [size]="16"></lucide-icon>
+            </button>
+            } @else {
+            <button class="icon-btn" (click)="openUnbanModal(user)">
+              <lucide-icon name="user-check" [size]="16"></lucide-icon>
+            </button>
+            }
+            <button class="icon-btn" (click)="openEditModal(user)">
+              <lucide-icon name="pencil" [size]="16"></lucide-icon>
+            </button>
+
+            <button class="icon-btn" (click)="openDeleteModal(user)">
+              <lucide-icon name="trash" [size]="16"></lucide-icon>
+            </button>
+          </div>
+        </div>
+        } @empty {
+        <div class="empty">No users found</div>
+        }}
+      </div>
+    </div>
+    <div class="table-footer">
+      <app-pagination
+        [pageNumber]="pageNumber"
+        [totalPages]="totalPages"
+        (pageChange)="gotoPage($event)"
+      ></app-pagination>
+    </div>
+  </div>
+</div>
+@if (editUserModal && editingUser) {
+<app-admin-edit-user-modal
+  [user]="editingUser"
+  [toggleEditUserModal]="closeEditUserModal"
+  (userUpdated)="onUserUpdated($event)"
+></app-admin-edit-user-modal>
+} @if (deleteUserModal && deletingUser) {
+<app-modal
+  [title]="'Delete user'"
+  [isOpen]="true"
+  [isLoading]="isDeleting"
+  (onClose)="closeDeleteUserModal()"
+  (onSubmit)="confirmDeleteUser()"
+  [submitButtonText]="'Delete'"
+>
+  <div class="confirm-body">
+    <p>
+      Are you sure you want to delete
+      <strong>{{deletingUser?.userName}}</strong>? This action cannot be undone.
+    </p>
+  </div>
+</app-modal>
+} @if (unbanUserModal && unbanningUser) {
+<app-modal
+  [title]="'Unban user'"
+  [isOpen]="true"
+  [isLoading]="isUnbanning"
+  (onClose)="closeUnbanModal()"
+  (onSubmit)="confirmUnbanUser()"
+  [submitButtonText]="'Unban'"
+>
+  <div class="confirm-body">
+    <p>
+      Are you sure you want to unban
+      <strong
+        >{{ unbanningUser?.firstName + ' ' + unbanningUser?.lastName }}</strong
+      >?
+    </p>
+  </div>
+</app-modal>
+} @if (banUserModal && banningUser) {
+<app-modal
+  [title]="'Ban user - ' + banningUser?.firstName + ' ' + banningUser?.lastName"
+  [isOpen]="true"
+  [isLoading]="isBanning"
+  (onClose)="closeBanModal()"
+  (onSubmit)="confirmBanUser()"
+  [submitButtonText]="'Ban'"
+>
+  <div class="ban-body">
+    <div class="form-group">
+      <label class="form-label">Reason</label>
+      <textarea
+        class="form-textarea"
+        rows="3"
+        required
+        (input)="banReason = $any($event.target).value"
+        placeholder="Reason for ban"
+        style="min-height: 80px; max-height: 200px"
+      ></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Expires at</label>
+      <input
+        type="datetime-local"
+        class="form-input"
+        [min]="minBanDate"
+        required
+        [value]="banExpiresAt"
+        (change)="onExpireInputChange($event)"
+      />
+      <div
+        class="quick-expire-buttons"
+        style="margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap"
+      >
+        <button
+          type="button"
+          class="btn small"
+          [class.selected]="selectedQuickExpire==='1d'"
+          (click)="setQuickExpire('1d')"
+        >
+          1 day
+        </button>
+        <button
+          type="button"
+          class="btn small"
+          [class.selected]="selectedQuickExpire==='1w'"
+          (click)="setQuickExpire('1w')"
+        >
+          1 week
+        </button>
+        <button
+          type="button"
+          class="btn small"
+          [class.selected]="selectedQuickExpire==='1m'"
+          (click)="setQuickExpire('1m')"
+        >
+          1 month
+        </button>
+        <button
+          type="button"
+          class="btn small primary"
+          [class.selected]="selectedQuickExpire==='1y'"
+          (click)="setQuickExpire('1y')"
+        >
+          1 year
+        </button>
+        <button
+          type="button"
+          class="btn small perm"
+          [class.selected]="selectedQuickExpire==='perm'"
+          (click)="setQuickExpire('perm')"
+        >
+          Permanent
+        </button>
+      </div>
+    </div>
+  </div>
+</app-modal>
+}

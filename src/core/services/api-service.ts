@@ -19,9 +19,14 @@ import { UpdateUser } from '../interfaces/user-interface';
   providedIn: 'root',
 })
 export class ApiService {
-  constructor(private http: HttpClient) {}
-
-  private url: string = env.publicUrl;
+  constructor(private http: HttpClient) {
+    if (!env.production) {
+      this.url = env.localUrl;
+    } else {
+      this.url = env.publicUrl;
+    }
+  }
+  private url: string = '';
 
   signin(
     signinBody: SignInRequest
@@ -235,11 +240,42 @@ export class ApiService {
   }
 
   // Admin endpoints
-  getAllUsersAdmin() {
-    return this.http.get(this.url + 'admin/users/all');
+  getAllUsersAdmin(pageNumber: number, pageSize: number) {
+    return this.http.get(
+      this.url + `admin/users/all?pageNumber=${pageNumber}&pageSize=${pageSize}`
+    );
   }
 
   isAdminUser() {
     return this.http.get(this.url + 'admin/is-admin');
+  }
+
+  adminStats() {
+    return this.http.get(this.url + 'admin/stats');
+  }
+
+  banUser(userId: string, banBody: any) {
+    return this.http.post(this.url + `admin/ban/${userId}`, banBody);
+  }
+
+  unbanUser(userId: string) {
+    return this.http.post(this.url + `admin/unban/${userId}`, {});
+  }
+
+  getBanHistory() {
+    return this.http.get(this.url + 'admin/ban-history');
+  }
+
+  getAllBans(pageNumber: number, pageSize: number) {
+    return this.http.get(
+      this.url + `admin/bans/all?pageNumber=${pageNumber}&pageSize=${pageSize}`
+    );
+  }
+
+  getAllComments(pageNumber: number, pageSize: number) {
+    return this.http.get(
+      this.url +
+        `admin/comments/all?pageNumber=${pageNumber}&pageSize=${pageSize}`
+    );
   }
 }

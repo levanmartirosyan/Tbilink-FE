@@ -1,0 +1,205 @@
+.panel {
+  background: var(--auth-form-background);
+  border-radius: 10px;
+  padding: 18px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  margin-top: 20px;
+  border: 1px solid var(--auth-input-border);
+  .panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+
+    .title {
+      h2 {
+        margin: 0 0 6px 0;
+        color: var(--primary);
+      }
+      .hint {
+        margin: 0 0 12px 0;
+        color: var(--text-unfocused);
+        font-size: 13px;
+      }
+    }
+    .dropdown-wrapper {
+      min-width: 200px;
+    }
+    @media screen and (max-width: 580px) {
+      flex-direction: column;
+      width: 100%;
+    }
+  }
+  .users-table {
+    .table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      .table-head,
+      .table-body .table-row {
+        min-width: 760px;
+      }
+    }
+    .table-footer {
+      margin-top: 12px;
+      display: flex;
+      justify-content: center;
+    }
+    .table-head {
+      display: grid;
+      grid-template-columns: 50px 2fr 2fr 1fr 1fr 1fr 100px;
+      gap: 12px;
+      padding: 12px 8px;
+      border-bottom: 1px solid var(--auth-input-border);
+      color: var(--text-unfocused);
+      font-weight: 600;
+    }
+
+    .table-body {
+      .loader-wrapper {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+      }
+      .table-row {
+        display: grid;
+        grid-template-columns: 50px 2fr 2fr 1fr 1fr 1fr 100px;
+        gap: 12px;
+        padding: 14px 8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        align-items: center;
+
+        .user-cell {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+          }
+          .user-info {
+            .name {
+              font-weight: 600;
+              color: var(--text-color);
+            }
+            .small {
+              color: var(--text-unfocused);
+              font-size: 13px;
+            }
+          }
+        }
+
+        .email {
+          color: var(--text-unfocused);
+        }
+
+        .role {
+          color: var(--primary);
+          font-weight: 600;
+        }
+
+        .joined {
+          color: var(--text-unfocused);
+        }
+
+        .status .badge {
+          background: var(--primary);
+          color: white;
+          padding: 6px 10px;
+          border-radius: 999px;
+          font-size: 12px;
+        }
+
+        .actions {
+          display: flex;
+          gap: 8px;
+          justify-content: flex-start;
+          .icon-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 6px;
+            transition: 0.3s ease;
+            &:hover {
+              background: var(--auth-input-border);
+            }
+          }
+        }
+      }
+
+      .empty {
+        padding: 24px;
+        color: var(--text-unfocused);
+        text-align: center;
+      }
+    }
+  }
+
+  .ban-body {
+    .form-group {
+      .form-textarea {
+        min-height: 80px;
+        max-height: 200px;
+      }
+    }
+    .quick-expire-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+
+      .btn {
+        padding: 0 14px;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 13px;
+        color: var(--text-color);
+        background: var(--auth-input-background);
+        border: 0;
+
+        transition: transform 0.14s ease, background 0.14s ease,
+          opacity 0.14s ease;
+      }
+
+      .btn.small {
+        height: 34px;
+        font-size: 13px;
+        padding: 0 12px;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        opacity: 0.95;
+      }
+
+      .btn.primary {
+        background: var(--auth-form-button);
+        color: #fff;
+        border-color: transparent;
+      }
+
+      .btn.perm {
+        background: linear-gradient(
+          90deg,
+          var(--primary),
+          color-mix(in srgb, var(--primary) 60%, #000 0%)
+        );
+        color: #fff;
+        border-color: transparent;
+      }
+      .btn.selected {
+        border: 2px solid var(--primary);
+        padding: 0 12px;
+        transform: translateY(-1px);
+      }
+    }
+  }
+}

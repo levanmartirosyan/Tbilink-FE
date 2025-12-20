@@ -13,6 +13,7 @@
 
     z-index: 999;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid var(--auth-input-border);
     .container {
       max-width: 1280px;
       width: 100%;

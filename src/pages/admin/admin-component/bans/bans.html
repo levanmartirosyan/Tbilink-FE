@@ -1,0 +1,59 @@
+<div class="panel">
+  <h2>Bans History</h2>
+  <p class="hint">View all bans</p>
+
+  <div class="bans-table">
+    <div class="table-scroll">
+      <div class="table-head">
+        <div>ID</div>
+        <div>User</div>
+        <div>Reason</div>
+        <div>Banned At</div>
+        <div>Expires</div>
+        <div>Admin</div>
+      </div>
+
+      <div class="table-body">
+        @if (isLoading) {
+        <div class="loader-wrapper">
+          <app-spinner-loader></app-spinner-loader>
+        </div>
+        } @else {@for (ban of bans; track $index) {
+        <div class="table-row">
+          <div class="user-cell">
+            <div class="id">{{ban.id}}</div>
+          </div>
+          <div class="user-cell">
+            <div class="user-info">
+              <div class="small">@{{ban.userName}}</div>
+            </div>
+          </div>
+
+          <div class="content">{{ban.reason}}</div>
+          <div class="created">
+            {{ban.bannedAt | date : 'dd MMM y | HH:mm'}}
+          </div>
+          <div class="created">
+            {{ban.expiresAt | date : 'dd MMM y | HH:mm'}}
+          </div>
+
+          <div class="user-cell">
+            <div class="user-info">
+              <div class="small">@{{ban.bannedByUserName}}</div>
+            </div>
+          </div>
+        </div>
+        } @empty {
+        <div class="empty">No bans found</div>
+        }}
+      </div>
+    </div>
+    <div class="table-footer">
+      <app-pagination
+        [pageNumber]="pageNumber"
+        [totalPages]="totalPages"
+        (pageChange)="gotoPage($event)"
+      ></app-pagination>
+    </div>
+  </div>
+</div>

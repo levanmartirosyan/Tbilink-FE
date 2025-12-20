@@ -46,6 +46,7 @@ export class AddPost implements OnInit, OnDestroy {
   public isLoading: boolean = false;
 
   public filePreview: any = null;
+  public filePreviewType: 'image' | 'video' | null = null;
 
   ngOnInit(): void {
     this.getCurrentUser();
@@ -80,14 +81,40 @@ export class AddPost implements OnInit, OnDestroy {
     if (files && files.length > 0) {
       this.selectedFile = files[0];
       console.log('File selected:', this.selectedFile.name);
+      const MAX_BYTES = 10 * 1024 * 1024;
+      if (this.selectedFile.size > MAX_BYTES) {
+        this.toastService.error('File size must be 10 MB or smaller.');
+        this.selectedFile = null;
+        this.filePreview = null;
+        this.filePreviewType = null;
+        input.value = '';
+        return;
+      }
 
-      const reader = new FileReader();
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        this.filePreview = this.sanitizer.bypassSecurityTrustUrl(
-          e.target?.result as string
-        );
-      };
-      reader.readAsDataURL(this.selectedFile);
+      const type = this.selectedFile.type || '';
+      const name = (this.selectedFile.name || '').toLowerCase();
+      const isHeic = name.endsWith('.heic') || name.endsWith('.heif');
+
+      if (type.startsWith('image') || isHeic) {
+        this.filePreviewType = 'image';
+        const reader = new FileReader();
+        reader.onload = (e: ProgressEvent<FileReader>) => {
+          this.filePreview = this.sanitizer.bypassSecurityTrustUrl(
+            e.target?.result as string
+          );
+        };
+        reader.readAsDataURL(this.selectedFile);
+      } else if (type.startsWith('video')) {
+        this.filePreviewType = 'video';
+        const url = URL.createObjectURL(this.selectedFile);
+        this.filePreview = this.sanitizer.bypassSecurityTrustUrl(url);
+      } else {
+        this.toastService.error('Unsupported file format.');
+        this.selectedFile = null;
+        this.filePreview = null;
+        this.filePreviewType = null;
+        input.value = '';
+      }
     }
   }
 

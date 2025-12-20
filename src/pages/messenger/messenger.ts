@@ -75,13 +75,27 @@ export class Messenger implements OnInit, OnDestroy {
       if (readData) {
         console.log('Messages marked as read:', readData);
         const readByUserId = readData.ReadByUserId;
-        const chatIndex = this.allChats.findIndex(
-          (chat) => chat.participants[0].id === readByUserId
-        );
-        if (chatIndex !== -1) {
-          this.allChats[chatIndex].unreadCount = 0;
-          this.allChats = [...this.allChats];
-        }
+        const messageIds: any[] =
+          readData.MessageIds || readData.messageIds || [];
+
+        this.allChats.forEach((chat: any) => {
+          const partnerId = chat.participants?.[0]?.id;
+          if (partnerId && String(partnerId) === String(readByUserId)) {
+            chat.unreadCount = 0;
+          }
+
+          if (chat.lastMessage && messageIds && messageIds.length > 0) {
+            const lastMsgId = chat.lastMessage.id;
+            if (lastMsgId && messageIds.includes(lastMsgId)) {
+              chat.lastMessage = {
+                ...chat.lastMessage,
+                dateRead: new Date().toISOString(),
+              };
+            }
+          }
+        });
+
+        this.allChats = [...this.allChats];
       }
     });
 
@@ -256,14 +270,86 @@ export class Messenger implements OnInit, OnDestroy {
   }
 
   private updateChatData(chatUpdate: any): void {
-    const chatIndex = this.allChats.findIndex(
-      (chat) => chat.participants[0].id === chatUpdate.ChatPartnerId
+    const normalize = (v: any) =>
+      v === null || v === undefined ? '' : String(v);
+    const currentUserId = normalize(this.userService.getUser()?.data?.id);
+
+    const partnerIdFromUpdate =
+      chatUpdate.chatPartnerId ??
+      chatUpdate.ChatPartnerId ??
+      chatUpdate.ChatPartnerId ??
+      null;
+    const lastMessageFromUpdate =
+      chatUpdate.lastMessage ?? chatUpdate.LastMessage ?? null;
+    const lastActivityFromUpdate =
+      chatUpdate.lastActivity ?? chatUpdate.LastActivity ?? null;
+    const unreadFromUpdate =
+      chatUpdate.unreadCount ?? chatUpdate.UnreadCount ?? null;
+    const chatIdFromUpdate = normalize(
+      chatUpdate.chatId ??
+        chatUpdate.ChatId ??
+        chatUpdate.threadId ??
+        chatUpdate.ThreadId ??
+        ''
     );
 
+    const chatIndex = this.allChats.findIndex((chat: any) => {
+      const parts = chat.participants || [];
+      const partner =
+        parts.find((p: any) => normalize(p?.id) !== currentUserId) || parts[0];
+      const partnerId = normalize(partner?.id);
+      const chatId = normalize(
+        chat?.id ?? chat?.chatId ?? chat?.threadId ?? ''
+      );
+
+      const lastMessageIdMatches =
+        normalize(chat.lastMessage?.id) ===
+        normalize(lastMessageFromUpdate?.id);
+
+      return (
+        (partnerId && partnerId === normalize(partnerIdFromUpdate)) ||
+        (chatIdFromUpdate && chatId && chatId === chatIdFromUpdate) ||
+        lastMessageIdMatches
+      );
+    });
+
     if (chatIndex !== -1) {
-      this.allChats[chatIndex].lastMessage = chatUpdate.LastMessage;
-      this.allChats[chatIndex].lastActivity = chatUpdate.LastActivity;
-      this.allChats[chatIndex].unreadCount = chatUpdate.UnreadCount;
+      const normalizedLastMessage = lastMessageFromUpdate
+        ? {
+            id: lastMessageFromUpdate?.id ?? null,
+            senderId:
+              lastMessageFromUpdate?.senderId ??
+              lastMessageFromUpdate?.fromId ??
+              null,
+            senderName:
+              lastMessageFromUpdate?.senderName ??
+              lastMessageFromUpdate?.fromName ??
+              null,
+            content:
+              lastMessageFromUpdate?.content ??
+              lastMessageFromUpdate?.message ??
+              lastMessageFromUpdate?.text ??
+              '',
+            messageSent:
+              lastMessageFromUpdate?.messageSent ??
+              lastMessageFromUpdate?.sentAt ??
+              lastMessageFromUpdate?.timestamp ??
+              null,
+            dateRead: lastMessageFromUpdate?.dateRead ?? null,
+          }
+        : null;
+
+      if (normalizedLastMessage) {
+        this.allChats[chatIndex].lastMessage = normalizedLastMessage;
+      }
+
+      if (lastActivityFromUpdate) {
+        this.allChats[chatIndex].lastActivity = lastActivityFromUpdate;
+      }
+
+      if (unreadFromUpdate !== null && unreadFromUpdate !== undefined) {
+        this.allChats[chatIndex].unreadCount = unreadFromUpdate;
+      }
 
       this.allChats = [...this.allChats];
     }

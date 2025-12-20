@@ -1,0 +1,88 @@
+<div class="panel">
+  <div class="panel-head">
+    <div class="title">
+      <h2>Comments Management</h2>
+      <p class="hint">View and manage all comments</p>
+    </div>
+  </div>
+
+  <div class="comments-table">
+    <div class="table-scroll">
+      <div class="table-head">
+        <div>PostID</div>
+        <div>User</div>
+        <div>Email</div>
+        <div>Content</div>
+        <div>Post</div>
+        <div>Created</div>
+        <div>Actions</div>
+      </div>
+
+      <div class="table-body">
+        @if (isLoading) {
+        <div class="loader-wrapper">
+          <app-spinner-loader></app-spinner-loader>
+        </div>
+        } @else {@for (comment of comments; track $index) {
+        <div class="table-row">
+          <div class="id">{{comment.id}}</div>
+
+          <div class="user-cell">
+            <div class="user-info">
+              <div class="name">@{{comment.userName}}</div>
+              <div class="small">#{{comment.userId}}</div>
+            </div>
+          </div>
+
+          <div class="email">{{comment.userEmail}}</div>
+
+          <div class="content">{{comment.content}}</div>
+
+          <div class="post">{{comment.postContent}}</div>
+
+          <div class="created">
+            {{comment.createdAt | date : 'dd MMM y | HH:mm'}}
+          </div>
+
+          <div class="actions">
+            <button
+              class="icon-btn"
+              title="Delete comment"
+              (click)="openDeleteCommentModal(comment)"
+            >
+              <lucide-icon name="trash" [size]="16"></lucide-icon>
+            </button>
+          </div>
+        </div>
+        } @empty {
+        <div class="empty">No comments found</div>
+        }}
+      </div>
+    </div>
+
+    <div class="table-footer">
+      <app-pagination
+        [pageNumber]="pageNumber"
+        [totalPages]="totalPages"
+        (pageChange)="gotoPage($event)"
+      ></app-pagination>
+    </div>
+  </div>
+</div>
+@if (deleteCommentModal && deletingComment) {
+<app-modal
+  [title]="'Delete comment'"
+  [isOpen]="true"
+  [isLoading]="isDeletingComment"
+  (onClose)="closeDeleteCommentModal()"
+  (onSubmit)="confirmDeleteComment()"
+  [submitButtonText]="'Delete'"
+>
+  <div class="confirm-body">
+    <p>Are you sure you want to delete this comment?</p>
+    <div style="margin-top: 8px; color: var(--text-unfocused)">
+      {{deletingComment?.content}}
+    </div>
+  </div>
+</app-modal>
+}

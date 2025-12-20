@@ -69,15 +69,27 @@
         }
         .current-image {
           width: 100%;
-          height: 200px;
+          max-height: 320px;
+          height: auto;
           border-radius: 8px;
           overflow: hidden;
-          img {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          img,
+          video {
             width: 100%;
             height: 100%;
             border-radius: 8px;
             object-fit: cover;
             object-position: center;
+            display: block;
+            max-height: 320px;
+          }
+
+          video {
+            background: #000;
           }
         }
         .bottom {
@@ -109,6 +121,13 @@
                 height: 26px;
                 border-radius: 4px;
                 object-fit: cover;
+              }
+              .file-preview-video {
+                width: 80px;
+                height: 56px;
+                border-radius: 6px;
+                object-fit: cover;
+                background: #000;
               }
             }
           }

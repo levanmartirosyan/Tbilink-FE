@@ -11,7 +11,14 @@
   } @else { @for (posts of data; track $index) { @if (posts.imageUrl !== null &&
   posts.imageUrl !== '') {
   <div class="container" (click)="toggleCommentModal(posts)">
+    @if (isVideoUrl(posts.imageUrl)) {
+    <img
+      [src]="videoThumbnails[posts.imageUrl] || (env.storageUrl + posts.imageUrl)"
+      alt="photo"
+    />
+    } @else {
     <img [src]="env.storageUrl + posts.imageUrl" alt="photo" />
+    }
     <div class="like-comment-count">
       <div class="item">
         <lucide-icon name="heart" [size]="20"></lucide-icon>

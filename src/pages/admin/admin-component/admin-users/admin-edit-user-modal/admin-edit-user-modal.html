@@ -1,0 +1,148 @@
+<app-modal
+  [title]="'Edit User'"
+  [isOpen]="true"
+  [isLoading]="isSaving"
+  (onClose)="toggleEditUserModal?.()"
+  (onSubmit)="saveChanges()"
+  [submitButtonText]="'Save'"
+>
+  <form [formGroup]="editForm" class="modal-form">
+    <div class="form-group avatar-wrapper">
+      <label class="form-label">Avatar</label>
+      <div class="avatar-row">
+        <div class="avatar-container">
+          <img [src]="filePreview || 'assets/icons/profile.png'" alt="Avatar" />
+        </div>
+        <label class="change-avatar-btn">
+          <lucide-icon name="camera" [size]="16"></lucide-icon>
+          Change Avatar
+          <input
+            type="file"
+            accept="image/*,.heic,.heif"
+            (change)="onAvatarChange($event)"
+            hidden
+          />
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">First Name</label>
+      <input
+        type="text"
+        formControlName="firstName"
+        class="form-input"
+        style="
+          background: var(--auth-input-background);
+          color: var(--text-color);
+          border: 1px solid var(--auth-input-border);
+        "
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Last Name</label>
+      <input
+        type="text"
+        formControlName="lastName"
+        class="form-input"
+        style="
+          background: var(--auth-input-background);
+          color: var(--text-color);
+          border: 1px solid var(--auth-input-border);
+        "
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Country</label>
+      <app-custom-select
+        [options]="countries"
+        [selectedValue]="editForm.get('country')?.value || ''"
+        placeholder="Select a country"
+        (selectionChanged)="onCountryChange($event)"
+        [disableSearch]="false"
+      ></app-custom-select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">City</label>
+      <input
+        type="text"
+        formControlName="city"
+        class="form-input"
+        style="
+          background: var(--auth-input-background);
+          color: var(--text-color);
+          border: 1px solid var(--auth-input-border);
+        "
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Bio</label>
+      <textarea
+        formControlName="description"
+        class="form-textarea"
+        rows="3"
+        style="
+          background: var(--auth-input-background);
+          color: var(--text-color);
+          border: 1px solid var(--auth-input-border);
+        "
+      ></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Role</label>
+      <app-custom-select
+        [options]="roles"
+        [selectedValue]="editForm.get('role')?.value || ''"
+        placeholder="Select role"
+        (selectionChanged)="onRoleChange($event)"
+        [disableSearch]="true"
+      ></app-custom-select>
+    </div>
+  </form>
+  <div class="read-only-section" style="color: var(--text-color)">
+    <h4>Account details</h4>
+    <div class="details-grid">
+      <div><strong>Username:</strong> {{ user?.userName }}</div>
+      <div><strong>Email:</strong> {{ user?.email }}</div>
+      <div><strong>Phone:</strong> {{ user?.phoneNumber || '—' }}</div>
+      <div>
+        <strong>Registered:</strong> {{ user?.registerDate | date : 'dd MMM y |
+        HH:mm' }}
+      </div>
+      <div>
+        <strong>Email Verified:</strong> {{ user?.isEmailVerified ? 'Yes' : 'No'
+        }}
+      </div>
+      <div>
+        <strong>Registration Completed:</strong> {{
+        user?.isRegistrationCompleted ? 'Yes' : 'No' }}
+      </div>
+      <div>
+        <strong>Public Profile:</strong> {{ user?.isPublicProfile ? 'Yes' : 'No'
+        }}
+      </div>
+      <div>
+        <strong>Show Email:</strong> {{ user?.showEmail ? 'Yes' : 'No' }}
+      </div>
+      <div>
+        <strong>Show Phone:</strong> {{ user?.showPhone ? 'Yes' : 'No' }}
+      </div>
+      <div>
+        <strong>Allow Tagging:</strong> {{ user?.allowTagging ? 'Yes' : 'No' }}
+      </div>
+      <div><strong>Followers:</strong> {{ user?.followersCount }}</div>
+      <div><strong>Following:</strong> {{ user?.followingCount }}</div>
+      <div><strong>Posts:</strong> {{ user?.postCount }}</div>
+      <div><strong>Is Banned:</strong> {{ user?.isBanned ? 'Yes' : 'No' }}</div>
+      <div>
+        <strong>Last Active:</strong> {{ user?.lastActive | date : 'dd MMM y |
+        HH:mm' }}
+      </div>
+    </div>
+  </div>
+</app-modal>

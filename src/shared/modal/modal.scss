@@ -45,7 +45,6 @@
   }
 }
 
-/* Wider modal variant for photos */
 app-modal.photo-modal .modal {
   max-width: min(1100px, 95vw);
   width: auto;
@@ -99,6 +98,71 @@ app-modal.photo-modal .modal {
       font-weight: 600;
       color: var(--primary);
       letter-spacing: 0.5px;
+    }
+
+    /* Ban modal textarea sizing */
+    .ban-body {
+      .form-textarea {
+        min-height: 80px;
+        max-height: 220px;
+      }
+    }
+
+    .quick-expire-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+
+      .btn {
+        padding: 0 14px;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 13px;
+        color: var(--text-color);
+        background: var(--auth-input-background);
+        border: 1px solid var(--auth-input-border);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        transition: transform 0.14s ease, background 0.14s ease,
+          opacity 0.14s ease;
+      }
+
+      .btn.small {
+        height: 34px;
+        font-size: 13px;
+        padding: 0 12px;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        opacity: 0.95;
+      }
+
+      .btn.primary {
+        background: var(--auth-form-button);
+        color: #fff;
+        border-color: transparent;
+      }
+
+      .btn.perm {
+        background: linear-gradient(
+          90deg,
+          var(--primary),
+          color-mix(in srgb, var(--primary) 60%, #000 0%)
+        );
+        color: #fff;
+        border-color: transparent;
+      }
+      .btn.selected {
+        border: 2px solid var(--primary);
+        padding: 0 12px; /* adjust for border width */
+        transform: translateY(-1px);
+      }
     }
 
     .form-input {
