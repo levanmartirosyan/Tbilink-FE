@@ -73,6 +73,28 @@
           display: flex;
           align-items: center;
           gap: 12px;
+          .avatar {
+            position: relative;
+            img {
+              width: 44px;
+              height: 44px;
+              border-radius: 50%;
+              object-fit: cover;
+            }
+            .statusIndicator {
+              width: 12px;
+              height: 12px;
+              border-radius: 50%;
+              background-color: var(--indicator-inactive, #bbb);
+              position: absolute;
+              right: 0px;
+              bottom: 0px;
+              border: 2px solid var(--auth-form-background);
+            }
+            .statusIndicator.active {
+              background-color: var(--indicator-active, var(--primary));
+            }
+          }
           img {
             width: 44px;
             height: 44px;

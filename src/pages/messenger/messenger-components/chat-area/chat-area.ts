@@ -25,6 +25,7 @@ import { EmojiPickerComponent } from '../../../../shared/emoji-picker/emoji-pick
 import { ApiService } from '../../../../core/services/api-service';
 import { ToastService } from '../../../../core/services/toast-service';
 import { env } from '../../../../enviroment/enviroment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-chat-area',
@@ -67,7 +68,8 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
     public userService: UserService,
     public commonService: CommonService,
     private apiService: ApiService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private router: Router
   ) {
     this.chatMessages = this.signalRService.messages;
     this.typingUsers = this.signalRService.typingUsers;
@@ -445,5 +447,9 @@ export class ChatArea implements OnInit, OnDestroy, OnChanges {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+
+  goToProfile(username: string): void {
+    this.router.navigate([`/profile/${username}`]);
   }
 }

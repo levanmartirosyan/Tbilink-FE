@@ -38,10 +38,16 @@
           </div>
           <div class="user-cell">
             <div class="image">
-              <img
-                [src]="user.profilePhotoUrl ? env.storageUrl + user.profilePhotoUrl : 'assets/icons/profile.png'"
-                alt="avatar"
-              />
+              <div class="avatar">
+                <img
+                  [src]="user.profilePhotoUrl ? env.storageUrl + user.profilePhotoUrl : 'assets/icons/profile.png'"
+                  alt="avatar"
+                />
+                <div
+                  class="statusIndicator"
+                  [class.active]="signalRService.isUserOnline(user.id)"
+                ></div>
+              </div>
             </div>
 
             <div class="user-info">

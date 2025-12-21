@@ -7,6 +7,7 @@ import { CustomSelectComponent } from '../../../profile/profile-components/profi
 import { AdminEditUserModal } from './admin-edit-user-modal/admin-edit-user-modal';
 import { ModalComponent } from '../../../../shared/modal/modal';
 import { ApiService } from '../../../../core/services/api-service';
+import { SignalRService } from '../../../../core/services/signal-r-service';
 import { ToastService } from '../../../../core/services/toast-service';
 import { SpinnerLoader } from '../../../../shared/loadings/spinner-loader/spinner-loader';
 import { Pagination } from '../pagination/pagination';
@@ -36,7 +37,11 @@ export class AdminUsers implements OnInit, OnDestroy {
   public hasPreviousPage: boolean = false;
   public hasNextPage: boolean = false;
 
-  constructor(private api: ApiService, private toast: ToastService) {}
+  constructor(
+    private api: ApiService,
+    private toast: ToastService,
+    public signalRService: SignalRService
+  ) {}
 
   ngOnInit(): void {
     this.loadUsers();
