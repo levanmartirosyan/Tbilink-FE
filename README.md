@@ -121,15 +121,12 @@ Tbilink-FE/
 │
 ├─ src/
 │  ├─ app/
-│  │  ├─ components/       # Reusable components like buttons, inputs
-│  │  ├─ pages/            # Pages like Feed, Messenger, Profile
-│  │  ├─ services/         # Angular services for API calls
-│  │  ├─ guards/           # Route guards for authentication
-│  │  ├─ pipes/            # Custom pipes like masked email
 │  │  └─ app-routing.module.ts
-│  ├─ assets/              # Images, icons, logos
+│  ├─ core/                # Services, Guards, Pipes, Interceptors and etc.
+│  ├─ pages/               # Page Components
+│  ├─ shared/              # Shared Components
 │  └─ environments/        # Environment variables
-│
+├─ public/assets/          # Images, icons, logos
 ├─ angular.json
 ├─ package.json
 └─ README.md
