@@ -1,4 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { AddPost } from './feed-components/add-post/add-post';
 import { PostCard } from './feed-components/post-card/post-card';
 import { ApiService } from '../../core/services/api-service';
@@ -20,14 +27,41 @@ import { SpinnerLoader } from '../../shared/loadings/spinner-loader/spinner-load
   ],
   templateUrl: './feed.html',
   styleUrl: './feed.scss',
-  host: { '(scroll)': 'onScroll($event)' },
+  host: {
+    '(scroll)': 'onScroll($event)',
+    '(window:scroll)': 'onWindowScroll($event)',
+  },
 })
-export class Feed implements OnInit {
+export class Feed implements OnInit, AfterViewInit, OnDestroy {
   constructor(private api: ApiService, private title: Title) {}
 
   ngOnInit(): void {
     this.title.setTitle('Tbilink - Feed');
     this.getAllPosts();
+  }
+
+  ngAfterViewInit(): void {
+    if (!this.feedSentinel) return;
+
+    this.sentinelObserver = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (!entry) return;
+        if (entry.isIntersecting && !this.isLoading && this.hasMorePosts) {
+          if (this.scrollTimeout) clearTimeout(this.scrollTimeout);
+          this.scrollTimeout = setTimeout(() => {
+            console.log(
+              'Sentinel intersecting — loading page:',
+              this.currentPage
+            );
+            this.getAllPosts();
+          }, 150);
+        }
+      },
+      { root: null, threshold: 0.25 }
+    );
+
+    this.sentinelObserver.observe(this.feedSentinel.nativeElement);
   }
 
   public postData: any[] = [];
@@ -41,6 +75,9 @@ export class Feed implements OnInit {
   private pageSize = 5;
   private hasMorePosts = true;
   private scrollTimeout: any = null;
+  private sentinelObserver: IntersectionObserver | null = null;
+
+  @ViewChild('feedSentinel', { static: false }) feedSentinel?: ElementRef;
 
   getAllPosts(currentPage?: number) {
     if (this.isLoading || !this.hasMorePosts) {
@@ -123,6 +160,32 @@ export class Feed implements OnInit {
     }
   }
 
+  onWindowScroll(event: any) {
+    const scrollTop =
+      window.scrollY ||
+      document.documentElement.scrollTop ||
+      document.body.scrollTop ||
+      0;
+    const clientHeight =
+      window.innerHeight || document.documentElement.clientHeight || 0;
+    const scrollHeight =
+      document.documentElement.scrollHeight || document.body.scrollHeight || 0;
+
+    const scrollPercentage = (scrollTop + clientHeight) / scrollHeight;
+
+    if (scrollPercentage > 0.85 && !this.isLoading && this.hasMorePosts) {
+      if (this.scrollTimeout) clearTimeout(this.scrollTimeout);
+
+      this.scrollTimeout = setTimeout(() => {
+        console.log(
+          'Window scroll threshold reached. Loading page:',
+          this.currentPage
+        );
+        this.getAllPosts();
+      }, 300);
+    }
+  }
+
   getNewPosts(event: any) {
     this.postData = [event, ...this.postData];
   }
@@ -162,4 +225,12 @@ export class Feed implements OnInit {
   closeCommentModal = () => {
     this.commentModal = false;
   };
+
+  ngOnDestroy(): void {
+    if (this.sentinelObserver) {
+      this.sentinelObserver.disconnect();
+      this.sentinelObserver = null;
+    }
+    if (this.scrollTimeout) clearTimeout(this.scrollTimeout);
+  }
 }

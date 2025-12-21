@@ -9,11 +9,20 @@
     </div>
   </div>
   } @else { @for (photo of data; track $index) { @if (photo.imageUrl !== null &&
-  photo.imageUrl !== '') {
+  photo.imageUrl !== '') { @if (isVideoUrl(photo.imageUrl)) {
+  <div class="container video-item" (click)="openImageModal(photo)">
+    <video muted playsinline preload="metadata">
+      <source [src]="env.storageUrl + photo.imageUrl" />
+    </video>
+    <div class="video-play-overlay">
+      <lucide-icon name="play" [size]="18"></lucide-icon>
+    </div>
+  </div>
+  } @else {
   <div class="container" (click)="openImageModal(photo)">
     <img [src]="env.storageUrl + photo.imageUrl" alt="photo" />
   </div>
-  } } @empty {
+  } } } @empty {
   <div class="empty-state">
     <lucide-icon name="image-off" [size]="28"></lucide-icon>
     <p>No photos found</p>
@@ -29,7 +38,11 @@
   (onClose)="closeImageModal()"
 >
   <div class="photo-modal-content">
+    @if (selectedImageIsVideo) {
+    <video [src]="selectedImageUrl" controls playsinline></video>
+    } @else {
     <img [src]="selectedImageUrl" alt="photo" />
+    }
   </div>
 </app-modal>
 }

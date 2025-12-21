@@ -34,6 +34,7 @@
     .table-scroll {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
+      scrollbar-gutter: stable;
       .table-head,
       .table-body .table-row {
         min-width: 760px;

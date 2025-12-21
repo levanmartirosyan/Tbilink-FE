@@ -46,9 +46,11 @@ export class Profile implements OnInit, OnDestroy {
     private toastService: ToastService
   ) {
     this.currentUserId = this.userService.getUser()?.data.id;
+    this.currentUserRole = this.userService.getUser()?.data.role;
   }
 
   public currentUserId?: string;
+  public currentUserRole?: string;
   public userData?: FullUser;
   public followStats?: any;
   private pendingToggles: Record<string, boolean> = {};
@@ -316,5 +318,12 @@ export class Profile implements OnInit, OnDestroy {
     this.userService.logout();
 
     this.router.navigate(['/']);
+  }
+
+  shareProfile() {
+    const profileUrl = `${window.location.origin}/profile/${this.userData?.userName}`;
+    navigator.clipboard.writeText(profileUrl).then(() => {
+      this.toastService.info('Profile link copied to clipboard!');
+    });
   }
 }

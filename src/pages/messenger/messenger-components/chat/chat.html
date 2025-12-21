@@ -20,7 +20,22 @@
           {{userService.getUser()?.data?.id == chatData.lastMessage.senderId ?
           'You: ' : chatData.participants[0].firstName + ': '}}
         </p>
-        <span>{{chatData.lastMessage.content}}</span>
+        <span>
+          <ng-container *ngIf="chatData?.lastMessage?.content as c">
+            <ng-container *ngIf="isImageUrl(c)">[IMAGE]</ng-container>
+            <ng-container *ngIf="!isImageUrl(c) && isVideoUrl(c)"
+              >[VIDEO]</ng-container
+            >
+            <ng-container
+              *ngIf="!isImageUrl(c) && !isVideoUrl(c) && isFileUrl(c)"
+              >[FILE]</ng-container
+            >
+            <ng-container
+              *ngIf="!isImageUrl(c) && !isVideoUrl(c) && !isFileUrl(c)"
+              >{{c}}</ng-container
+            >
+          </ng-container>
+        </span>
       </div>
     </div>
   </div>

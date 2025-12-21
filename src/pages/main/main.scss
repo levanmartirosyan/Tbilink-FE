@@ -1,7 +1,17 @@
 :host {
-  height: calc(100% - 64px);
-  display: block;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   main {
-    height: 100%;
+    height: calc(100% - 64px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: block;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-gutter: stable;
+    flex-grow: 1;
+    @media screen and (max-width: 768px) {
+      height: calc(100% - 128px);
+    }
   }
 }

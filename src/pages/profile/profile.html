@@ -31,7 +31,7 @@
                 <lucide-icon name="user-pen" [size]="17"></lucide-icon>
                 <p>Edit Profile</p>
               </div>
-              <div class="menu-item">
+              <div class="menu-item" (click)="shareProfile()">
                 <lucide-icon name="share-2" [size]="17"></lucide-icon>
                 <p>Share Profile</p>
               </div>
@@ -55,6 +55,8 @@
         (followToggled)="onChildFollowToggled($event)"
       ></app-followers-counter>
 
+      @if (userData && userData !== null) { @if (userData.id.toString() ===
+      currentUserId || userData.isPublicProfile ) {
       <div class="meta">
         <app-segmented-switcher
           [route]="profileRoute"
@@ -65,6 +67,16 @@
           <router-outlet></router-outlet>
         </div>
       </div>
+      } @else {
+      <div class="privacy">
+        <div class="isPrivate">
+          <div class="info-row">
+            <lucide-icon name="lock" [size]="17"></lucide-icon>
+            <span>Profile is private</span>
+          </div>
+        </div>
+      </div>
+      } }
     </div>
   </div>
 

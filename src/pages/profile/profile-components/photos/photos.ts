@@ -20,6 +20,7 @@ export class Photos implements OnInit {
   public isLoading = true;
   public imageModal: boolean = false;
   public selectedImageUrl: string | null = null;
+  public selectedImageIsVideo: boolean = false;
   constructor(
     private apiService: ApiService,
     private activatedRoute: ActivatedRoute,
@@ -60,15 +61,29 @@ export class Photos implements OnInit {
   }
 
   openImageModal(photo: any) {
-    const url = photo?.imageUrl
-      ? `${this.env.storageUrl}${photo.imageUrl}`
-      : null;
-    this.selectedImageUrl = url;
+    if (this.isVideoUrl(photo?.imageUrl)) {
+      this.selectedImageIsVideo = true;
+      this.selectedImageUrl = photo?.imageUrl
+        ? `${this.env.storageUrl}${photo.imageUrl}`
+        : null;
+    } else {
+      this.selectedImageIsVideo = false;
+      this.selectedImageUrl = photo?.imageUrl
+        ? `${this.env.storageUrl}${photo.imageUrl}`
+        : null;
+    }
     this.imageModal = true;
   }
 
   closeImageModal = () => {
     this.imageModal = false;
     this.selectedImageUrl = null;
+    this.selectedImageIsVideo = false;
   };
+
+  isVideoUrl(path: string | undefined | null): boolean {
+    if (!path) return false;
+    const lower = path.toLowerCase();
+    return /\.(mp4|webm|ogg)$/i.test(lower);
+  }
 }

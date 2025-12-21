@@ -114,4 +114,15 @@ export class CommonService {
   getChatRecipientId() {
     return this.chatRecipientId.asObservable();
   }
+
+  private currentRoute = new BehaviorSubject<string>('');
+  currentRoute$ = this.currentRoute.asObservable();
+
+  setCurrentRoute(route: string) {
+    this.currentRoute.next(route);
+  }
+
+  getCurrentRoute() {
+    return this.currentRoute.asObservable();
+  }
 }

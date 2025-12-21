@@ -2,12 +2,12 @@ import { Component, effect, Input } from '@angular/core';
 import { RelativeTimePipe } from '../../../../core/pipes/relative-time-pipe-pipe';
 import { UserService } from '../../../../core/services/user-service';
 import { SignalRService } from '../../../../core/services/signal-r-service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { env } from '../../../../enviroment/enviroment';
 
 @Component({
   selector: 'app-chat',
-  imports: [RelativeTimePipe, CommonModule],
+  imports: [RelativeTimePipe, CommonModule, NgIf],
   templateUrl: './chat.html',
   styleUrl: './chat.scss',
 })
@@ -43,6 +43,24 @@ export class Chat {
 
   public env = env;
   public unreadCount: number = 0;
+
+  isVideoUrl(path: string | undefined | null): boolean {
+    if (!path) return false;
+    const lower = path.toLowerCase();
+    return /\.(mp4|webm|ogg)$/i.test(lower);
+  }
+
+  isImageUrl(path: string | undefined | null): boolean {
+    if (!path) return false;
+    const lower = path.toLowerCase();
+    return /\.(jpeg|jpg|gif|png|webp|heic|heif)$/i.test(lower);
+  }
+
+  isFileUrl(path: string | undefined | null): boolean {
+    if (!path) return false;
+    const lower = path.toLowerCase();
+    return /\.(pdf|docx|doc|xls|xlsx|ppt|pptx|zip|rar|txt)$/i.test(lower);
+  }
 
   getUnreadCount(): number {
     if (!this._chatData?.participants?.[0]) return 0;
