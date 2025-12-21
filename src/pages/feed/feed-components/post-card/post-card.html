@@ -85,7 +85,7 @@
     <p>{{postData?.content}}</p>
     @if (postData?.imageUrl) {
     <div class="img">
-      @defer (on viewport) { @if (isVideoUrl(postData?.imageUrl)) {
+      @if (isVideoUrl(postData?.imageUrl)) {
       <div
         class="video-wrapper"
         style="
@@ -116,8 +116,6 @@
         alt="Post Image"
         loading="lazy"
       />
-      } } @placeholder {
-      <div></div>
       }
     </div>
     }
