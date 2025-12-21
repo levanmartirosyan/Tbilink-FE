@@ -12,5 +12,5 @@ export const env = {
   storageUrl:
     'https://ypvppaifguwqanzoajan.supabase.co/storage/v1/object/public/Tbilink-Public/',
 
-  production: false,
+  production: true,
 };
