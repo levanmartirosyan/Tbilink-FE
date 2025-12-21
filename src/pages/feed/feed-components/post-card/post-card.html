@@ -88,7 +88,12 @@
       @defer (on viewport) { @if (isVideoUrl(postData?.imageUrl)) {
       <div
         class="video-wrapper"
-        style="overflow: hidden; border-radius: 8px; max-height: 480px"
+        style="
+          overflow: hidden;
+          border-radius: 8px;
+          max-height: 800px;
+          height: 100%;
+        "
       >
         <video
           class="post-video"
@@ -112,7 +117,7 @@
         loading="lazy"
       />
       } } @placeholder {
-      <div></div>
+      <div class="image-skeleton"></div>
       }
     </div>
     }
